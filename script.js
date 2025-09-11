@@ -18,13 +18,13 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     buttonText.style.display = 'none';
     loadingText.style.display = 'inline';
     
-    // Get form data
+    // Get form data - DÜZELTILMIŞ: Supabase kolon adlarıyla eşleşiyor
     const formData = {
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        company: document.getElementById('company').value.trim(),
-        position: document.getElementById('position').value.trim(),
+        contact_phone: document.getElementById('phone').value.trim(), // phone değil contact_phone
+        company_name: document.getElementById('company').value.trim(), // company değil company_name
+        position: document.getElementById('position').value.trim() || null,
         registration_source: 'web',
         subscription_status: 'trial',
         subscription_plan: 'freemium',
@@ -35,7 +35,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     };
     
     // Validate required fields
-    if (!formData.name || !formData.email || !formData.phone || !formData.company) {
+    if (!formData.name || !formData.email || !formData.contact_phone || !formData.company_name) {
         alert('Lütfen tüm zorunlu alanları doldurun.');
         resetButton();
         return;
@@ -51,7 +51,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     
     // Validate phone format (basic)
     const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-    if (!phoneRegex.test(formData.phone)) {
+    if (!phoneRegex.test(formData.contact_phone)) {
         alert('Lütfen geçerli bir telefon numarası girin. Örn: +90 555 123 45 67');
         resetButton();
         return;
@@ -70,18 +70,22 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             body: JSON.stringify(formData)
         });
         
+        // DÜZELTILMIŞ: Daha iyi hata handling
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorText = await response.text();
+            console.error('Supabase error response:', errorText);
+            console.error('Form data sent:', formData);
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
         
         const result = await response.json();
-        console.log('Customer created:', result);
+        console.log('Customer created successfully:', result);
         
         // Send welcome email via EmailJS
         await sendWelcomeEmail(formData);
         
-        // Redirect to success page
-        window.location.href = 'success.html?phone=' + encodeURIComponent(formData.phone);
+        // Redirect to success page - DÜZELTILMIŞ: contact_phone kullan
+        window.location.href = 'success.html?phone=' + encodeURIComponent(formData.contact_phone);
         
     } catch (error) {
         console.error('Registration error:', error);
@@ -107,8 +111,8 @@ async function sendWelcomeEmail(userData) {
         const emailData = {
             to_email: userData.email,
             to_name: userData.name,
-            company_name: userData.company,
-            phone_number: userData.phone,
+            company_name: userData.company_name, // DÜZELTILMIŞ
+            phone_number: userData.contact_phone, // DÜZELTILMIŞ
             whatsapp_number: '+14155238886', // Your Twilio WhatsApp number
             trial_end_date: new Date(userData.trial_end_date).toLocaleDateString('tr-TR')
         };
