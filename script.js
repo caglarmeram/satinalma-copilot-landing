@@ -26,8 +26,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         company_name: document.getElementById('company').value.trim(), // company değil company_name
         position: document.getElementById('position').value.trim() || null,
         registration_source: 'web',
-        subscription_status: 'trial',
-        subscription_plan: 'freemium',
+        subscription_status: 'active',
+        subscription_plan: 'basic',
         trial_start_date: new Date().toISOString(),
         trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days
         monthly_quota: 100,
