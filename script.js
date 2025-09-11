@@ -18,19 +18,19 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     buttonText.style.display = 'none';
     loadingText.style.display = 'inline';
     
-    // Get form data - DÜZELTILMIŞ: Supabase kolon adlarıyla eşleşiyor
+    // Get form data - DÜZELTILMIŞ: Trial subscription için
     const formData = {
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
-        contact_phone: document.getElementById('phone').value.trim(), // phone değil contact_phone
-        company_name: document.getElementById('company').value.trim(), // company değil company_name
+        contact_phone: document.getElementById('phone').value.trim(),
+        company_name: document.getElementById('company').value.trim(),
         position: document.getElementById('position').value.trim() || null,
         registration_source: 'web',
-        subscription_status: 'active',
-        subscription_plan: 'basic',
+        subscription_status: 'trial', // ✅ TRIAL olmalı
+        subscription_plan: 'trial',   // ✅ Plan da trial
         trial_start_date: new Date().toISOString(),
-        trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days
-        monthly_quota: 100,
+        trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        monthly_quota: 1000,  // ✅ Trial için 1000 mesaj
         used_quota: 0
     };
     
@@ -58,7 +58,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     }
     
     try {
-        // Send to Supabase via CORS-enabled endpoint
+        // Send to Supabase
         const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
             method: 'POST',
             headers: {
@@ -70,7 +70,6 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             body: JSON.stringify(formData)
         });
         
-        // DÜZELTILMIŞ: Daha iyi hata handling
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Supabase error response:', errorText);
@@ -81,16 +80,16 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         const result = await response.json();
         console.log('Customer created successfully:', result);
         
-        // Send welcome email via EmailJS
+        // Send welcome email
         await sendWelcomeEmail(formData);
         
-        // Redirect to success page - DÜZELTILMIŞ: contact_phone kullan
+        // Redirect to success page
         window.location.href = 'success.html?phone=' + encodeURIComponent(formData.contact_phone);
         
     } catch (error) {
         console.error('Registration error:', error);
         
-        // Try alternative registration method (localStorage backup)
+        // Backup to localStorage
         localStorage.setItem('pendingRegistration', JSON.stringify(formData));
         
         alert('Kayıt işlemi tamamlanamadı. Lütfen birkaç dakika sonra tekrar deneyin veya doğrudan WhatsApp\'tan bize ulaşın: +90 552 071 0977');
@@ -107,23 +106,19 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
 // Send welcome email function
 async function sendWelcomeEmail(userData) {
     try {
-        // EmailJS configuration (replace with your actual EmailJS credentials)
         const emailData = {
             to_email: userData.email,
             to_name: userData.name,
-            company_name: userData.company_name, // DÜZELTILMIŞ
-            phone_number: userData.contact_phone, // DÜZELTILMIŞ
-            whatsapp_number: '+14155238886', // Your Twilio WhatsApp number
+            company_name: userData.company_name,
+            phone_number: userData.contact_phone,
+            whatsapp_number: '+14155238886',
             trial_end_date: new Date(userData.trial_end_date).toLocaleDateString('tr-TR')
         };
         
-        // For now, we'll skip EmailJS to keep it simple
-        // You can add EmailJS later if needed
         console.log('Welcome email data prepared:', emailData);
         
     } catch (error) {
         console.error('Email sending error:', error);
-        // Don't block registration if email fails
     }
 }
 
@@ -143,7 +138,7 @@ document.getElementById('phone').addEventListener('input', function(e) {
     e.target.value = value;
 });
 
-// Form validation on input
+// Form validation
 document.querySelectorAll('#registrationForm input[required]').forEach(input => {
     input.addEventListener('blur', function() {
         if (!this.value.trim()) {
@@ -166,37 +161,26 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Analytics and tracking (placeholder)
+// Analytics tracking
 function trackEvent(eventName, properties) {
     console.log('Event tracked:', eventName, properties);
-    // Add Google Analytics or other tracking here later
 }
 
-// Track form interactions
 document.getElementById('registrationForm').addEventListener('focusin', function(e) {
     trackEvent('form_field_focus', { field: e.target.name });
 });
 
-// Track CTA button clicks
 document.querySelector('.cta-button').addEventListener('click', function() {
     trackEvent('cta_button_click', { source: 'hero' });
 });
 
-// Simple error handling for missing resources
-window.addEventListener('error', function(e) {
-    console.error('Resource loading error:', e);
-});
-
-// Check for successful registration on page load
+// Page load animations
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if there's a pending registration in localStorage
     const pendingRegistration = localStorage.getItem('pendingRegistration');
     if (pendingRegistration) {
         console.log('Found pending registration:', JSON.parse(pendingRegistration));
-        // You could retry the registration or show a message
     }
     
-    // Animate elements on scroll (simple version)
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -211,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
     
-    // Observe feature cards
     document.querySelectorAll('.feature-card').forEach(card => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
