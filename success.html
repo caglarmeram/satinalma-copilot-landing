@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Başarılı - Satınalma CoPilot</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #10b981, #059669);
+            padding: 20px;
+        }
+        
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .success-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+        
+        .success-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .steps-container {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .steps-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .step-number {
+            background: #10b981;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .step-content p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .whatsapp-info {
+            background: #dcfce7;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .whatsapp-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin: 8px 0;
+        }
+        
+        .whatsapp-button {
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-button:hover {
+            background: #20c757;
+            transform: translateY(-2px);
+        }
+        
+        .trial-info {
+            background: #fef3c7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .trial-countdown {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+        
+        .footer-links {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-links a {
+            color: #2563eb;
+            text-decoration: none;
+            margin: 0 16px;
+            font-weight: 500;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">🎉</div>
+            <h1 class="success-title">Kayıt Başarılı!</h1>
+            <p class="success-subtitle">
+                Hoş geldiniz! 14 günlük ücretsiz deneme süreniz başladı. 
+                Şimdi WhatsApp asistanınızla tanışma zamanı.
+            </p>
+            
+            <div class="whatsapp-info">
+                <p><strong>WhatsApp Asistan Numarası:</strong></p>
+                <div class="whatsapp-number">+1 (415) 523-8886</div>
+                <p>Bu numarayı WhatsApp'ta kaydedin ve ilk mesajınızı atın!</p>
+                <a href="https://wa.me/14155238886?text=Merhaba" class="whatsapp-button" target="_blank">
+                    📱 WhatsApp'ta Mesaj Gönder
+                </a>
+            </div>
+            
+            <div class="steps-container">
+                <h3 class="steps-title">🚀 Başlamak için 3 basit adım:</h3>
+                
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>WhatsApp'ta Numarayı Kaydedin</h4>
+                        <p>+1 (415) 523-8886 numarasını "Satınalma CoPilot" adıyla WhatsApp'ta kaydedin</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>İlk Mesajınızı Atın</h4>
+                        <p>"Merhaba" veya "join shallow-private" yazarak asistanınızı aktifleştirin</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Satınalma İhtiyaçlarınızı Paylaşın</h4>
+                        <p>"500 kg demir profil lazım" gibi ihtiyaçlarınızı doğal dille yazın</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trial-info">
+                <p><strong>🎁 Ücretsiz Deneme Süreniz:</strong></p>
+                <div class="trial-countdown" id="trialCountdown">14 gün kaldı</div>
+                <p style="margin-top: 8px; font-size: 0.9rem; color: #92400e;">
+                    Günlük 10 sorgu hakkınız var. Sınırsız kullanım için Pro plana geçebilirsiniz.
+                </p>
+            </div>
+            
+            <div style="margin: 30px 0; padding: 20px; background: #f1f5f9; border-radius: 12px;">
+                <h4 style="color: #1e293b; margin-bottom: 12px;">💡 İlk Deneme Önerileri:</h4>
+                <ul style="text-align: left; color: #475569; line-height: 1.6;">
+                    <li>"Hangi firmalar alüminyum profil üretiyor?"</li>
+                    <li>"Bosch Türkiye hakkında risk analizi"</li>
+                    <li>"Plastik ambalaj pazarı nasıl?"</li>
+                    <li>"RFQ baÅlat: 1000 adet vida"</li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <a href="mailto:info@satinalmacopilot.com">📧 Destek</a>
+                <a href="tel:+905520710977">📞 Yardım</a>
+                <a href="index.html">🏠 Ana Sayfa</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Get phone number from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const userPhone = urlParams.get('phone');
+        
+        // Calculate trial countdown
+        function updateTrialCountdown() {
+            const now = new Date();
+            const trialEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+            const timeLeft = trialEnd - now;
+            const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('trialCountdown').textContent = `${daysLeft} gün kaldı`;
+        }
+        
+        updateTrialCountdown();
+        
+        // Update countdown every hour
+        setInterval(updateTrialCountdown, 60 * 60 * 1000);
+        
+        // Track successful registration
+        console.log('Registration completed for phone:', userPhone);
+        
+        // Auto-open WhatsApp after 3 seconds (optional)
+        setTimeout(() => {
+            if (confirm('WhatsApp\'ı şimdi açmak ister misiniz?')) {
+                window.open('https://wa.me/14155238886?text=Merhaba,%20yeni%20kaydoldum', '_blank');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
