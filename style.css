@@ -28,6 +28,7 @@ body {
     right: 0;
     z-index: 1000;
     padding: 1rem 0;
+    transition: all 0.3s ease;
 }
 
 .nav-brand {
@@ -362,6 +363,10 @@ body {
     cursor: not-allowed;
 }
 
+.loading-text {
+    display: none;
+}
+
 .form-note {
     text-align: center;
     color: rgba(255,255,255,0.8);
@@ -380,7 +385,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -391,17 +396,32 @@ body {
     padding: 30px;
     text-align: center;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .pricing-card.featured {
     border-color: #2563eb;
     background: linear-gradient(135deg, #f8fafc, #e2e8f0);
     transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
 }
 
 .pricing-card:hover {
     border-color: #2563eb;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2563eb;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .pricing-header h3 {
@@ -416,6 +436,7 @@ body {
     font-weight: 700;
     color: #2563eb;
     margin-bottom: 24px;
+    display: block;
 }
 
 .price span {
@@ -427,12 +448,16 @@ body {
 .pricing-features {
     list-style: none;
     text-align: left;
+    margin-bottom: 30px;
 }
 
 .pricing-features li {
     padding: 8px 0;
     color: #475569;
     font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* Footer */
@@ -479,6 +504,7 @@ body {
     .hero-content {
         grid-template-columns: 1fr;
         gap: 40px;
+        text-align: center;
     }
     
     .hero-title {
@@ -506,6 +532,10 @@ body {
         flex-direction: column;
         gap: 12px;
     }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -527,5 +557,18 @@ body {
     
     .form-wrapper {
         padding: 30px 20px;
+    }
+    
+    .pricing-cards {
+        gap: 20px;
+    }
+    
+    .features-grid {
+        gap: 20px;
+    }
+    
+    .testimonials {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
