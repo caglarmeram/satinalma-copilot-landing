@@ -6,6 +6,310 @@
     <title>Satınalma CoPilot - AI Destekli WhatsApp Asistanı</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Yeni Pricing Styles */
+        .pricing {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 80px 0;
+        }
+
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .toggle-container {
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 8px;
+        }
+
+        .toggle-option {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .toggle-option.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .toggle-option:not(.active) {
+            color: #64748b;
+        }
+
+        .toggle-option:not(.active):hover {
+            background: #f1f5f9;
+        }
+
+        .savings-badge {
+            background: #10b981;
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            white-space: nowrap;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .pricing-card.featured {
+            border-color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: "🔥 ÖNERİLEN";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .plan-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .price-container {
+            position: relative;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1e293b;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .price-unit {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .original-price {
+            font-size: 1.2rem;
+            color: #ef4444;
+            text-decoration: line-through;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+        }
+
+        .savings-text {
+            background: #10b981;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 8px auto;
+            display: inline-block;
+        }
+
+        .message-quota {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .quota-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .quota-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: #475569;
+        }
+
+        .feature-check {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feature-cross {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .cta-button-pricing {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .cta-button-pricing:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .cta-button-pricing.secondary {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .cta-button-pricing.secondary:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .login-link {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .enterprise-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+        }
+
+        .enterprise-card .plan-name,
+        .enterprise-card .price {
+            color: white;
+        }
+
+        .enterprise-card .plan-description,
+        .enterprise-card .quota-label {
+            color: #cbd5e1;
+        }
+
+        .enterprise-card .message-quota {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .enterprise-card .features-list li {
+            color: #e2e8f0;
+        }
+
+        .trial-banner {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 600px;
+        }
+
+        .trial-banner h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .trial-banner p {
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .price {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -138,6 +442,10 @@
                     <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
                 </div>
                 <form id="registrationForm" class="registration-form">
+                    <!-- Plan Selection (Hidden for now, filled by pricing selection) -->
+                    <input type="hidden" id="selectedPlan" name="selectedPlan" value="trial">
+                    <input type="hidden" id="selectedBilling" name="selectedBilling" value="monthly">
+                    
                     <div class="form-group">
                         <label for="name">Ad Soyad *</label>
                         <input type="text" id="name" name="name" required placeholder="Örn: Ahmet Yılmaz">
@@ -173,107 +481,167 @@
     </section>
 
     <!-- Pricing -->
-    <section class="pricing">
+    <section class="pricing" id="pricing">
         <div class="container">
             <h2 class="section-title">Şeffaf Fiyatlandırma</h2>
-            <p style="text-align: center; color: #64748b; margin-bottom: 40px; font-size: 1.1rem;">
-                Kullandığınız kadar ödeyin. WhatsApp mesaj maliyetlerine dayalı gerçekçi planlar.
+            <p class="section-subtitle">
+                İhtiyacınıza uygun planı seçin. Tüm planlar 14 gün ücretsiz deneme ile başlar.
             </p>
-            <div class="pricing-cards">
-                <!-- Trial Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Ücretsiz Deneme</h3>
-                        <div class="price">₺0<span>/14 gün</span></div>
+
+            <!-- Billing Toggle -->
+            <div class="billing-toggle">
+                <div class="toggle-container">
+                    <div class="toggle-option active" id="monthlyToggle" onclick="switchBilling('monthly')">
+                        Aylık Ödeme
                     </div>
-                    <ul class="pricing-features">
-                        <li>✅ 1000 mesaj hakkı</li>
-                        <li>✅ Tüm temel özellikler</li>
-                        <li>✅ RFQ oluşturma</li>
-                        <li>✅ Tedarikçi bulma</li>
-                        <li>✅ Risk analizi</li>
-                        <li>✅ WhatsApp desteği</li>
-                        <li>✅ Kredi kartı gerekmez</li>
-                    </ul>
-                </div>
-                
-                <!-- Basic Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Basic</h3>
-                        <div class="price">₺149<span>/ay</span></div>
-                        <p style="color: #64748b; font-size: 0.9rem; margin: 8px 0;">500 mesaj dahil</p>
+                    <div class="toggle-option" id="yearlyToggle" onclick="switchBilling('yearly')">
+                        Yıllık Ödeme
+                        <span class="savings-badge">%58'e Kadar İndirim</span>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✅ 500 mesaj/ay</li>
-                        <li>✅ Tüm temel özellikler</li>
-                        <li>✅ Email desteği</li>
-                        <li>✅ Temel raporlama</li>
-                        <li>💰 Ek mesaj: ₺0,50/adet</li>
-                    </ul>
-                </div>
-                
-                <!-- Pro Plan - Featured -->
-                <div class="pricing-card featured">
-                    <div class="popular-badge">En Popüler</div>
-                    <div class="pricing-header">
-                        <h3>Pro</h3>
-                        <div class="price">₺349<span>/ay</span></div>
-                        <p style="color: #64748b; font-size: 0.9rem; margin: 8px 0;">1500 mesaj dahil</p>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>✅ 1500 mesaj/ay</li>
-                        <li>✅ Tüm premium özellikler</li>
-                        <li>✅ Öncelikli destek</li>
-                        <li>✅ Detaylı raporlar</li>
-                        <li>✅ API erişimi</li>
-                        <li>✅ Özel entegrasyonlar</li>
-                        <li>💰 Ek mesaj: ₺0,40/adet</li>
-                    </ul>
-                </div>
-                
-                <!-- Enterprise Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Enterprise</h3>
-                        <div class="price">₺799<span>/ay</span></div>
-                        <p style="color: #64748b; font-size: 0.9rem; margin: 8px 0;">5000 mesaj dahil</p>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>✅ 5000 mesaj/ay</li>
-                        <li>✅ Tüm özellikler</li>
-                        <li>✅ 7/24 telefon desteği</li>
-                        <li>✅ Özel AI modelleri</li>
-                        <li>✅ Çoklu kullanıcı</li>
-                        <li>✅ SSO entegrasyonu</li>
-                        <li>💰 Ek mesaj: ₺0,30/adet</li>
-                    </ul>
                 </div>
             </div>
-            
-            <!-- Cost Breakdown -->
-            <div style="background: #f8fafc; border-radius: 16px; padding: 30px; margin-top: 40px; text-align: center;">
-                <h4 style="color: #1e293b; margin-bottom: 16px; font-size: 1.3rem;">📊 Maliyet Hesaplaması</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h5 style="color: #2563eb; margin-bottom: 8px;">WhatsApp Mesaj</h5>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: #1e293b;">~₺0,40</div>
-                        <p style="font-size: 0.8rem; color: #64748b; margin: 0;">Twilio + Meta Ücretleri</p>
+
+            <!-- Trial Banner -->
+            <div class="trial-banner">
+                <h3>🎁 14 Gün Ücretsiz Deneme</h3>
+                <p>Tüm planlar kredi kartı gerektirmeden 14 gün veya 1000 mesaj ücretsiz!</p>
+            </div>
+
+            <!-- Pricing Cards -->
+            <div class="pricing-cards" id="pricingCards">
+                <!-- Basic Plan -->
+                <div class="pricing-card" data-plan="basic">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Basic</h3>
+                        <p class="plan-description">Küçük işletmeler için başlangıç paketi</p>
+                        <div class="price-container">
+                            <div class="price">
+                                $<span id="basicPrice">3.95</span>
+                                <span class="price-unit">/ay</span>
+                            </div>
+                        </div>
+                        <div class="message-quota">
+                            <div class="quota-number" id="basicQuota">500</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
                     </div>
-                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h5 style="color: #2563eb; margin-bottom: 8px;">AI İşleme</h5>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: #1e293b;">~₺0,15</div>
-                        <p style="font-size: 0.8rem; color: #64748b; margin: 0;">OpenAI + analiz maliyeti</p>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h5 style="color: #2563eb; margin-bottom: 8px;">Platform</h5>
-                        <div style="font-size: 1.5rem; font-weight: 700; color: #1e293b;">~₺0,25</div>
-                        <p style="font-size: 0.8rem; color: #64748b; margin: 0;">Geliştirme + altyapı</p>
+                    <ul class="features-list">
+                        <li><span class="feature-check">✅</span> RFQ Oluşturma</li>
+                        <li><span class="feature-check">✅</span> Tedarikçi Bulma</li>
+                        <li><span class="feature-check">✅</span> Risk Analizi</li>
+                        <li><span class="feature-check">✅</span> WhatsApp Desteği</li>
+                        <li><span class="feature-cross">❌</span> API Erişimi</li>
+                        <li><span class="feature-cross">❌</span> Öncelikli Destek</li>
+                    </ul>
+                    <button class="cta-button-pricing" onclick="selectPlan('basic')">
+                        Ücretsiz Denemeye Başla
+                    </button>
+                    <div class="login-link">
+                        <a href="#" onclick="showLogin()">Zaten üye misiniz?</a>
                     </div>
                 </div>
-                <p style="color: #1e293b; font-weight: 600; font-size: 1.1rem; margin: 0;">
-                    💡 Bizim maliyetimiz: ~₺0,80/mesaj • Sizin fiyatınız: ₺0,30-0,50/mesaj
-                </p>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card featured" data-plan="pro">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Pro</h3>
+                        <p class="plan-description">Büyüyen işletmeler için ideal</p>
+                        <div class="price-container">
+                            <div class="original-price" id="proOriginalPrice">$11.85</div>
+                            <div class="price">
+                                $<span id="proPrice">8.95</span>
+                                <span class="price-unit">/ay</span>
+                            </div>
+                            <div class="savings-text" id="proSavings">%24 İndirim</div>
+                        </div>
+                        <div class="message-quota">
+                            <div class="quota-number" id="proQuota">1500</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
+                    </div>
+                    <ul class="features-list">
+                        <li><span class="feature-check">✅</span> RFQ Oluşturma</li>
+                        <li><span class="feature-check">✅</span> Tedarikçi Bulma</li>
+                        <li><span class="feature-check">✅</span> Risk Analizi</li>
+                        <li><span class="feature-check">✅</span> Pazar Araştırması</li>
+                        <li><span class="feature-check">✅</span> WhatsApp Desteği</li>
+                        <li><span class="feature-check">✅</span> API Erişimi</li>
+                        <li><span class="feature-cross">❌</span> Öncelikli Destek</li>
+                    </ul>
+                    <button class="cta-button-pricing" onclick="selectPlan('pro')">
+                        Ücretsiz Denemeye Başla
+                    </button>
+                    <div class="login-link">
+                        <a href="#" onclick="showLogin()">Zaten üye misiniz?</a>
+                    </div>
+                </div>
+
+                <!-- Max Plan -->
+                <div class="pricing-card" data-plan="max">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Max</h3>
+                        <p class="plan-description">Yoğun kullanım için güçlü paket</p>
+                        <div class="price-container">
+                            <div class="original-price" id="maxOriginalPrice">$39.95</div>
+                            <div class="price">
+                                $<span id="maxPrice">19.95</span>
+                                <span class="price-unit">/ay</span>
+                            </div>
+                            <div class="savings-text" id="maxSavings">%50 İndirim</div>
+                        </div>
+                        <div class="message-quota">
+                            <div class="quota-number" id="maxQuota">5000</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
+                    </div>
+                    <ul class="features-list">
+                        <li><span class="feature-check">✅</span> Tüm Pro Özellikler</li>
+                        <li><span class="feature-check">✅</span> Teslimat Takibi</li>
+                        <li><span class="feature-check">✅</span> Ödeme Yönetimi</li>
+                        <li><span class="feature-check">✅</span> Sözleşme Desteği</li>
+                        <li><span class="feature-check">✅</span> Detaylı Raporlar</li>
+                        <li><span class="feature-check">✅</span> Öncelikli Destek</li>
+                        <li><span class="feature-check">✅</span> Özel Entegrasyonlar</li>
+                    </ul>
+                    <button class="cta-button-pricing" onclick="selectPlan('max')">
+                        Ücretsiz Denemeye Başla
+                    </button>
+                    <div class="login-link">
+                        <a href="#" onclick="showLogin()">Zaten üye misiniz?</a>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card enterprise-card" data-plan="enterprise">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Enterprise</h3>
+                        <p class="plan-description">Kurumsal çözümler için</p>
+                        <div class="price-container">
+                            <div class="price">
+                                Fiyat<span class="price-unit"> Sorunuz</span>
+                            </div>
+                        </div>
+                        <div class="message-quota">
+                            <div class="quota-number">Sınırsız</div>
+                            <div class="quota-label">mesaj</div>
+                        </div>
+                    </div>
+                    <ul class="features-list">
+                        <li><span class="feature-check">✅</span> Tüm Max Özellikler</li>
+                        <li><span class="feature-check">✅</span> Özel WhatsApp Numarası</li>
+                        <li><span class="feature-check">✅</span> Özel AI Modeli</li>
+                        <li><span class="feature-check">✅</span> SLA Garantisi</li>
+                        <li><span class="feature-check">✅</span> Özel Entegrasyonlar</li>
+                        <li><span class="feature-check">✅</span> Kişisel Hesap Yöneticisi</li>
+                        <li><span class="feature-check">✅</span> On-Site Eğitim</li>
+                    </ul>
+                    <button class="cta-button-pricing secondary" onclick="selectPlan('enterprise')">
+                        İletişime Geçin
+                    </button>
+                    <div class="login-link">
+                        <a href="#" onclick="showLogin()">Zaten üye misiniz?</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -296,188 +664,315 @@
     </footer>
 
     <script>
-// Smooth scroll to registration form
-function scrollToForm() {
-    document.getElementById('registration').scrollIntoView({ 
-        behavior: 'smooth' 
-    });
-}
-
-// Form submission handler
-document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const submitButton = this.querySelector('.submit-button');
-    const buttonText = submitButton.querySelector('.button-text');
-    const loadingText = submitButton.querySelector('.loading-text');
-    
-    // Show loading state
-    submitButton.disabled = true;
-    buttonText.style.display = 'none';
-    loadingText.style.display = 'inline';
-    
-    // Get form data - Trial subscription için
-    const formData = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        contact_phone: document.getElementById('phone').value.trim(),
-        company_name: document.getElementById('company').value.trim(),
-        position: document.getElementById('position').value.trim() || null,
-        registration_source: 'web',
-        subscription_status: 'trial', // Trial olmalı
-        subscription_plan: 'trial',   // Plan da trial
-        trial_start_date: new Date().toISOString(),
-        trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-        monthly_quota: 1000,  // Trial için 1000 mesaj
-        used_quota: 0
-    };
-    
-    // Validate required fields
-    if (!formData.name || !formData.email || !formData.contact_phone || !formData.company_name) {
-        alert('Lütfen tüm zorunlu alanları doldurun.');
-        resetButton();
-        return;
-    }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-        alert('Lütfen geçerli bir e-posta adresi girin.');
-        resetButton();
-        return;
-    }
-    
-    // Validate phone format (basic)
-    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-    if (!phoneRegex.test(formData.contact_phone)) {
-        alert('Lütfen geçerli bir telefon numarası girin. Örn: +90 555 123 45 67');
-        resetButton();
-        return;
-    }
-    
-    try {
-        // Send to Supabase
-        const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Prefer': 'return=representation'
+        // Pricing data
+        const pricingData = {
+            monthly: {
+                basic: { price: 3.95, quota: 500 },
+                pro: { price: 8.95, originalPrice: 11.85, quota: 1500, savings: 24 },
+                max: { price: 19.95, originalPrice: 39.95, quota: 5000, savings: 50 }
             },
-            body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Supabase error response:', errorText);
-            console.error('Form data sent:', formData);
-            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+            yearly: {
+                basic: { price: 39.95, quota: 6000 },
+                pro: { price: 99.95, originalPrice: 142.20, quota: 18000, savings: 30 },
+                max: { price: 199.95, originalPrice: 474, quota: 60000, savings: 58 }
+            }
+        };
+
+        let currentBilling = 'monthly';
+
+        function switchBilling(type) {
+            currentBilling = type;
+            
+            // Update toggle UI
+            document.getElementById('monthlyToggle').classList.toggle('active', type === 'monthly');
+            document.getElementById('yearlyToggle').classList.toggle('active', type === 'yearly');
+            
+            // Update pricing
+            updatePricing();
         }
-        
-        const result = await response.json();
-        console.log('Customer created successfully:', result);
-        
-        // Redirect to success page
-        window.location.href = 'success.html?phone=' + encodeURIComponent(formData.contact_phone);
-        
-    } catch (error) {
-        console.error('Registration error:', error);
-        
-        // Backup to localStorage
-        localStorage.setItem('pendingRegistration', JSON.stringify(formData));
-        
-        alert('Kayıt işlemi tamamlanamadı. Lütfen birkaç dakika sonra tekrar deneyin veya doğrudan WhatsApp\'tan bize ulaşın: +90 552 071 0977');
-        resetButton();
-    }
-    
-    function resetButton() {
-        submitButton.disabled = false;
-        buttonText.style.display = 'inline';
-        loadingText.style.display = 'none';
-    }
-});
 
-// Phone number formatting
-document.getElementById('phone').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/[^\d+]/g, '');
-    
-    // Auto-add +90 for Turkish numbers
-    if (value.length > 0 && !value.startsWith('+')) {
-        if (value.startsWith('90')) {
-            value = '+' + value;
-        } else if (value.startsWith('5') && value.length >= 10) {
-            value = '+90' + value;
+        function updatePricing() {
+            const data = pricingData[currentBilling];
+            
+            // Basic plan
+            document.getElementById('basicPrice').textContent = data.basic.price;
+            document.getElementById('basicQuota').textContent = data.basic.quota.toLocaleString();
+            
+            // Pro plan
+            document.getElementById('proPrice').textContent = data.pro.price;
+            document.getElementById('proQuota').textContent = data.pro.quota.toLocaleString();
+            document.getElementById('proOriginalPrice').textContent = '$' + data.pro.originalPrice;
+            document.getElementById('proSavings').textContent = '%' + data.pro.savings + ' İndirim';
+            
+            // Max plan
+            document.getElementById('maxPrice').textContent = data.max.price;
+            document.getElementById('maxQuota').textContent = data.max.quota.toLocaleString();
+            document.getElementById('maxOriginalPrice').textContent = '
+             + data.max.originalPrice;
+            document.getElementById('maxSavings').textContent = '%' + data.max.savings + ' İndirim';
         }
-    }
-    
-    e.target.value = value;
-});
 
-// Form validation
-document.querySelectorAll('#registrationForm input[required]').forEach(input => {
-    input.addEventListener('blur', function() {
-        if (!this.value.trim()) {
-            this.style.borderColor = '#ef4444';
-        } else {
-            this.style.borderColor = 'rgba(255,255,255,0.2)';
+        function selectPlan(planType) {
+            if (planType === 'enterprise') {
+                window.location.href = 'mailto:info@satinalmacopilot.com?subject=Enterprise Plan Talebi';
+                return;
+            }
+
+            // Store selected plan in hidden inputs
+            document.getElementById('selectedPlan').value = planType;
+            document.getElementById('selectedBilling').value = currentBilling;
+            
+            // Update form header to show selected plan
+            const planInfo = pricingData[currentBilling][planType];
+            const formHeader = document.querySelector('.form-header h2');
+            formHeader.textContent = `${planType.toUpperCase()} Plan - Ücretsiz Deneme`;
+            
+            // Scroll to registration form
+            document.getElementById('registration').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
         }
-    });
-});
 
-// Navbar scroll effect
-window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.backdropFilter = 'blur(10px)';
-    } else {
-        navbar.style.background = '#fff';
-        navbar.style.backdropFilter = 'none';
-    }
-});
+        function showLogin() {
+            // Show existing user login modal
+            const phone = prompt('WhatsApp numaranızı girin (mevcut kullanıcılar için):');
+            if (phone && phone.trim()) {
+                // Check if user exists and redirect accordingly
+                checkExistingUser(phone.trim());
+            }
+        }
 
-// Analytics tracking
-function trackEvent(eventName, properties) {
-    console.log('Event tracked:', eventName, properties);
-}
+        async function checkExistingUser(phone) {
+            try {
+                const cleanPhone = phone.replace(/[^\d+]/g, '');
+                
+                const response = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${cleanPhone}&select=*`, {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+                    }
+                });
+                
+                const users = await response.json();
+                
+                if (users.length > 0) {
+                    const user = users[0];
+                    if (user.subscription_status === 'trial' && new Date(user.trial_end_date) > new Date()) {
+                        alert(`Merhaba ${user.name}! Trial süreniz devam ediyor. WhatsApp'tan mesaj göndermeye devam edebilirsiniz.`);
+                    } else if (user.subscription_status === 'inactive' || user.subscription_status === 'trial') {
+                        alert(`Merhaba ${user.name}! Trial süreniz dolmuş. Ödeme yapmak için yönlendiriliyorsunuz.`);
+                        // TODO: Redirect to payment page
+                        window.location.href = `payment.html?phone=${encodeURIComponent(cleanPhone)}`;
+                    } else {
+                        alert(`Merhaba ${user.name}! Aktif aboneliğiniz var. WhatsApp'tan mesaj göndermeye devam edebilirsiniz.`);
+                    }
+                } else {
+                    alert('Bu numara ile kayıtlı kullanıcı bulunamadı. Lütfen kayıt olun.');
+                    scrollToForm();
+                }
+            } catch (error) {
+                console.error('User check error:', error);
+                alert('Kullanıcı kontrolü yapılırken hata oluştu. Lütfen tekrar deneyin.');
+            }
+        }
 
-document.getElementById('registrationForm').addEventListener('focusin', function(e) {
-    trackEvent('form_field_focus', { field: e.target.name });
-});
+        // Smooth scroll to registration form
+        function scrollToForm() {
+            document.getElementById('registration').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
 
-document.querySelector('.cta-button').addEventListener('click', function() {
-    trackEvent('cta_button_click', { source: 'hero' });
-});
-
-// Page load animations
-document.addEventListener('DOMContentLoaded', function() {
-    const pendingRegistration = localStorage.getItem('pendingRegistration');
-    if (pendingRegistration) {
-        console.log('Found pending registration:', JSON.parse(pendingRegistration));
-    }
-    
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+        // Updated form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = this.querySelector('.submit-button');
+            const buttonText = submitButton.querySelector('.button-text');
+            const loadingText = submitButton.querySelector('.loading-text');
+            
+            // Show loading state
+            submitButton.disabled = true;
+            buttonText.style.display = 'none';
+            loadingText.style.display = 'inline';
+            
+            // Get selected plan info
+            const selectedPlan = document.getElementById('selectedPlan').value || 'trial';
+            const selectedBilling = document.getElementById('selectedBilling').value || 'monthly';
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                contact_phone: document.getElementById('phone').value.trim(),
+                company_name: document.getElementById('company').value.trim(),
+                position: document.getElementById('position').value.trim() || null,
+                registration_source: 'web',
+                subscription_status: 'trial',
+                subscription_plan: selectedPlan,
+                billing_cycle: selectedBilling,
+                trial_start_date: new Date().toISOString(),
+                trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+                monthly_quota: 1000, // Trial için 1000 mesaj
+                used_quota: 0,
+                trial_used: false
+            };
+            
+            // Validate required fields
+            if (!formData.name || !formData.email || !formData.contact_phone || !formData.company_name) {
+                alert('Lütfen tüm zorunlu alanları doldurun.');
+                resetButton();
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                alert('Lütfen geçerli bir e-posta adresi girin.');
+                resetButton();
+                return;
+            }
+            
+            // Validate phone format
+            const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+            if (!phoneRegex.test(formData.contact_phone)) {
+                alert('Lütfen geçerli bir telefon numarası girin. Örn: +90 555 123 45 67');
+                resetButton();
+                return;
+            }
+            
+            try {
+                // First check if user already exists
+                const cleanPhone = formData.contact_phone.replace(/[^\d+]/g, '');
+                const checkResponse = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${cleanPhone}`, {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+                    }
+                });
+                
+                const existingUsers = await checkResponse.json();
+                
+                if (existingUsers.length > 0) {
+                    const existingUser = existingUsers[0];
+                    if (existingUser.trial_used) {
+                        alert('Bu numara ile daha önce ücretsiz deneme kullanılmış. Ödeme yaparak devam edebilirsiniz.');
+                        // TODO: Redirect to payment
+                        window.location.href = `payment.html?phone=${encodeURIComponent(cleanPhone)}`;
+                        return;
+                    } else {
+                        alert('Bu numara ile zaten kayıt bulunuyor. Mevcut hesabınızı kullanabilirsiniz.');
+                        resetButton();
+                        return;
+                    }
+                }
+                
+                // Create new user
+                const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Supabase error response:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Customer created successfully:', result);
+                
+                // Store selected plan for success page
+                localStorage.setItem('selectedPlan', selectedPlan);
+                localStorage.setItem('selectedBilling', selectedBilling);
+                
+                // Redirect to success page
+                window.location.href = 'success.html?phone=' + encodeURIComponent(formData.contact_phone) + '&plan=' + selectedPlan;
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Kayıt işlemi tamamlanamadı. Lütfen tekrar deneyin.');
+                resetButton();
+            }
+            
+            function resetButton() {
+                submitButton.disabled = false;
+                buttonText.style.display = 'inline';
+                loadingText.style.display = 'none';
             }
         });
-    }, observerOptions);
-    
-    document.querySelectorAll('.feature-card').forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(card);
-    });
-});
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d+]/g, '');
+            
+            if (value.length > 0 && !value.startsWith('+')) {
+                if (value.startsWith('90')) {
+                    value = '+' + value;
+                } else if (value.startsWith('5') && value.length >= 10) {
+                    value = '+90' + value;
+                }
+            }
+            
+            e.target.value = value;
+        });
+
+        // Form validation
+        document.querySelectorAll('#registrationForm input[required]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = 'rgba(255,255,255,0.2)';
+                }
+            });
+        });
+
+        // Initialize pricing
+        updatePricing();
+
+        // Page load setup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for URL parameters (plan selection from external links)
+            const urlParams = new URLSearchParams(window.location.search);
+            const planFromUrl = urlParams.get('plan');
+            const billingFromUrl = urlParams.get('billing');
+            
+            if (planFromUrl && pricingData[billingFromUrl || 'monthly'][planFromUrl]) {
+                selectPlan(planFromUrl);
+                if (billingFromUrl) {
+                    switchBilling(billingFromUrl);
+                }
+            }
+            
+            // Animate elements
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.feature-card, .pricing-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
     </script>
 </body>
 </html>
