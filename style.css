@@ -361,7 +361,7 @@ body {
     margin: 0 auto;
 }
 
-/* DÜZELTILMIŞ: Pricing Card Hover Efektleri */
+/* UPDATED: Enhanced Pricing Card System */
 .pricing-card {
     background: white;
     border-radius: 20px;
@@ -370,6 +370,7 @@ body {
     position: relative;
     transition: all 0.3s ease;
     border: 2px solid #e2e8f0;
+    cursor: pointer;
 }
 
 .pricing-card:hover {
@@ -388,6 +389,41 @@ body {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
     border-color: #1d4ed8 !important;
+}
+
+/* NEW: Plan Selection States */
+.pricing-card.selected {
+    border-color: #10b981 !important;
+    background: #f0fdf4;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+}
+
+.pricing-card.selected:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(16, 185, 129, 0.3);
+}
+
+/* NEW: Plan Selection Indicator */
+.plan-selection-indicator {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #10b981;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .popular-badge {
@@ -448,6 +484,10 @@ body {
     line-height: 1;
 }
 
+.pricing-card.selected .price-amount {
+    color: #059669;
+}
+
 .price-period {
     font-size: 1.1rem;
     color: #64748b;
@@ -493,6 +533,12 @@ body {
     margin: 20px 0 30px;
     text-align: center;
     border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.pricing-card.selected .quota-section {
+    background: #ecfdf5;
+    border-color: #10b981;
 }
 
 .quota-number {
@@ -500,6 +546,10 @@ body {
     font-weight: 700;
     color: #1e293b;
     margin-bottom: 4px;
+}
+
+.pricing-card.selected .quota-number {
+    color: #059669;
 }
 
 .quota-label {
@@ -552,6 +602,18 @@ body {
 .cta-button-pricing:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* NEW: Selected Plan Button Style */
+.pricing-card.selected .cta-button-pricing {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.pricing-card.selected .cta-button-pricing:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
 }
 
 .cta-button-pricing.secondary {
@@ -615,7 +677,7 @@ body {
     color: #e2e8f0;
 }
 
-/* DÜZELTILMIŞ: Registration Form */
+/* NEW: Registration Form Updates */
 .registration {
     padding: 80px 0;
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -646,6 +708,41 @@ body {
 .form-header p {
     color: #64748b;
     font-size: 1.1rem;
+}
+
+/* NEW: Selected Plan Info Display */
+.selected-plan-info {
+    background: #f0fdf4;
+    border: 2px solid #10b981;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.selected-plan-info h3 {
+    color: #059669;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.selected-plan-info p {
+    color: #065f46;
+    font-size: 0.95rem;
+    margin: 0;
 }
 
 .registration-form {
@@ -683,6 +780,15 @@ body {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* NEW: Enhanced Form Validation */
+.form-group input.valid {
+    border-color: #10b981;
+}
+
+.form-group input.invalid {
+    border-color: #ef4444;
 }
 
 .submit-button {
@@ -763,6 +869,74 @@ body {
     color: #e2e8f0;
 }
 
+/* NEW: Notification System */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 4px solid #10b981;
+    z-index: 1001;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left-color: #10b981;
+}
+
+.notification.error {
+    border-left-color: #ef4444;
+}
+
+.notification.warning {
+    border-left-color: #f59e0b;
+}
+
+/* NEW: Loading States */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-content {
@@ -802,6 +976,10 @@ body {
         border-color: #2563eb !important;
     }
     
+    .pricing-card.selected {
+        transform: translateY(-4px) scale(1.02);
+    }
+    
     .footer-links {
         flex-direction: column;
         gap: 12px;
@@ -819,6 +997,16 @@ body {
     
     .toggle-option {
         text-align: center;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        transform: translateY(-100px);
+    }
+    
+    .notification.show {
+        transform: translateY(0);
     }
 }
 
@@ -854,5 +1042,461 @@ body {
     .testimonials {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+    
+    .plan-selection-indicator {
+        top: -8px;
+        right: -8px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+/* NEW: Billing Toggle Enhancements */
+.monthly-prices {
+    display: none;
+}
+
+.annual-prices {
+    display: block;
+}
+
+.toggle-container.monthly .monthly-prices {
+    display: block;
+}
+
+.toggle-container.monthly .annual-prices {
+    display: none;
+}
+
+/* NEW: Accessibility Improvements */
+.pricing-card:focus {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.toggle-option:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.form-group input:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* NEW: Success Animation */
+.success-animation {
+    animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* NEW: Plan Comparison Table (Optional Enhancement) */
+.plan-comparison {
+    display: none; /* Hidden by default, can be shown via JS */
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 40px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.comparison-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.comparison-table .feature-included {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.comparison-table .feature-excluded {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* NEW: Premium Features Highlight */
+.premium-feature {
+    background: linear-gradient(90deg, #fef3c7, #fbbf24);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #92400e;
+    margin-left: 8px;
+}
+
+/* NEW: Mobile Optimizations */
+@media (max-width: 480px) {
+    .pricing-card {
+        padding: 30px 20px;
+    }
+    
+    .price-amount {
+        font-size: 2.5rem;
+    }
+    
+    .currency {
+        font-size: 1.5rem;
+    }
+    
+    .quota-number {
+        font-size: 1.5rem;
+    }
+    
+    .features-list li {
+        font-size: 0.9rem;
+        padding: 8px 0;
+    }
+    
+    .selected-plan-info {
+        padding: 16px;
+    }
+    
+    .form-wrapper {
+        padding: 24px 16px;
+    }
+    
+    .toggle-container {
+        padding: 6px;
+        gap: 4px;
+    }
+    
+    .toggle-option {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .savings-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        top: -6px;
+        right: -6px;
+    }
+}
+
+/* NEW: Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+    .pricing-card {
+        background: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .pricing-card.selected {
+        background: #064e3b;
+        border-color: #10b981;
+    }
+    
+    .quota-section {
+        background: #111827;
+        border-color: #374151;
+    }
+    
+    .pricing-card.selected .quota-section {
+        background: #022c22;
+        border-color: #10b981;
+    }
+    
+    .plan-name,
+    .quota-number {
+        color: #f9fafb;
+    }
+    
+    .pricing-card.selected .plan-name,
+    .pricing-card.selected .quota-number {
+        color: #10b981;
+    }
+    
+    .features-list li {
+        color: #d1d5db;
+    }
+}
+
+/* NEW: Print Styles */
+@media print {
+    .navbar,
+    .hero,
+    .social-proof,
+    .footer {
+        display: none;
+    }
+    
+    .pricing {
+        padding: 20px 0;
+    }
+    
+    .pricing-card {
+        border: 2px solid #000;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+    
+    .features-list {
+        font-size: 12px;
+    }
+}
+
+/* NEW: High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .pricing-card {
+        border-width: 3px;
+    }
+    
+    .pricing-card.selected {
+        border-width: 4px;
+    }
+    
+    .toggle-option.active {
+        background: #000;
+        color: #fff;
+    }
+    
+    .cta-button-pricing {
+        background: #000;
+        border: 2px solid #000;
+    }
+    
+    .feature-check {
+        color: #000;
+        background: #10b981;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .feature-cross {
+        color: #fff;
+        background: #ef4444;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* NEW: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .pricing-card,
+    .feature-card,
+    .cta-button,
+    .submit-button,
+    .toggle-option {
+        transition: none;
+    }
+    
+    .plan-selection-indicator {
+        animation: none;
+    }
+    
+    .spinner {
+        animation: none;
+        border: 4px solid #2563eb;
+        border-radius: 50%;
+    }
+    
+    .success-animation {
+        animation: none;
+    }
+    
+    @keyframes pulse,
+    @keyframes spin,
+    @keyframes slideIn,
+    @keyframes successPulse {
+        to { transform: none; }
+    }
+}
+
+/* NEW: Focus Management */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #2563eb;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* NEW: Error States */
+.form-group.error input {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.form-group.error .error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
+
+.form-group.success input {
+    border-color: #10b981;
+    background-color: #f0fdf4;
+}
+
+/* NEW: Tooltip System */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #1f2937;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.875rem;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* NEW: Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* NEW: Selection Styling */
+::selection {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+::-moz-selection {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* NEW: Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* NEW: Button Loading States */
+.submit-button.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.submit-button.loading::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+/* Final Media Queries for Edge Cases */
+@media (max-width: 320px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .pricing-card {
+        padding: 20px 16px;
+    }
+    
+    .toggle-container {
+        width: 100%;
+    }
+    
+    .toggle-option {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .pricing-cards {
+        max-width: 1400px;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
     }
 }
