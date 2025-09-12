@@ -878,3 +878,111 @@ body {
         text-align: center;
     }
 }
+/* Yeni Pricing Sistem CSS'leri - DOSYANIN SONUNA EKLE */
+.section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #64748b;
+    margin-bottom: 60px;
+}
+
+.billing-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.toggle-container {
+    background: white;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 8px;
+}
+
+.toggle-option {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.toggle-option.active {
+    background: #2563eb;
+    color: white;
+}
+
+.toggle-option:not(.active) {
+    color: #64748b;
+}
+
+.toggle-option:not(.active):hover {
+    background: #f1f5f9;
+}
+
+.savings-badge {
+    background: #10b981;
+    color: white;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    white-space: nowrap;
+}
+
+.trial-banner {
+    background: linear-gradient(90deg, #10b981, #059669);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 40px auto;
+    max-width: 600px;
+}
+
+.trial-banner h3 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.trial-banner p {
+    opacity: 0.9;
+    margin: 0;
+}
+
+.cta-button-pricing {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+}
+
+.cta-button-pricing:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.login-link {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.login-link a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
