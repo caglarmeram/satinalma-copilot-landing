@@ -785,6 +785,7 @@ body {
     
     .pricing-card:hover {
         transform: translateY(-4px);
+        border-color: #2563eb !important;
     }
     
     .footer-links {
