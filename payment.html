@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme - Satınalma CoPilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .payment-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .user-info-card, .payment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .user-info-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .user-details {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .user-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .user-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-trial {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-expired {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .quota-info {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .quota-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .quota-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            transition: width 0.3s ease;
+        }
+
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .toggle-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .toggle-option {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .toggle-option.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .toggle-option:not(.active) {
+            color: #64748b;
+        }
+
+        .toggle-option:not(.active):hover {
+            background: #e2e8f0;
+        }
+
+        .savings-badge {
+            background: #10b981;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            white-space: nowrap;
+        }
+
+        .plans-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .plan-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .plan-option:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        .plan-option.selected {
+            border-color: #2563eb;
+            background: #f8faff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        .plan-option.recommended::before {
+            content: "🔥 ÖNERİLEN";
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: #2563eb;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .plan-name {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1.2rem;
+        }
+
+        .plan-price {
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 1.5rem;
+        }
+
+        .plan-price-unit {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .plan-original-price {
+            text-decoration: line-through;
+            color: #ef4444;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+
+        .plan-details {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .payment-methods {
+            margin-bottom: 30px;
+        }
+
+        .method-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .payment-method {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-method:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .payment-method.selected {
+            border-color: #2563eb;
+            background: #f8faff;
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .method-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .method-description {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .order-summary {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1e293b;
+        }
+
+        .pay-button {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .pay-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .pay-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-note {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .payment-wrapper {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .user-info-card, .payment-card {
+                padding: 24px;
+            }
+            
+            .method-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-wrapper">
+            <!-- User Info Card -->
+            <div class="user-info-card">
+                <div class="card-header">
+                    <h1 class="card-title">🤖 Satınalma CoPilot</h1>
+                    <p class="card-subtitle">Plan Yükseltme & Ödeme</p>
+                </div>
+
+                <div class="user-details" id="userDetails">
+                    <div class="user-detail-item">
+                        <span class="label">Ad Soyad:</span>
+                        <span class="value" id="userName">Yükleniyor...</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <span class="label">Şirket:</span>
+                        <span class="value" id="companyName">Yükleniyor...</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <span class="label">WhatsApp:</span>
+                        <span class="value" id="phoneNumber">Yükleniyor...</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <span class="label">Durum:</span>
+                        <span class="value">
+                            <span class="status-badge" id="statusBadge">Yükleniyor...</span>
+                        </span>
+                    </div>
+                    <div class="user-detail-item">
+                        <span class="label">Plan:</span>
+                        <span class="value" id="currentPlan">Yükleniyor...</span>
+                    </div>
+                </div>
+
+                <div class="quota-info" id="quotaInfo">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #1e293b;">Mesaj Kullanımı</span>
+                        <span id="quotaText" style="color: #64748b; font-size: 0.9rem;">Yükleniyor...</span>
+                    </div>
+                    <div class="quota-bar">
+                        <div class="quota-fill" id="quotaFill" style="width: 0%"></div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-top: 4px;" id="quotaDetails">
+                        Bilgiler yükleniyor...
+                    </div>
+                </div>
+
+                <div style="background: #fef3c7; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="color: #92400e; font-weight: 600; margin-bottom: 4px;">⚡ Hemen Aktifleşir</div>
+                    <div style="color: #92400e; font-size: 0.9rem;">Ödeme sonrası WhatsApp asistanınız anında çalışmaya başlar</div>
+                </div>
+            </div>
+
+            <!-- Payment Card -->
+            <div class="payment-card">
+                <div class="card-header">
+                    <h2 class="card-title">Plan Seçin</h2>
+                    <p class="card-subtitle">İhtiyacınıza en uygun planı seçin</p>
+                </div>
+
+                <!-- Billing Toggle -->
+                <div class="billing-toggle">
+                    <div class="toggle-container">
+                        <div class="toggle-option active" id="monthlyToggle" onclick="switchBilling('monthly')">
+                            Aylık
+                        </div>
+                        <div class="toggle-option" id="yearlyToggle" onclick="switchBilling('yearly')">
+                            Yıllık
+                            <span class="savings-badge">%58'e Varan İndirim</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Options -->
+                <div class="plans-grid" id="plansGrid">
+                    <!-- Plans will be populated by JavaScript -->
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h3 class="method-title">Ödeme Yöntemi</h3>
+                    <div class="method-grid">
+                        <div class="payment-method selected" data-method="stripe" onclick="selectPaymentMethod('stripe')">
+                            <div class="method-icon">💳</div>
+                            <div class="method-name">Kredi Kartı</div>
+                            <div class="method-description">Visa, Mastercard, Amex</div>
+                        </div>
+                        <div class="payment-method" data-method="paytr" onclick="selectPaymentMethod('paytr')">
+                            <div class="method-icon">🇹🇷</div>
+                            <div class="method-name">PayTR</div>
+                            <div class="method-description">Türkiye kartları</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h4 class="summary-title">Sipariş Özeti</h4>
+                    <div class="summary-item">
+                        <span>Plan:</span>
+                        <span id="summaryPlan">Seçiniz</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Süre:</span>
+                        <span id="summaryDuration">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Mesaj Kotası:</span>
+                        <span id="summaryQuota">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Toplam:</span>
+                        <span id="summaryTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Pay Button -->
+                <button class="pay-button" id="payButton" onclick="processPayment()" disabled>
+                    <span id="payButtonText">Plan Seçin</span>
+                </button>
+
+                <div class="security-note">
+                    🔒 Ödemeleriniz SSL ile şifrelenir<br>
+                    💰 İlk 14 gün para iade garantisi<br>
+                    🚫 Otomatik yenilenme yok, istediğiniz zaman iptal
+                </div>
+
+                <div class="back-link">
+                    <a href="index.html">← Ana Sayfaya Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Ödeme İşleniyor...</h3>
+            <p>Lütfen sayfayı kapatmayın</p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let selectedBilling = 'monthly';
+        let selectedPlan = null;
+        let selectedPaymentMethod = 'stripe';
+
+        // Pricing data
+        const pricingData = {
+            monthly: {
+                basic: { price: 3.95, quota: 500, name: 'Basic' },
+                pro: { price: 8.95, originalPrice: 11.85, quota: 1500, name: 'Pro', recommended: true },
+                max: { price: 19.95, originalPrice: 39.95, quota: 5000, name: 'Max' }
+            },
+            yearly: {
+                basic: { price: 39.95, quota: 6000, name: 'Basic' },
+                pro: { price: 99.95, originalPrice: 142.20, quota: 18000, name: 'Pro', recommended: true },
+                max: { price: 199.95, originalPrice: 474, quota: 60000, name: 'Max' }
+            }
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const phone = urlParams.get('phone');
+            
+            if (!phone) {
+                alert('Telefon numarası gerekli. Ana sayfaya yönlendiriliyorsunuz.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadUserData(phone);
+            renderPlans();
+        });
+
+        async function loadUserData(phone) {
+            try {
+                const cleanPhone = phone.replace(/[^\d+]/g, '');
+                const response = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?id=eq.${currentUser.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Ödeme kaydı güncellenemedi');
+                }
+                
+                // Hide loading
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Success message
+                alert(`🎉 Ödeme başarılı!\n\n${plan.name} planı aktifleştirildi.\n${plan.quota.toLocaleString()} mesaj hakkınız yüklendi.\n\nWhatsApp asistanınız şimdi aktif!`);
+                
+                // Redirect to success or dashboard
+                window.location.href = `success.html?phone=${encodeURIComponent(currentUser.contact_phone)}&plan=${selectedPlan}&payment=success`;
+                
+            } catch (error) {
+                console.error('Payment error:', error);
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                alert('Ödeme işlemi başarısız oldu. Lütfen tekrar deneyin veya destek ile iletişime geçin.\n\n📧 info@satinalmacopilot.com\n📞 +90 552 071 0977');
+            }
+        }
+
+        // Initialize page on load
+        window.addEventListener('load', function() {
+            // Check for plan suggestion from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const suggestedPlan = urlParams.get('plan');
+            const suggestedBilling = urlParams.get('billing');
+            
+            if (suggestedPlan && pricingData.monthly[suggestedPlan]) {
+                selectedPlan = suggestedPlan;
+            }
+            
+            if (suggestedBilling && pricingData[suggestedBilling]) {
+                switchBilling(suggestedBilling);
+            }
+            
+            renderPlans();
+            updateSummary();
+        });
+    </script>
+</body>
+</html>supabase.co/rest/v1/customers?contact_phone=eq.${cleanPhone}&select=*`, {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+                    }
+                });
+                
+                const users = await response.json();
+                
+                if (users.length > 0) {
+                    currentUser = users[0];
+                    displayUserInfo(currentUser);
+                } else {
+                    alert('Kullanıcı bulunamadı. Ana sayfaya yönlendiriliyorsunuz.');
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('User loading error:', error);
+                alert('Kullanıcı bilgileri yüklenirken hata oluştu.');
+            }
+        }
+
+        function displayUserInfo(user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('companyName').textContent = user.company_name;
+            document.getElementById('phoneNumber').textContent = user.contact_phone;
+            document.getElementById('currentPlan').textContent = user.subscription_plan?.toUpperCase() || 'YOK';
+            
+            // Status badge
+            const statusBadge = document.getElementById('statusBadge');
+            const now = new Date();
+            const trialEnd = user.trial_end_date ? new Date(user.trial_end_date) : null;
+            
+            if (user.subscription_status === 'trial' && trialEnd && trialEnd > now) {
+                statusBadge.textContent = 'Trial Aktif';
+                statusBadge.className = 'status-badge status-trial';
+            } else if (user.subscription_status === 'active') {
+                statusBadge.textContent = 'Aktif';
+                statusBadge.className = 'status-badge status-active';
+            } else {
+                statusBadge.textContent = 'Süresi Dolmuş';
+                statusBadge.className = 'status-badge status-expired';
+            }
+            
+            // Quota information
+            const usedQuota = user.used_quota || 0;
+            const monthlyQuota = user.monthly_quota || 1000;
+            const quotaPercentage = Math.round((usedQuota / monthlyQuota) * 100);
+            
+            document.getElementById('quotaText').textContent = `${usedQuota} / ${monthlyQuota}`;
+            document.getElementById('quotaFill').style.width = quotaPercentage + '%';
+            
+            let quotaColor = '#10b981';
+            if (quotaPercentage > 80) quotaColor = '#ef4444';
+            else if (quotaPercentage > 60) quotaColor = '#f59e0b';
+            
+            document.getElementById('quotaFill').style.background = quotaColor;
+            document.getElementById('quotaDetails').textContent = `${quotaPercentage}% kullanılmış`;
+        }
+
+        function switchBilling(type) {
+            selectedBilling = type;
+            
+            document.getElementById('monthlyToggle').classList.toggle('active', type === 'monthly');
+            document.getElementById('yearlyToggle').classList.toggle('active', type === 'yearly');
+            
+            renderPlans();
+            updateSummary();
+        }
+
+        function renderPlans() {
+            const plansGrid = document.getElementById('plansGrid');
+            const data = pricingData[selectedBilling];
+            
+            plansGrid.innerHTML = Object.keys(data).map(planKey => {
+                const plan = data[planKey];
+                const isSelected = selectedPlan === planKey;
+                
+                return `
+                    <div class="plan-option ${isSelected ? 'selected' : ''} ${plan.recommended ? 'recommended' : ''}" 
+                         onclick="selectPlan('${planKey}')">
+                        <div class="plan-header">
+                            <div class="plan-name">${plan.name}</div>
+                            <div>
+                                ${plan.originalPrice ? `<span class="plan-original-price">$${plan.originalPrice}</span>` : ''}
+                                <span class="plan-price">$${plan.price}</span>
+                                <span class="plan-price-unit">/${selectedBilling === 'monthly' ? 'ay' : 'yıl'}</span>
+                            </div>
+                        </div>
+                        <div class="plan-details">
+                            <strong>${plan.quota.toLocaleString()}</strong> mesaj/${selectedBilling === 'monthly' ? 'ay' : 'yıl'}
+                        </div>
+                        <ul class="plan-features">
+                            <li>✅ RFQ Oluşturma</li>
+                            <li>✅ Tedarikçi Bulma</li>
+                            <li>✅ Risk Analizi</li>
+                            ${planKey !== 'basic' ? '<li>✅ API Erişimi</li>' : '<li>❌ API Erişimi</li>'}
+                            ${planKey === 'max' ? '<li>✅ Öncelikli Destek</li>' : '<li>❌ Öncelikli Destek</li>'}
+                        </ul>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectPlan(planKey) {
+            selectedPlan = planKey;
+            renderPlans();
+            updateSummary();
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.toggle('selected', el.dataset.method === method);
+            });
+        }
+
+        function updateSummary() {
+            if (!selectedPlan) {
+                document.getElementById('summaryPlan').textContent = 'Seçiniz';
+                document.getElementById('summaryDuration').textContent = '-';
+                document.getElementById('summaryQuota').textContent = '-';
+                document.getElementById('summaryTotal').textContent = '$0.00';
+                document.getElementById('payButton').disabled = true;
+                document.getElementById('payButtonText').textContent = 'Plan Seçin';
+                return;
+            }
+            
+            const plan = pricingData[selectedBilling][selectedPlan];
+            
+            document.getElementById('summaryPlan').textContent = plan.name;
+            document.getElementById('summaryDuration').textContent = selectedBilling === 'monthly' ? '1 Ay' : '1 Yıl';
+            document.getElementById('summaryQuota').textContent = plan.quota.toLocaleString() + ' mesaj';
+            document.getElementById('summaryTotal').textContent = '$' + plan.price;
+            
+            document.getElementById('payButton').disabled = false;
+            document.getElementById('payButtonText').textContent = `$${plan.price} Öde`;
+        }
+
+        async function processPayment() {
+            if (!selectedPlan || !currentUser) {
+                alert('Lütfen bir plan seçin.');
+                return;
+            }
+            
+            const plan = pricingData[selectedBilling][selectedPlan];
+            
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            try {
+                // Simulate payment processing
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Update user in database
+                const updateData = {
+                    subscription_status: 'active',
+                    subscription_plan: selectedPlan,
+                    billing_cycle: selectedBilling,
+                    monthly_quota: plan.quota,
+                    used_quota: 0,
+                    plan_start_date: new Date().toISOString(),
+                    plan_end_date: new Date(Date.now() + (selectedBilling === 'monthly' ? 30 : 365) * 24 * 60 * 60 * 1000).toISOString(),
+                    last_payment_date: new Date().toISOString(),
+                    payment_status: 'paid'
+                };
+                
+                const response = await fetch(`https://dblepmaqqkudsbmvlqcw.
