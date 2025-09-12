@@ -176,189 +176,463 @@
         </div>
     </section>
 
-    <!-- Pricing -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <h2 class="section-title">Şeffaf Fiyatlandırma</h2>
-            <p class="section-subtitle">
-                İhtiyacınıza uygun planı seçin. Tüm planlar 14 gün ücretsiz deneme ile başlar.
-            </p>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Pricing Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            <!-- Billing Toggle -->
-            <div class="billing-toggle">
-                <div class="toggle-container">
-                    <div class="toggle-option active" id="monthlyToggle" onclick="switchBilling('monthly')">
-                        Aylık Ödeme
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .pricing-card.featured {
+            border-color: #2563eb;
+            transform: scale(1.02);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .plan-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        /* Yeni Fiyat Tasarımı */
+        .price-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .currency {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .price-amount {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+        }
+
+        .price-period {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .price-info {
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .original-price {
+            color: #ef4444;
+            text-decoration: line-through;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .savings-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Mesaj Quota Tasarımı */
+        .quota-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0 30px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quota-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 4px;
+        }
+
+        .quota-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .feature-check {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feature-cross {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .cta-button.secondary:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .login-link {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Enterprise özel tasarım */
+        .enterprise-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+        }
+
+        .enterprise-card .plan-name,
+        .enterprise-card .price-amount,
+        .enterprise-card .currency {
+            color: white;
+        }
+
+        .enterprise-card .plan-description,
+        .enterprise-card .price-period {
+            color: #cbd5e1;
+        }
+
+        .enterprise-card .quota-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .enterprise-card .quota-number {
+            color: #60a5fa;
+        }
+
+        .enterprise-card .quota-label {
+            color: #cbd5e1;
+        }
+
+        .enterprise-card .features-list li {
+            color: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card:hover {
+                transform: translateY(-4px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pricing-container">
+        <div class="pricing-cards">
+            <!-- Basic Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h3 class="plan-name">Basic</h3>
+                    <p class="plan-description">Satınalma profesyonelleri için başlangıç paketi</p>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-main">
+                        <span class="currency">$</span>
+                        <span class="price-amount">39.95</span>
+                        <span class="price-period">/ay</span>
                     </div>
-                    <div class="toggle-option" id="yearlyToggle" onclick="switchBilling('yearly')">
-                        Yıllık Ödeme
-                        <span class="savings-badge">%58'e Kadar İndirim</span>
+                    <div class="price-info">
+                        <!-- Basic'te indirim yok, bu alan boş kalıyor -->
                     </div>
+                </div>
+
+                <div class="quota-section">
+                    <div class="quota-number">6.000</div>
+                    <div class="quota-label">mesaj/ay</div>
+                </div>
+
+                <ul class="features-list">
+                    <li><span class="feature-check">✅</span> Tedarikçi Bulma ve Analiz</li>
+                    <li><span class="feature-check">✅</span> RFQ Oluşturma</li>
+                    <li><span class="feature-check">✅</span> Temel Risk Analizi</li>
+                    <li><span class="feature-check">✅</span> Pazar Fiyat Bilgileri</li>
+                    <li><span class="feature-check">✅</span> WhatsApp Desteği</li>
+                    <li><span class="feature-cross">❌</span> API Erişimi</li>
+                    <li><span class="feature-cross">❌</span> Öncelikli Destek</li>
+                </ul>
+
+                <button class="cta-button">
+                    Ücretsiz Denemeye Başla
+                </button>
+                <div class="login-link">
+                    <a href="#">Zaten üye misiniz?</a>
                 </div>
             </div>
 
-            <!-- Trial Banner -->
-            <div class="trial-banner">
-                <h3>🎁 14 Gün Ücretsiz Deneme</h3>
-                <p>Tüm planlar kredi kartı gerektirmeden 14 gün veya 1000 mesaj ücretsiz!</p>
+            <!-- Pro Plan -->
+            <div class="pricing-card featured">
+                <div class="popular-badge">🔥 ÖNERİLEN</div>
+                
+                <div class="plan-header">
+                    <h3 class="plan-name">Pro</h3>
+                    <p class="plan-description">Deneyimli procurement uzmanları için</p>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-main">
+                        <span class="currency">$</span>
+                        <span class="price-amount">99.95</span>
+                        <span class="price-period">/ay</span>
+                    </div>
+                    <div class="price-info">
+                        <span class="original-price">$142.20</span>
+                        <span class="savings-badge">%30 İndirim</span>
+                    </div>
+                </div>
+
+                <div class="quota-section">
+                    <div class="quota-number">18.000</div>
+                    <div class="quota-label">mesaj/ay</div>
+                </div>
+
+                <ul class="features-list">
+                    <li><span class="feature-check">✅</span> Gelişmiş Tedarikçi Scouting</li>
+                    <li><span class="feature-check">✅</span> Kapsamlı RFQ Yönetimi</li>
+                    <li><span class="feature-check">✅</span> Detaylı Risk & Due Diligence</li>
+                    <li><span class="feature-check">✅</span> Pazar Trend Analizi</li>
+                    <li><span class="feature-check">✅</span> Sözleşme Danışmanlığı</li>
+                    <li><span class="feature-check">✅</span> API Erişimi</li>
+                    <li><span class="feature-check">✅</span> WhatsApp + Email Desteği</li>
+                </ul>
+
+                <button class="cta-button">
+                    Ücretsiz Denemeye Başla
+                </button>
+                <div class="login-link">
+                    <a href="#">Zaten üye misiniz?</a>
+                </div>
             </div>
 
-            <!-- Pricing Cards -->
-            <div class="pricing-cards" id="pricingCards">
-                <!-- Basic Plan -->
-                <div class="pricing-card" data-plan="basic">
-                    <div class="plan-header">
-                        <h3 class="plan-name">Basic</h3>
-                        <p class="plan-description">Küçük işletmeler için başlangıç paketi</p>
-                        <div class="price-container">
-                            <div class="price">
-                                $<span id="basicPrice">3.95</span>
-                                <span class="price-unit">/ay</span>
-                            </div>
-                        </div>
-                        <div class="message-quota">
-                            <div class="quota-number" id="basicQuota">500</div>
-                            <div class="quota-label">mesaj/ay</div>
-                        </div>
+            <!-- Max Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h3 class="plan-name">Max</h3>
+                    <p class="plan-description">İleri seviye procurement profesyonelleri için</p>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-main">
+                        <span class="currency">$</span>
+                        <span class="price-amount">199.95</span>
+                        <span class="price-period">/ay</span>
                     </div>
-                    <ul class="features-list">
-                        <li><span class="feature-check">✅</span> RFQ Oluşturma</li>
-                        <li><span class="feature-check">✅</span> Tedarikçi Bulma</li>
-                        <li><span class="feature-check">✅</span> Risk Analizi</li>
-                        <li><span class="feature-check">✅</span> WhatsApp Desteği</li>
-                        <li><span class="feature-cross">❌</span> API Erişimi</li>
-                        <li><span class="feature-cross">❌</span> Öncelikli Destek</li>
-                    </ul>
-                    <button class="cta-button-pricing" onclick="selectPlan('basic')">
-                        Ücretsiz Denemeye Başla
-                    </button>
-                    <div class="login-link">
-                        <a href="#" onclick="showLogin(); return false;">Zaten üye misiniz?</a>
+                    <div class="price-info">
+                        <span class="original-price">$474.00</span>
+                        <span class="savings-badge">%58 İndirim</span>
                     </div>
                 </div>
 
-                <!-- Pro Plan -->
-                <div class="pricing-card featured" data-plan="pro">
-                    <div class="plan-header">
-                        <h3 class="plan-name">Pro</h3>
-                        <p class="plan-description">Büyüyen işletmeler için ideal</p>
-                        <div class="price-container">
-                            <div class="original-price" id="proOriginalPrice">$11.85</div>
-                            <div class="price">
-                                $<span id="proPrice">8.95</span>
-                                <span class="price-unit">/ay</span>
-                            </div>
-                            <div class="savings-text" id="proSavings">%24 İndirim</div>
-                        </div>
-                        <div class="message-quota">
-                            <div class="quota-number" id="proQuota">1500</div>
-                            <div class="quota-label">mesaj/ay</div>
-                        </div>
+                <div class="quota-section">
+                    <div class="quota-number">60.000</div>
+                    <div class="quota-label">mesaj/ay</div>
+                </div>
+
+                <ul class="features-list">
+                    <li><span class="feature-check">✅</span> Tüm Pro Özellikleri</li>
+                    <li><span class="feature-check">✅</span> Sipariş & Teslimat Takibi</li>
+                    <li><span class="feature-check">✅</span> Ödeme & Fatura Yönetimi</li>
+                    <li><span class="feature-check">✅</span> Performans KPI Raporları</li>
+                    <li><span class="feature-check">✅</span> Stratejik Procurement Danışmanlığı</li>
+                    <li><span class="feature-check">✅</span> Öncelikli Teknik Destek</li>
+                    <li><span class="feature-check">✅</span> Özel Entegrasyonlar</li>
+                </ul>
+
+                <button class="cta-button">
+                    Ücretsiz Denemeye Başla
+                </button>
+                <div class="login-link">
+                    <a href="#">Zaten üye misiniz?</a>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card enterprise-card">
+                <div class="plan-header">
+                    <h3 class="plan-name">Enterprise</h3>
+                    <p class="plan-description">CPO'lar ve procurement ekipleri için</p>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-main">
+                        <span class="price-amount" style="font-size: 2.2rem;">Fiyat Sorunuz</span>
                     </div>
-                    <ul class="features-list">
-                        <li><span class="feature-check">✅</span> RFQ Oluşturma</li>
-                        <li><span class="feature-check">✅</span> Tedarikçi Bulma</li>
-                        <li><span class="feature-check">✅</span> Risk Analizi</li>
-                        <li><span class="feature-check">✅</span> Pazar Araştırması</li>
-                        <li><span class="feature-check">✅</span> WhatsApp Desteği</li>
-                        <li><span class="feature-check">✅</span> API Erişimi</li>
-                        <li><span class="feature-cross">❌</span> Öncelikli Destek</li>
-                    </ul>
-                    <button class="cta-button-pricing" onclick="selectPlan('pro')">
-                        Ücretsiz Denemeye Başla
-                    </button>
-                    <div class="login-link">
-                        <a href="#" onclick="showLogin(); return false;">Zaten üye misiniz?</a>
+                    <div class="price-info">
+                        <!-- Enterprise'da fiyat yok -->
                     </div>
                 </div>
 
-                <!-- Max Plan -->
-                <div class="pricing-card" data-plan="max">
-                    <div class="plan-header">
-                        <h3 class="plan-name">Max</h3>
-                        <p class="plan-description">Yoğun kullanım için güçlü paket</p>
-                        <div class="price-container">
-                            <div class="original-price" id="maxOriginalPrice">$39.95</div>
-                            <div class="price">
-                                $<span id="maxPrice">19.95</span>
-                                <span class="price-unit">/ay</span>
-                            </div>
-                            <div class="savings-text" id="maxSavings">%50 İndirim</div>
-                        </div>
-                        <div class="message-quota">
-                            <div class="quota-number" id="maxQuota">5000</div>
-                            <div class="quota-label">mesaj/ay</div>
-                        </div>
-                    </div>
-                    <ul class="features-list">
-                        <li><span class="feature-check">✅</span> Tüm Pro Özellikler</li>
-                        <li><span class="feature-check">✅</span> Teslimat Takibi</li>
-                        <li><span class="feature-check">✅</span> Ödeme Yönetimi</li>
-                        <li><span class="feature-check">✅</span> Sözleşme Desteği</li>
-                        <li><span class="feature-check">✅</span> Detaylı Raporlar</li>
-                        <li><span class="feature-check">✅</span> Öncelikli Destek</li>
-                        <li><span class="feature-check">✅</span> Özel Entegrasyonlar</li>
-                    </ul>
-                    <button class="cta-button-pricing" onclick="selectPlan('max')">
-                        Ücretsiz Denemeye Başla
-                    </button>
-                    <div class="login-link">
-                        <a href="#" onclick="showLogin(); return false;">Zaten üye misiniz?</a>
-                    </div>
+                <div class="quota-section">
+                    <div class="quota-number">Sınırsız</div>
+                    <div class="quota-label">mesaj</div>
                 </div>
 
-                <!-- Enterprise Plan -->
-                <div class="pricing-card enterprise-card" data-plan="enterprise">
-                    <div class="plan-header">
-                        <h3 class="plan-name">Enterprise</h3>
-                        <p class="plan-description">Kurumsal çözümler için</p>
-                        <div class="price-container">
-                            <div class="price">
-                                Fiyat<span class="price-unit"> Sorunuz</span>
-                            </div>
-                        </div>
-                        <div class="message-quota">
-                            <div class="quota-number">Sınırsız</div>
-                            <div class="quota-label">mesaj</div>
-                        </div>
-                    </div>
-                    <ul class="features-list">
-                        <li><span class="feature-check">✅</span> Tüm Max Özellikler</li>
-                        <li><span class="feature-check">✅</span> Özel WhatsApp Numarası</li>
-                        <li><span class="feature-check">✅</span> Özel AI Modeli</li>
-                        <li><span class="feature-check">✅</span> SLA Garantisi</li>
-                        <li><span class="feature-check">✅</span> Özel Entegrasyonlar</li>
-                        <li><span class="feature-check">✅</span> Kişisel Hesap Yöneticisi</li>
-                        <li><span class="feature-check">✅</span> On-Site Eğitim</li>
-                    </ul>
-                    <button class="cta-button-pricing secondary" onclick="selectPlan('enterprise')">
-                        İletişime Geçin
-                    </button>
-                    <div class="login-link">
-                        <a href="#" onclick="showLogin(); return false;">Zaten üye misiniz?</a>
-                    </div>
+                <ul class="features-list">
+                    <li><span class="feature-check">✅</span> Tüm Max Özellikleri</li>
+                    <li><span class="feature-check">✅</span> Özel WhatsApp Business Account</li>
+                    <li><span class="feature-check">✅</span> Kişiselleştirilmiş AI Asistan</li>
+                    <li><span class="feature-check">✅</span> SLA & Uptime Garantisi</li>
+                    <li><span class="feature-check">✅</span> ERP/SAP Entegrasyonu</li>
+                    <li><span class="feature-check">✅</span> Dedicated Account Manager</li>
+                    <li><span class="feature-check">✅</span> On-site Training & Setup</li>
+                </ul>
+
+                <button class="cta-button secondary">
+                    İletişime Geçin
+                </button>
+                <div class="login-link">
+                    <a href="#" style="color: #94a3b8;">Zaten üye misiniz?</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <span class="logo">🤖</span>
-                    <span class="brand-text">Satınalma CoPilot</span>
-                </div>
-                <p>AI destekli satınalma asistanınız</p>
-                <div class="footer-links">
-                    <a href="mailto:info@satinalmacopilot.com">📧 info@satinalmacopilot.com</a>
-                    <a href="tel:+905520710977">📞 +90 552 071 0977</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    </div>
 </body>
 </html>
