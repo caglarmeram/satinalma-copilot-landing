@@ -381,197 +381,6 @@ body {
     background: #fff;
 }
 
-.pricing-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.pricing-card {
-    background: #fff;
-    border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 30px;
-    text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.pricing-card.featured {
-    border-color: #2563eb;
-    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
-}
-
-.pricing-card:hover {
-    border-color: #2563eb;
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
-}
-
-.popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2563eb;
-    color: white;
-    padding: 6px 20px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.pricing-header h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 12px;
-}
-
-.price {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #2563eb;
-    margin-bottom: 24px;
-    display: block;
-}
-
-.price span {
-    font-size: 1rem;
-    color: #64748b;
-    font-weight: 400;
-}
-
-.pricing-features {
-    list-style: none;
-    text-align: left;
-    margin-bottom: 30px;
-}
-
-.pricing-features li {
-    padding: 8px 0;
-    color: #475569;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Footer */
-.footer {
-    background: #1e293b;
-    color: white;
-    padding: 40px 0;
-    text-align: center;
-}
-
-.footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
-
-.footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.footer-links {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-links a {
-    color: #94a3b8;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #e2e8f0;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .phone-mockup {
-        width: 240px;
-        height: 480px;
-    }
-    
-    .testimonials {
-        grid-template-columns: 1fr;
-    }
-    
-    .pricing-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .pricing-card.featured {
-        transform: none;
-    }
-    
-    .footer-links {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 0 16px;
-    }
-    
-    .hero {
-        padding: 100px 0 60px;
-    }
-    
-    .hero-title {
-        font-size: 2rem;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .form-wrapper {
-        padding: 30px 20px;
-    }
-    
-    .pricing-cards {
-        gap: 20px;
-    }
-    
-    .features-grid {
-        gap: 20px;
-    }
-    
-    .testimonials {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
 /* Yeni Pricing Sistem CSS'leri */
 .section-subtitle {
     text-align: center;
@@ -651,7 +460,7 @@ body {
 
 .pricing-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
@@ -664,7 +473,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid #e2e8f0;
 }
 
 .pricing-card:hover {
@@ -674,21 +483,21 @@ body {
 
 .pricing-card.featured {
     border-color: #2563eb;
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
-.pricing-card.featured::before {
-    content: "🔥 ÖNERİLEN";
+.popular-badge {
     position: absolute;
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: white;
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .plan-header {
@@ -706,79 +515,102 @@ body {
 .plan-description {
     color: #64748b;
     font-size: 0.9rem;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-.price-container {
-    position: relative;
+/* Yeni Fiyat Tasarımı */
+.price-section {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.price {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #1e293b;
+.price-main {
     display: flex;
     align-items: baseline;
     justify-content: center;
     gap: 8px;
+    margin-bottom: 12px;
 }
 
-.price-unit {
-    font-size: 1rem;
+.currency {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.price-amount {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #2563eb; /* MAVİ FIYAT */
+    line-height: 1;
+}
+
+.price-period {
+    font-size: 1.1rem;
     color: #64748b;
-    font-weight: 400;
+    font-weight: 500;
+}
+
+.price-info {
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
 .original-price {
-    font-size: 1.2rem;
     color: #ef4444;
     text-decoration: line-through;
-    position: absolute;
-    top: -20px;
-    right: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
-.savings-text {
-    background: #10b981;
+.savings-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     font-size: 0.8rem;
     padding: 4px 12px;
-    border-radius: 20px;
-    margin: 8px auto;
-    display: inline-block;
+    border-radius: 12px;
+    font-weight: 600;
 }
 
-.message-quota {
-    background: #f1f5f9;
-    border-radius: 8px;
-    padding: 12px;
-    margin: 20px 0;
+/* Mesaj Quota Tasarımı */
+.quota-section {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0 30px;
     text-align: center;
+    border: 1px solid #e2e8f0;
 }
 
 .quota-number {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* KÜÇÜLTÜLDÜ */
     font-weight: 700;
-    color: #2563eb;
+    color: #1e293b; /* SİYAH MESAJ SAYISI */
+    margin-bottom: 4px;
 }
 
 .quota-label {
     color: #64748b;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .features-list {
     list-style: none;
     padding: 0;
-    margin: 30px 0;
+    margin: 0 0 30px;
 }
 
 .features-list li {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 0;
+    padding: 10px 0;
     color: #475569;
+    font-size: 0.95rem;
 }
 
 .feature-check {
@@ -795,7 +627,7 @@ body {
 
 .cta-button-pricing {
     width: 100%;
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: white;
     border: none;
     padding: 16px 24px;
@@ -808,8 +640,8 @@ body {
 }
 
 .cta-button-pricing:hover {
-    background: #1d4ed8;
     transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
 }
 
 .cta-button-pricing.secondary {
@@ -827,7 +659,6 @@ body {
     text-align: center;
     color: #64748b;
     font-size: 0.9rem;
-    margin-top: 8px;
 }
 
 .login-link a {
@@ -840,32 +671,120 @@ body {
     text-decoration: underline;
 }
 
+/* Enterprise özel tasarım */
 .enterprise-card {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     color: white;
 }
 
 .enterprise-card .plan-name,
-.enterprise-card .price {
+.enterprise-card .price-amount,
+.enterprise-card .currency {
     color: white;
 }
 
 .enterprise-card .plan-description,
-.enterprise-card .quota-label {
+.enterprise-card .price-period {
     color: #cbd5e1;
 }
 
-.enterprise-card .message-quota {
+.enterprise-card .quota-section {
     background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.enterprise-card .quota-number {
+    color: #60a5fa;
+}
+
+.enterprise-card .quota-label {
+    color: #cbd5e1;
 }
 
 .enterprise-card .features-list li {
     color: #e2e8f0;
 }
 
+/* Footer */
+.footer {
+    background: #1e293b;
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #e2e8f0;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .phone-mockup {
+        width: 240px;
+        height: 480px;
+    }
+    
+    .testimonials {
+        grid-template-columns: 1fr;
+    }
+    
+    .pricing-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
     .pricing-card.featured {
         transform: none;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-4px);
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
     }
     
     .toggle-container {
@@ -878,111 +797,38 @@ body {
         text-align: center;
     }
 }
-/* Yeni Pricing Sistem CSS'leri - DOSYANIN SONUNA EKLE */
-.section-subtitle {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #64748b;
-    margin-bottom: 60px;
-}
 
-.billing-toggle {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 60px;
-}
-
-.toggle-container {
-    background: white;
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 8px;
-}
-
-.toggle-option {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.toggle-option.active {
-    background: #2563eb;
-    color: white;
-}
-
-.toggle-option:not(.active) {
-    color: #64748b;
-}
-
-.toggle-option:not(.active):hover {
-    background: #f1f5f9;
-}
-
-.savings-badge {
-    background: #10b981;
-    color: white;
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 6px;
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    white-space: nowrap;
-}
-
-.trial-banner {
-    background: linear-gradient(90deg, #10b981, #059669);
-    color: white;
-    text-align: center;
-    padding: 20px;
-    border-radius: 12px;
-    margin: 40px auto;
-    max-width: 600px;
-}
-
-.trial-banner h3 {
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-}
-
-.trial-banner p {
-    opacity: 0.9;
-    margin: 0;
-}
-
-.cta-button-pricing {
-    width: 100%;
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 16px 24px;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 16px;
-}
-
-.cta-button-pricing:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-}
-
-.login-link {
-    text-align: center;
-    color: #64748b;
-    font-size: 0.9rem;
-    margin-top: 8px;
-}
-
-.login-link a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+    
+    .hero {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .form-wrapper {
+        padding: 30px 20px;
+    }
+    
+    .pricing-cards {
+        gap: 20px;
+    }
+    
+    .features-grid {
+        gap: 20px;
+    }
+    
+    .testimonials {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
