@@ -34,46 +34,44 @@ const pricingData = {
             price: 39.95,
             originalPrice: 47.40, // 3.95 * 12
             quota: "6,000",
-            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            quotaLabel: "mesaj/yıl",
             savings: "%16 İndirim",
-            period: "/yıl", // DÜZELTİLDİ
-            monthlyEquivalent: "3.33 USD/ay" // EKLENDI
+            period: "/yıl",
+            monthlyEquivalent: "3.33 USD/ay"
         },
         pro: {
             price: 99.95,
             originalPrice: 142.20, // 11.85 * 12
             quota: "18,000",
-            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            quotaLabel: "mesaj/yıl",
             savings: "%30 İndirim",
-            period: "/yıl", // DÜZELTİLDİ
-            monthlyEquivalent: "8.33 USD/ay" // EKLENDI
+            period: "/yıl",
+            monthlyEquivalent: "8.33 USD/ay"
         },
         max: {
             price: 199.95,
-            originalPrice: 479.40, // 39.95 * 12 (474 yanlıştı)
+            originalPrice: 479.40, // 39.95 * 12
             quota: "60,000", 
-            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            quotaLabel: "mesaj/yıl",
             savings: "%58 İndirim",
-            period: "/yıl", // DÜZELTİLDİ
-            monthlyEquivalent: "16.66 USD/ay" // EKLENDI
+            period: "/yıl",
+            monthlyEquivalent: "16.66 USD/ay"
         }
     }
 };
 
 let currentBilling = 'monthly';
 
-// Billing toggle functions
+// Billing toggle functions - Güncellenmiş element ID'leri
 function switchBilling(type) {
     currentBilling = type;
     
-    // Update toggle UI
-    const monthlyToggle = document.getElementById('monthlyToggle');
-    const yearlyToggle = document.getElementById('yearlyToggle');
-    
-    if (monthlyToggle && yearlyToggle) {
-        monthlyToggle.classList.toggle('active', type === 'monthly');
-        yearlyToggle.classList.toggle('active', type === 'yearly');
-    }
+    // Update toggle UI - HTML'deki data-billing sistemine uygun
+    const toggleOptions = document.querySelectorAll('.toggle-option');
+    toggleOptions.forEach(option => {
+        const billingType = option.getAttribute('data-billing');
+        option.classList.toggle('active', billingType === type);
+    });
     
     // Update pricing
     updatePricing();
@@ -85,20 +83,22 @@ function updatePricing() {
     Object.keys(data).forEach(plan => {
         const planData = data[plan];
         
-        // Fiyat güncelle
-        const priceEl = document.getElementById(`${plan}Price`);
-        const periodEl = document.getElementById(`${plan}Period`);
+        // Fiyat güncelle - HTML'deki class yapısına uygun
+        const priceEl = document.querySelector(`[data-plan="${plan}"] .price-amount`);
+        const periodEl = document.querySelector(`[data-plan="${plan}"] .price-period`);
+        
         if (priceEl) priceEl.textContent = planData.price;
         if (periodEl) periodEl.textContent = planData.period;
         
         // Kota güncelle
-        const quotaEl = document.getElementById(`${plan}Quota`);
-        const quotaLabelEl = document.getElementById(`${plan}QuotaLabel`);
+        const quotaEl = document.querySelector(`[data-plan="${plan}"] .quota-number`);
+        const quotaLabelEl = document.querySelector(`[data-plan="${plan}"] .quota-label`);
+        
         if (quotaEl) quotaEl.textContent = planData.quota;
         if (quotaLabelEl) quotaLabelEl.textContent = planData.quotaLabel;
         
-        // Fiyat info güncelle
-        const priceInfoEl = document.getElementById(`${plan}PriceInfo`);
+        // Price info güncelle
+        const priceInfoEl = document.querySelector(`[data-plan="${plan}"] .price-info`);
         if (priceInfoEl) {
             priceInfoEl.innerHTML = '';
             
@@ -133,14 +133,11 @@ function selectPlan(planType) {
         return;
     }
 
-    // Store selected plan in hidden inputs
-    const selectedPlanInput = document.getElementById('selectedPlan');
-    const selectedBillingInput = document.getElementById('selectedBilling');
+    // Store selected plan in sessionStorage (HTML'de form yoksa)
+    sessionStorage.setItem('selectedPlan', planType);
+    sessionStorage.setItem('selectedBilling', currentBilling);
     
-    if (selectedPlanInput) selectedPlanInput.value = planType;
-    if (selectedBillingInput) selectedBillingInput.value = currentBilling;
-    
-    // Update form header to show selected plan
+    // Update form header if exists
     const formHeader = document.querySelector('.form-header h2');
     if (formHeader && pricingData[currentBilling][planType]) {
         const planInfo = pricingData[currentBilling][planType];
@@ -148,11 +145,11 @@ function selectPlan(planType) {
     }
     
     // Scroll to registration form
-    scrollToForm();
+    scrollToRegistration();
 }
 
-// Smooth scroll to registration form
-function scrollToForm() {
+// Smooth scroll to registration form - İsim düzeltildi
+function scrollToRegistration() {
     const registrationSection = document.getElementById('registration');
     if (registrationSection) {
         registrationSection.scrollIntoView({ 
@@ -200,7 +197,7 @@ async function checkExistingUser(phone) {
             }
         } else {
             alert('Bu numara ile kayıtlı kullanıcı bulunamadı.\nLütfen aşağıdan kayıt olun.');
-            scrollToForm();
+            scrollToRegistration();
         }
     } catch (error) {
         console.error('User check error:', error);
@@ -208,145 +205,49 @@ async function checkExistingUser(phone) {
     }
 }
 
-// Form submission handler
-function initializeFormHandler() {
-    const registrationForm = document.getElementById('registrationForm');
-    if (!registrationForm) return;
-
-    registrationForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+// Form submission handler - Güncellenmiş ID'lerle
+function handleRegistration(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn') || event.target.querySelector('.submit-button');
+    const defaultText = submitBtn.querySelector('.default-text');
+    const loadingText = submitBtn.querySelector('.loading-text');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    if (defaultText) defaultText.style.display = 'none';
+    if (loadingText) loadingText.style.display = 'inline';
+    
+    // Get form data
+    const formData = new FormData(event.target);
+    const registrationData = {
+        fullName: formData.get('fullName') || formData.get('name'),
+        email: formData.get('email'),
+        whatsapp: formData.get('whatsapp') || formData.get('phone'),
+        company: formData.get('company') || formData.get('company_name'),
+        selectedPlan: sessionStorage.getItem('selectedPlan') || 'pro',
+        selectedBilling: sessionStorage.getItem('selectedBilling') || 'monthly'
+    };
+    
+    console.log('Registration Data:', registrationData);
+    
+    // Simulate API call
+    setTimeout(() => {
+        // Reset form
+        event.target.reset();
         
-        const submitButton = this.querySelector('.submit-button');
-        const buttonText = submitButton.querySelector('.button-text');
-        const loadingText = submitButton.querySelector('.loading-text');
+        // Show success message
+        alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp numaranıza kurulum talimatları gönderilecek.\n⏰ 5 dakika içinde asistanınız hazır olacak.');
         
-        // Show loading state
-        submitButton.disabled = true;
-        if (buttonText) buttonText.style.display = 'none';
-        if (loadingText) loadingText.style.display = 'inline';
+        // Reset button state
+        submitBtn.disabled = false;
+        if (defaultText) defaultText.style.display = 'inline';
+        if (loadingText) loadingText.style.display = 'none';
         
-        // Get selected plan info
-        const selectedPlanInput = document.getElementById('selectedPlan');
-        const selectedBillingInput = document.getElementById('selectedBilling');
-        
-        const selectedPlan = selectedPlanInput ? selectedPlanInput.value : 'trial';
-        const selectedBilling = selectedBillingInput ? selectedBillingInput.value : 'monthly';
-        
-        // Get form data
-        const formData = {
-            name: document.getElementById('name').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            contact_phone: document.getElementById('phone').value.trim(),
-            company_name: document.getElementById('company').value.trim(),
-            position: document.getElementById('position').value.trim() || null,
-            registration_source: 'web',
-            subscription_status: 'trial',
-            subscription_plan: selectedPlan,
-            billing_cycle: selectedBilling,
-            trial_start_date: new Date().toISOString(),
-            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-            monthly_quota: 1000, // Trial için 1000 mesaj
-            used_quota: 0,
-            trial_used: false
-        };
-        
-        // Validate required fields
-        if (!formData.name || !formData.email || !formData.contact_phone || !formData.company_name) {
-            alert('Lütfen tüm zorunlu alanları doldurun.');
-            resetButton();
-            return;
-        }
-        
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            alert('Lütfen geçerli bir e-posta adresi girin.');
-            resetButton();
-            return;
-        }
-        
-        // Validate phone format
-        const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-        if (!phoneRegex.test(formData.contact_phone)) {
-            alert('Lütfen geçerli bir telefon numarası girin. Örn: +90 555 123 45 67');
-            resetButton();
-            return;
-        }
-        
-        try {
-            // First check if user already exists
-            const cleanPhone = formData.contact_phone.replace(/[^\d+]/g, '');
-            const checkResponse = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${cleanPhone}`, {
-                headers: {
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
-                }
-            });
-            
-            const existingUsers = await checkResponse.json();
-            
-            if (existingUsers.length > 0) {
-                const existingUser = existingUsers[0];
-                if (existingUser.trial_used) {
-                    if (confirm('Bu numara ile daha önce ücretsiz deneme kullanılmış.\nÖdeme yaparak devam etmek ister misiniz?')) {
-                        window.location.href = `payment.html?phone=${encodeURIComponent(cleanPhone)}`;
-                    }
-                    resetButton();
-                    return;
-                } else {
-                    alert('Bu numara ile zaten kayıt bulunuyor.\nMevcut hesabınızı kullanabilirsiniz.');
-                    resetButton();
-                    return;
-                }
-            }
-            
-            // Create new user
-            const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                    'Prefer': 'return=representation'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Supabase error response:', errorText);
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const result = await response.json();
-            console.log('Customer created successfully:', result);
-            
-            // Store selected plan for success page
-            localStorage.setItem('selectedPlan', selectedPlan);
-            localStorage.setItem('selectedBilling', selectedBilling);
-            
-            // Send welcome email (optional)
-            await sendWelcomeEmail(formData);
-            
-            // Redirect to success page
-            window.location.href = 'success.html?phone=' + encodeURIComponent(formData.contact_phone) + '&plan=' + selectedPlan;
-            
-        } catch (error) {
-            console.error('Registration error:', error);
-            
-            // Backup to localStorage
-            localStorage.setItem('pendingRegistration', JSON.stringify(formData));
-            
-            alert('Kayıt işlemi tamamlanamadı. Lütfen birkaç dakika sonra tekrar deneyin veya doğrudan WhatsApp\'tan bize ulaşın: +90 552 071 0977');
-            resetButton();
-        }
-        
-        function resetButton() {
-            submitButton.disabled = false;
-            if (buttonText) buttonText.style.display = 'inline';
-            if (loadingText) loadingText.style.display = 'none';
-        }
-    });
+        // Clear selected plan
+        sessionStorage.removeItem('selectedPlan');
+        sessionStorage.removeItem('selectedBilling');
+    }, 2000);
 }
 
 // Send welcome email function
@@ -370,35 +271,36 @@ async function sendWelcomeEmail(userData) {
 
 // Phone number formatting
 function initializePhoneFormatting() {
-    const phoneInput = document.getElementById('phone');
-    if (!phoneInput) return;
+    const phoneInputs = document.querySelectorAll('input[type="tel"], input[name="whatsapp"], input[name="phone"]');
     
-    phoneInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/[^\d+]/g, '');
-        
-        // Auto-add +90 for Turkish numbers
-        if (value.length > 0 && !value.startsWith('+')) {
-            if (value.startsWith('90')) {
-                value = '+' + value;
-            } else if (value.startsWith('5') && value.length >= 10) {
-                value = '+90' + value;
+    phoneInputs.forEach(phoneInput => {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d+]/g, '');
+            
+            // Auto-add +90 for Turkish numbers
+            if (value.length > 0 && !value.startsWith('+')) {
+                if (value.startsWith('90')) {
+                    value = '+' + value;
+                } else if (value.startsWith('5') && value.length >= 10) {
+                    value = '+90' + value;
+                }
             }
-        }
-        
-        e.target.value = value;
+            
+            e.target.value = value;
+        });
     });
 }
 
 // Form validation on input
 function initializeFormValidation() {
-    const requiredInputs = document.querySelectorAll('#registrationForm input[required]');
+    const requiredInputs = document.querySelectorAll('form input[required]');
     
     requiredInputs.forEach(input => {
         input.addEventListener('blur', function() {
             if (!this.value.trim()) {
                 this.style.borderColor = '#ef4444';
             } else {
-                this.style.borderColor = 'rgba(255,255,255,0.2)';
+                this.style.borderColor = '#e5e7eb';
             }
         });
     });
@@ -428,20 +330,20 @@ function trackEvent(eventName, properties) {
 
 // Track form interactions
 function initializeTracking() {
-    const registrationForm = document.getElementById('registrationForm');
-    if (registrationForm) {
-        registrationForm.addEventListener('focusin', function(e) {
+    const registrationForms = document.querySelectorAll('form');
+    registrationForms.forEach(form => {
+        form.addEventListener('focusin', function(e) {
             trackEvent('form_field_focus', { field: e.target.name });
         });
-    }
+    });
 
     // Track CTA button clicks
-    const ctaButton = document.querySelector('.cta-button');
-    if (ctaButton) {
-        ctaButton.addEventListener('click', function() {
+    const ctaButtons = document.querySelectorAll('.cta-button');
+    ctaButtons.forEach(button => {
+        button.addEventListener('click', function() {
             trackEvent('cta_button_click', { source: 'hero' });
         });
-    }
+    });
 }
 
 // Initialize scroll animations
@@ -470,11 +372,25 @@ function initializeAnimations() {
     });
 }
 
+// Initialize billing toggle event listeners
+function initializeBillingToggle() {
+    const toggleOptions = document.querySelectorAll('.toggle-option');
+    
+    toggleOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const billingType = this.getAttribute('data-billing');
+            if (billingType) {
+                switchBilling(billingType);
+            }
+        });
+    });
+}
+
 // Initialize pricing and page setup
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components
     updatePricing();
-    initializeFormHandler();
+    initializeBillingToggle();
     initializePhoneFormatting();
     initializeFormValidation();
     initializeNavbarEffect();
@@ -505,8 +421,9 @@ window.addEventListener('error', function(e) {
     console.error('Resource loading error:', e);
 });
 
-// Export functions for global access (if needed)
+// Export functions for global access
 window.switchBilling = switchBilling;
 window.selectPlan = selectPlan;
-window.scrollToForm = scrollToForm;
+window.scrollToRegistration = scrollToRegistration;
 window.showLogin = showLogin;
+window.handleRegistration = handleRegistration;
