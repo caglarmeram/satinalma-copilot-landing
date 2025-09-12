@@ -1,14 +1,62 @@
 // Pricing data - Doğru fiyatlandırma yapısı
 const pricingData = {
     monthly: {
-        basic: { price: 3.95, quota: 500 },
-        pro: { price: 8.95, originalPrice: 11.85, quota: 1500, savings: 24 },
-        max: { price: 19.95, originalPrice: 39.95, quota: 5000, savings: 50 }
+        basic: {
+            price: 3.95,
+            originalPrice: null,
+            quota: "500",
+            quotaLabel: "mesaj/ay",
+            savings: null,
+            period: "/ay",
+            monthlyEquivalent: null
+        },
+        pro: {
+            price: 8.95,
+            originalPrice: 11.85,
+            quota: "1,500",
+            quotaLabel: "mesaj/ay", 
+            savings: "%24 İndirim",
+            period: "/ay",
+            monthlyEquivalent: null
+        },
+        max: {
+            price: 19.95,
+            originalPrice: 39.95,
+            quota: "5,000",
+            quotaLabel: "mesaj/ay",
+            savings: "%50 İndirim", 
+            period: "/ay",
+            monthlyEquivalent: null
+        }
     },
     yearly: {
-        basic: { price: 39.95, quota: 6000 },
-        pro: { price: 99.95, originalPrice: 142.20, quota: 18000, savings: 30 },
-        max: { price: 199.95, originalPrice: 474, quota: 60000, savings: 58 }
+        basic: {
+            price: 39.95,
+            originalPrice: 47.40, // 3.95 * 12
+            quota: "6,000",
+            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            savings: "%16 İndirim",
+            period: "/yıl", // DÜZELTİLDİ
+            monthlyEquivalent: "3.33 USD/ay" // EKLENDI
+        },
+        pro: {
+            price: 99.95,
+            originalPrice: 142.20, // 11.85 * 12
+            quota: "18,000",
+            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            savings: "%30 İndirim",
+            period: "/yıl", // DÜZELTİLDİ
+            monthlyEquivalent: "8.33 USD/ay" // EKLENDI
+        },
+        max: {
+            price: 199.95,
+            originalPrice: 479.40, // 39.95 * 12 (474 yanlıştı)
+            quota: "60,000", 
+            quotaLabel: "mesaj/yıl", // DÜZELTİLDİ
+            savings: "%58 İndirim",
+            period: "/yıl", // DÜZELTİLDİ
+            monthlyEquivalent: "16.66 USD/ay" // EKLENDI
+        }
     }
 };
 
@@ -34,33 +82,49 @@ function switchBilling(type) {
 function updatePricing() {
     const data = pricingData[currentBilling];
     
-    // Basic plan
-    const basicPrice = document.getElementById('basicPrice');
-    const basicQuota = document.getElementById('basicQuota');
-    if (basicPrice) basicPrice.textContent = data.basic.price;
-    if (basicQuota) basicQuota.textContent = data.basic.quota.toLocaleString();
-    
-    // Pro plan
-    const proPrice = document.getElementById('proPrice');
-    const proQuota = document.getElementById('proQuota');
-    const proOriginalPrice = document.getElementById('proOriginalPrice');
-    const proSavings = document.getElementById('proSavings');
-    
-    if (proPrice) proPrice.textContent = data.pro.price;
-    if (proQuota) proQuota.textContent = data.pro.quota.toLocaleString();
-    if (proOriginalPrice) proOriginalPrice.textContent = '$' + data.pro.originalPrice;
-    if (proSavings) proSavings.textContent = '%' + data.pro.savings + ' İndirim';
-    
-    // Max plan
-    const maxPrice = document.getElementById('maxPrice');
-    const maxQuota = document.getElementById('maxQuota');
-    const maxOriginalPrice = document.getElementById('maxOriginalPrice');
-    const maxSavings = document.getElementById('maxSavings');
-    
-    if (maxPrice) maxPrice.textContent = data.max.price;
-    if (maxQuota) maxQuota.textContent = data.max.quota.toLocaleString();
-    if (maxOriginalPrice) maxOriginalPrice.textContent = '$' + data.max.originalPrice;
-    if (maxSavings) maxSavings.textContent = '%' + data.max.savings + ' İndirim';
+    Object.keys(data).forEach(plan => {
+        const planData = data[plan];
+        
+        // Fiyat güncelle
+        const priceEl = document.getElementById(`${plan}Price`);
+        const periodEl = document.getElementById(`${plan}Period`);
+        if (priceEl) priceEl.textContent = planData.price;
+        if (periodEl) periodEl.textContent = planData.period;
+        
+        // Kota güncelle
+        const quotaEl = document.getElementById(`${plan}Quota`);
+        const quotaLabelEl = document.getElementById(`${plan}QuotaLabel`);
+        if (quotaEl) quotaEl.textContent = planData.quota;
+        if (quotaLabelEl) quotaLabelEl.textContent = planData.quotaLabel;
+        
+        // Fiyat info güncelle
+        const priceInfoEl = document.getElementById(`${plan}PriceInfo`);
+        if (priceInfoEl) {
+            priceInfoEl.innerHTML = '';
+            
+            if (planData.originalPrice) {
+                const originalPriceEl = document.createElement('span');
+                originalPriceEl.className = 'original-price';
+                originalPriceEl.textContent = `$${planData.originalPrice}`;
+                priceInfoEl.appendChild(originalPriceEl);
+            }
+            
+            if (planData.savings) {
+                const savingsEl = document.createElement('span');
+                savingsEl.className = 'discount-badge';
+                savingsEl.textContent = planData.savings;
+                priceInfoEl.appendChild(savingsEl);
+            }
+            
+            // Aylık eşdeğer ekle (sadece yıllık için)
+            if (planData.monthlyEquivalent) {
+                const monthlyEqEl = document.createElement('div');
+                monthlyEqEl.className = 'monthly-equivalent';
+                monthlyEqEl.textContent = planData.monthlyEquivalent;
+                priceInfoEl.appendChild(monthlyEqEl);
+            }
+        }
+    });
 }
 
 function selectPlan(planType) {
