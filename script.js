@@ -1,14 +1,14 @@
-// Pricing data - Güncellenmiş plan yapısı (bireysel satınalma profesyonelleri için)
+// Pricing data - Doğru fiyatlandırma yapısı
 const pricingData = {
     monthly: {
+        basic: { price: 3.95, quota: 500 },
+        pro: { price: 8.95, originalPrice: 11.85, quota: 1500, savings: 24 },
+        max: { price: 19.95, originalPrice: 39.95, quota: 5000, savings: 50 }
+    },
+    yearly: {
         basic: { price: 39.95, quota: 6000 },
         pro: { price: 99.95, originalPrice: 142.20, quota: 18000, savings: 30 },
         max: { price: 199.95, originalPrice: 474, quota: 60000, savings: 58 }
-    },
-    yearly: {
-        basic: { price: 399.50, quota: 72000 },
-        pro: { price: 999.50, originalPrice: 1706.40, quota: 216000, savings: 42 },
-        max: { price: 1999.50, originalPrice: 5688, quota: 720000, savings: 65 }
     }
 };
 
@@ -79,7 +79,8 @@ function selectPlan(planType) {
     // Update form header to show selected plan
     const formHeader = document.querySelector('.form-header h2');
     if (formHeader && pricingData[currentBilling][planType]) {
-        formHeader.textContent = `${planType.toUpperCase()} Plan - Ücretsiz Deneme`;
+        const planInfo = pricingData[currentBilling][planType];
+        formHeader.textContent = `${planType.toUpperCase()} Plan ($${planInfo.price}/${currentBilling === 'monthly' ? 'ay' : 'yıl'}) - Ücretsiz Deneme`;
     }
     
     // Scroll to registration form
