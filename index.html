@@ -1250,48 +1250,187 @@
             }, 3000);
         }
 
-        // Registration form handler
-        function handleRegistration(event) {
-            event.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const defaultText = submitBtn.querySelector('.default-text');
-            const loadingText = submitBtn.querySelector('.loading-text');
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            defaultText.style.display = 'none';
-            loadingText.style.display = 'inline';
-            
-            // Get form data
-            const formData = new FormData(event.target);
-            const registrationData = {
-                fullName: formData.get('fullName'),
-                email: formData.get('email'),
-                whatsapp: formData.get('whatsapp'),
-                company: formData.get('company'),
-                selectedPlan: sessionStorage.getItem('selectedPlan') || 'pro'
-            };
-            
-            console.log('Registration Data:', registrationData);
-            
-            // Simulate API call
-            setTimeout(() => {
-                // Reset form
-                event.target.reset();
-                
-                // Show success message
-                alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp numaranıza kurulum talimatları gönderilecek.\n⏰ 5 dakika içinde asistanınız hazır olacak.');
-                
-                // Reset button state
-                submitBtn.disabled = false;
-                defaultText.style.display = 'inline';
-                loadingText.style.display = 'none';
-                
-                // Clear selected plan
-                sessionStorage.removeItem('selectedPlan');
-            }, 2000);
+        // Registration form handler - FIXED VERSION
+async function handleRegistration(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const defaultText = submitBtn.querySelector('.default-text');
+    const loadingText = submitBtn.querySelector('.loading-text');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    defaultText.style.display = 'none';
+    loadingText.style.display = 'inline';
+    
+    try {
+        // Get form data
+        const formData = new FormData(event.target);
+        
+        // Clean and format phone number
+        const rawPhone = formData.get('whatsapp');
+        const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
+        const formattedPhone = cleanPhone.startsWith('+') ? cleanPhone : '+' + cleanPhone;
+        
+        const registrationData = {
+            name: formData.get('fullName'),
+            email: formData.get('email'),
+            contact_phone: formattedPhone,
+            company_name: formData.get('company'),
+            subscription_plan: 'trial',
+            subscription_status: 'trial',
+            monthly_quota: 1000,
+            used_quota: 0,
+            registration_source: 'web',
+            trial_start_date: new Date().toISOString(),
+            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+            billing_cycle: 'monthly',
+            trial_used: false,
+            payment_status: 'pending',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+        
+        console.log('Sending registration data:', registrationData);
+        
+        // GERÇEK API ÇAĞRISI - Supabase'e kayıt gönder
+        const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(registrationData)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
         }
+        
+        const result = await response.json();
+        console.log('Registration successful:', result);
+        
+        // Reset form
+        event.target.reset();
+        
+        // Show success message and redirect
+        alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp numaranıza kurulum talimatları gönderilecek.\n⏰ 5 dakika içinde asistanınız hazır olacak.');
+        
+        // Redirect to success page
+        window.location.href = `success.html?phone=${encodeURIComponent(formattedPhone)}`;
+        
+    } catch (error) {
+        console.error('Registration failed:', error);
+        
+        // Show error message
+        alert(`❌ Kayıt işlemi başarısız oldu:\n\n${error.message}\n\nLütfen tekrar deneyin veya destek ile iletişime geçin.\n\n📧 info@satinalmacopilot.com`);
+        
+    } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        defaultText.style.display = 'inline';
+        loadingText.style.display = 'none';
+    }
+}
+
+// Alternative version with error handling for specific scenarios
+async function handleRegistrationWithDuplicateCheck(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const defaultText = submitBtn.querySelector('.default-text');
+    const loadingText = submitBtn.querySelector('.loading-text');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    defaultText.style.display = 'none';
+    loadingText.style.display = 'inline';
+    
+    try {
+        const formData = new FormData(event.target);
+        const rawPhone = formData.get('whatsapp');
+        const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
+        const formattedPhone = cleanPhone.startsWith('+') ? cleanPhone : '+' + cleanPhone;
+        
+        // First check if user already exists
+        const checkResponse = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${encodeURIComponent(formattedPhone)}&select=id,name,subscription_status`, {
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+            }
+        });
+        
+        const existingUsers = await checkResponse.json();
+        
+        if (existingUsers.length > 0) {
+            const existingUser = existingUsers[0];
+            alert(`📱 Bu WhatsApp numarası zaten kayıtlı!\n\n👤 Kayıtlı İsim: ${existingUser.name}\n📊 Durum: ${existingUser.subscription_status}\n\n🔄 Giriş yapmak için payment.html?phone=${encodeURIComponent(formattedPhone)} adresine gidin.`);
+            
+            // Redirect to payment page if they want to upgrade
+            if (confirm('Ödeme sayfasına yönlendirilmek ister misiniz?')) {
+                window.location.href = `payment.html?phone=${encodeURIComponent(formattedPhone)}`;
+            }
+            return;
+        }
+        
+        // Proceed with new registration
+        const registrationData = {
+            name: formData.get('fullName'),
+            email: formData.get('email'),
+            contact_phone: formattedPhone,
+            company_name: formData.get('company'),
+            subscription_plan: 'trial',
+            subscription_status: 'trial',
+            monthly_quota: 1000,
+            used_quota: 0,
+            registration_source: 'web',
+            trial_start_date: new Date().toISOString(),
+            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+            billing_cycle: 'monthly',
+            trial_used: false,
+            payment_status: 'pending',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+        
+        const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(registrationData)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Registration failed: ${errorData.message || response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('New user registered:', result);
+        
+        event.target.reset();
+        alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp asistanınız hazırlanıyor...');
+        window.location.href = `success.html?phone=${encodeURIComponent(formattedPhone)}`;
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert(`❌ Kayıt başarısız: ${error.message}`);
+        
+    } finally {
+        submitBtn.disabled = false;
+        defaultText.style.display = 'inline';
+        loadingText.style.display = 'none';
+    }
+}
+
     </script>
 </body>
 </html>
