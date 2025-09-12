@@ -36,13 +36,13 @@ function updatePricing() {
     // Pro plan
     document.getElementById('proPrice').textContent = data.pro.price;
     document.getElementById('proQuota').textContent = data.pro.quota.toLocaleString();
-    document.getElementById('proOriginalPrice').textContent = ' + data.pro.originalPrice;
+    document.getElementById('proOriginalPrice').textContent = '$' + data.pro.originalPrice;
     document.getElementById('proSavings').textContent = '%' + data.pro.savings + ' İndirim';
     
     // Max plan
     document.getElementById('maxPrice').textContent = data.max.price;
     document.getElementById('maxQuota').textContent = data.max.quota.toLocaleString();
-    document.getElementById('maxOriginalPrice').textContent = ' + data.max.originalPrice;
+    document.getElementById('maxOriginalPrice').textContent = '$' + data.max.originalPrice;
     document.getElementById('maxSavings').textContent = '%' + data.max.savings + ' İndirim';
 }
 
