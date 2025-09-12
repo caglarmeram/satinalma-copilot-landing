@@ -306,17 +306,17 @@ body {
 .original-price {
     color: #ef4444;
     text-decoration: line-through;
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 1.1rem;        /* 0.95rem → 1.1rem */
+    font-weight: 600;         /* 500 → 600 */
 }
 
 .savings-badge {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
-    font-size: 0.8rem;
-    padding: 4px 12px;
+    font-size: 0.9rem;        /* 0.8rem → 0.9rem */
+    padding: 6px 14px;        /* 4px 12px → 6px 14px */
     border-radius: 12px;
-    font-weight: 600;
+    font-weight: 700;         /* 600 → 700 */
 }
 
 /* Mesaj Quota Tasarımı */
@@ -832,3 +832,11 @@ body {
     margin-bottom: 20px;
     font-size: 1.1rem;
     line
+}
+/* Yıllık ödemede gösterilecek aylık eşdeğer */
+.monthly-equivalent {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 4px;
+    font-weight: 500;
+}
