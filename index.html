@@ -377,6 +377,7 @@
             position: relative;
             transition: all 0.3s ease;
             border: 2px solid #e2e8f0;
+            cursor: pointer;
         }
 
         .pricing-card:hover {
@@ -395,6 +396,27 @@
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
             border-color: #1d4ed8 !important;
+        }
+
+        /* Plan Selection Indicator */
+        .pricing-card.selected {
+            border-color: #10b981 !important;
+            background: #f0fdf4;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .plan-selection-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #10b981;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
         }
 
         .popular-badge {
@@ -561,17 +583,6 @@
             box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
         }
 
-        .cta-button-pricing.secondary {
-            background: white;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-        }
-
-        .cta-button-pricing.secondary:hover {
-            background: #2563eb;
-            color: white;
-        }
-
         .login-link {
             text-align: center;
             color: #64748b;
@@ -588,41 +599,7 @@
             text-decoration: underline;
         }
 
-        /* Enterprise özel tasarım */
-        .enterprise-card {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-        }
-
-        .enterprise-card .plan-name,
-        .enterprise-card .price-amount,
-        .enterprise-card .currency {
-            color: white;
-        }
-
-        .enterprise-card .plan-description,
-        .enterprise-card .price-period {
-            color: #cbd5e1;
-        }
-
-        .enterprise-card .quota-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .enterprise-card .quota-number {
-            color: #60a5fa;
-        }
-
-        .enterprise-card .quota-label {
-            color: #cbd5e1;
-        }
-
-        .enterprise-card .features-list li {
-            color: #e2e8f0;
-        }
-
-        /* Registration Form - Updated Background */
+        /* Registration Form */
         .registration {
             padding: 80px 0;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -653,6 +630,20 @@
         .form-header p {
             color: #64748b;
             font-size: 1.1rem;
+        }
+
+        .selected-plan-info {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .selected-plan-info h3 {
+            color: #059669;
+            margin-bottom: 8px;
         }
 
         .registration-form {
@@ -936,6 +927,44 @@
             </div>
         </section>
 
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Neden Satınalma CoPilot?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Destekli Analiz</h3>
+                        <p>Gelişmiş yapay zeka ile tedarikçi araştırması, risk analizi ve pazar intelligence otomatik olarak gerçekleştirilir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>WhatsApp Entegrasyonu</h3>
+                        <p>Tanıdık WhatsApp arayüzü üzerinden tüm satınalma süreçlerinizi yönetin. Ekstra uygulama öğrenmeye gerek yok.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>7/24 Hızlı Yanıt</h3>
+                        <p>Gece yarısı bile tedarikçi araştırması yapın. Asistanınız her zaman hazır ve 2 saniyede yanıt verir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Güvenli & Gizli</h3>
+                        <p>Tüm verileriniz şifrelenmiş olarak korunur. KVKK uyumlu altyapı ile güvenlik bizim önceliğimiz.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Detaylı Raporlama</h3>
+                        <p>Tedarikçi performansı, maliyet analizi ve trend raporları ile stratejik kararlar alın.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>ERP Entegrasyonu</h3>
+                        <p>Mevcut ERP sisteminize entegre olarak çalışır. Veri transferi tamamen otomatik.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="social-proof">
             <div class="container">
                 <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
@@ -977,7 +1006,7 @@
                 </div>
 
                 <div class="pricing-cards">
-                    <div class="pricing-card">
+                    <div class="pricing-card" data-plan="basic">
                         <div class="plan-header">
                             <h3 class="plan-name">Basic</h3>
                             <p class="plan-description">Satınalma profesyonelleri için</p>
@@ -1028,7 +1057,7 @@
                         </div>
                     </div>
 
-                    <div class="pricing-card featured">
+                    <div class="pricing-card featured" data-plan="pro">
                         <div class="popular-badge">🔥 ÖNERİLEN</div>
                         <div class="plan-header">
                             <h3 class="plan-name">Pro</h3>
@@ -1080,7 +1109,7 @@
                         </div>
                     </div>
 
-                    <div class="pricing-card">
+                    <div class="pricing-card" data-plan="max">
                         <div class="plan-header">
                             <h3 class="plan-name">Max</h3>
                             <p class="plan-description">İleri seviye satınalma profesyonelleri için</p>
@@ -1141,7 +1170,14 @@
                         <h2>14 Gün Ücretsiz Denemeye Başla</h2>
                         <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
                     </div>
-                    <form class="registration-form" onsubmit="handleRegistration(event)">
+                    
+                    <!-- Selected Plan Info -->
+                    <div class="selected-plan-info" id="selectedPlanInfo" style="display: none;">
+                        <h3 id="selectedPlanName">Seçilen Plan</h3>
+                        <p id="selectedPlanDetails">Plan detayları</p>
+                    </div>
+                    
+                    <form class="registration-form" onsubmit="handleRegistrationWithPlan(event)">
                         <div class="form-group">
                             <label for="fullName">Ad Soyad *</label>
                             <input type="text" id="fullName" name="fullName" required placeholder="Örn: Ahmet Yılmaz">
@@ -1194,6 +1230,22 @@
     </footer>
 
     <script>
+        // Plan configuration data
+        const planConfig = {
+            basic: { 
+                monthly: { quota: 500, price: 7.95 },
+                annual: { quota: 6000, price: 47.4 }
+            },
+            pro: { 
+                monthly: { quota: 1500, price: 17.95 },
+                annual: { quota: 18000, price: 107.4 }
+            },
+            max: { 
+                monthly: { quota: 5000, price: 39.95 },
+                annual: { quota: 60000, price: 239.4 }
+            }
+        };
+
         // Billing Toggle Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const toggleContainer = document.querySelector('.toggle-container');
@@ -1209,8 +1261,17 @@
                     // Update pricing display
                     const billingType = this.getAttribute('data-billing');
                     updatePricing(billingType);
+                    
+                    // Update sessionStorage if plan is selected
+                    if (sessionStorage.getItem('selectedPlan')) {
+                        sessionStorage.setItem('selectedBilling', billingType);
+                        updateSelectedPlanDisplay();
+                    }
                 });
             });
+            
+            // Initialize selected plan display if exists
+            updateSelectedPlanDisplay();
         });
 
         function updatePricing(billingType) {
@@ -1233,15 +1294,39 @@
             });
         }
 
-        // Plan selection function
+        // Plan selection function with visual feedback
         function selectPlan(planType) {
-            // Store selected plan in sessionStorage
+            // Store selected plan and billing
             sessionStorage.setItem('selectedPlan', planType);
+            const currentBilling = document.querySelector('.toggle-option.active').getAttribute('data-billing') || 'annual';
+            sessionStorage.setItem('selectedBilling', currentBilling);
+            
+            // Remove previous selections
+            document.querySelectorAll('.pricing-card').forEach(card => {
+                card.classList.remove('selected');
+                const indicator = card.querySelector('.plan-selection-indicator');
+                if (indicator) indicator.remove();
+            });
+            
+            // Add selection to clicked plan
+            const selectedCard = document.querySelector(`[data-plan="${planType}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+                
+                // Add selection indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'plan-selection-indicator';
+                indicator.textContent = '✅ SEÇİLDİ';
+                selectedCard.appendChild(indicator);
+            }
+            
+            // Update selected plan display
+            updateSelectedPlanDisplay();
             
             // Scroll to registration form
             scrollToRegistration();
             
-            // Optionally highlight the form or show selected plan
+            // Highlight the form
             const formWrapper = document.querySelector('.form-wrapper');
             formWrapper.style.boxShadow = '0 0 20px rgba(37, 99, 235, 0.3)';
             
@@ -1250,225 +1335,172 @@
             }, 3000);
         }
 
-        // Registration form handler - FIXED VERSION
-async function handleRegistration(event) {
-    event.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const defaultText = submitBtn.querySelector('.default-text');
-    const loadingText = submitBtn.querySelector('.loading-text');
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    defaultText.style.display = 'none';
-    loadingText.style.display = 'inline';
-    
-    try {
-        // Get form data
-        const formData = new FormData(event.target);
-        
-        // Clean and format phone number
-        const rawPhone = formData.get('whatsapp');
-        const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
-        const formattedPhone = cleanPhone.startsWith('+') ? cleanPhone : '+' + cleanPhone;
-        
-        const registrationData = {
-            name: formData.get('fullName'),
-            email: formData.get('email'),
-            contact_phone: formattedPhone,
-            company_name: formData.get('company'),
-            subscription_plan: 'trial',
-            subscription_status: 'trial',
-            monthly_quota: 1000,
-            used_quota: 0,
-            registration_source: 'web',
-            trial_start_date: new Date().toISOString(),
-            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-            billing_cycle: 'monthly',
-            trial_used: false,
-            payment_status: 'pending',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
-        
-        console.log('Sending registration data:', registrationData);
-        
-        // GERÇEK API ÇAĞRISI - Supabase'e kayıt gönder
-        const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Prefer': 'return=representation'
-            },
-            body: JSON.stringify(registrationData)
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('API Error:', errorData);
-            throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
-        }
-        
-        const result = await response.json();
-        console.log('Registration successful:', result);
-        
-        // Reset form
-        event.target.reset();
-        
-        // Show success message and redirect
-        alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp numaranıza kurulum talimatları gönderilecek.\n⏰ 5 dakika içinde asistanınız hazır olacak.');
-        
-        // Redirect to success page
-        window.location.href = `success.html?phone=${encodeURIComponent(formattedPhone)}`;
-        
-    } catch (error) {
-        console.error('Registration failed:', error);
-        
-        // Show error message
-        alert(`❌ Kayıt işlemi başarısız oldu:\n\n${error.message}\n\nLütfen tekrar deneyin veya destek ile iletişime geçin.\n\n📧 info@satinalmacopilot.com`);
-        
-    } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        defaultText.style.display = 'inline';
-        loadingText.style.display = 'none';
-    }
-}
-
-// Alternative version with error handling for specific scenarios
-async function handleRegistrationWithDuplicateCheck(event) {
-    event.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const defaultText = submitBtn.querySelector('.default-text');
-    const loadingText = submitBtn.querySelector('.loading-text');
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    defaultText.style.display = 'none';
-    loadingText.style.display = 'inline';
-    
-    try {
-        const formData = new FormData(event.target);
-        const rawPhone = formData.get('whatsapp');
-        const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
-        const formattedPhone = cleanPhone.startsWith('+') ? cleanPhone : '+' + cleanPhone;
-        
-        // First check if user already exists
-        const checkResponse = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${encodeURIComponent(formattedPhone)}&select=id,name,subscription_status`, {
-            headers: {
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
-            }
-        });
-        
-        const existingUsers = await checkResponse.json();
-        
-        if (existingUsers.length > 0) {
-            const existingUser = existingUsers[0];
-            alert(`📱 Bu WhatsApp numarası zaten kayıtlı!\n\n👤 Kayıtlı İsim: ${existingUser.name}\n📊 Durum: ${existingUser.subscription_status}\n\n🔄 Giriş yapmak için payment.html?phone=${encodeURIComponent(formattedPhone)} adresine gidin.`);
+        // Update selected plan display in form
+        function updateSelectedPlanDisplay() {
+            const selectedPlan = sessionStorage.getItem('selectedPlan');
+            const selectedBilling = sessionStorage.getItem('selectedBilling') || 'annual';
+            const planInfoDiv = document.getElementById('selectedPlanInfo');
+            const planNameSpan = document.getElementById('selectedPlanName');
+            const planDetailsSpan = document.getElementById('selectedPlanDetails');
             
-            // Redirect to payment page if they want to upgrade
-            if (confirm('Ödeme sayfasına yönlendirilmek ister misiniz?')) {
-                window.location.href = `payment.html?phone=${encodeURIComponent(formattedPhone)}`;
+            if (selectedPlan && planConfig[selectedPlan]) {
+                const plan = planConfig[selectedPlan][selectedBilling];
+                planInfoDiv.style.display = 'block';
+                planNameSpan.textContent = `🎯 Seçilen Plan: ${selectedPlan.toUpperCase()}`;
+                planDetailsSpan.textContent = `${plan.price}/${selectedBilling === 'monthly' ? 'ay' : 'yıl'} • ${plan.quota.toLocaleString()} mesaj`;
+            } else {
+                planInfoDiv.style.display = 'none';
             }
-            return;
         }
-        
-        // Proceed with new registration
-        const registrationData = {
-            name: formData.get('fullName'),
-            email: formData.get('email'),
-            contact_phone: formattedPhone,
-            company_name: formData.get('company'),
-            subscription_plan: 'trial',
-            subscription_status: 'trial',
-            monthly_quota: 1000,
-            used_quota: 0,
-            registration_source: 'web',
-            trial_start_date: new Date().toISOString(),
-            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-            billing_cycle: 'monthly',
-            trial_used: false,
-            payment_status: 'pending',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
-        
-        const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-                'Prefer': 'return=representation'
-            },
-            body: JSON.stringify(registrationData)
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Registration failed: ${errorData.message || response.statusText}`);
-        }
-        
-        const result = await response.json();
-        console.log('New user registered:', result);
-        
-        event.target.reset();
-        alert('🎉 Kaydınız başarıyla tamamlandı!\n\n📱 WhatsApp asistanınız hazırlanıyor...');
-        window.location.href = `success.html?phone=${encodeURIComponent(formattedPhone)}`;
-        
-    } catch (error) {
-        console.error('Registration error:', error);
-        alert(`❌ Kayıt başarısız: ${error.message}`);
-        
-    } finally {
-        submitBtn.disabled = false;
-        defaultText.style.display = 'inline';
-        loadingText.style.display = 'none';
-    }
-}
 
+        // Enhanced Registration Handler with Plan Info and Duplicate Check
+        async function handleRegistrationWithPlan(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const defaultText = submitBtn.querySelector('.default-text');
+            const loadingText = submitBtn.querySelector('.loading-text');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            defaultText.style.display = 'none';
+            loadingText.style.display = 'inline';
+            
+            try {
+                const formData = new FormData(event.target);
+                
+                // Get selected plan info
+                const selectedPlan = sessionStorage.getItem('selectedPlan') || 'trial';
+                const selectedBilling = sessionStorage.getItem('selectedBilling') || 'annual';
+                
+                // Clean and format phone number
+                const rawPhone = formData.get('whatsapp');
+                const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
+                const formattedPhone = cleanPhone.startsWith('+') ? cleanPhone : '+' + cleanPhone;
+                
+                console.log('📞 Phone validation:', { rawPhone, cleanPhone, formattedPhone });
+                
+                // Check for existing user first
+                const checkResponse = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${encodeURIComponent(formattedPhone)}&select=id,name,subscription_status,subscription_plan`, {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
+                    }
+                });
+                
+                const existingUsers = await checkResponse.json();
+                console.log('👤 Existing users check:', existingUsers);
+                
+                if (existingUsers.length > 0) {
+                    const existingUser = existingUsers[0];
+                    
+                    // Build payment URL with selected plan
+                    const paymentUrl = `payment.html?phone=${encodeURIComponent(formattedPhone)}&plan=${selectedPlan}&billing=${selectedBilling}`;
+                    
+                    alert(`📱 Bu WhatsApp numarası zaten kayıtlı!\n\n👤 İsim: ${existingUser.name}\n📊 Mevcut Plan: ${existingUser.subscription_plan}\n🎯 Seçtiğiniz Plan: ${selectedPlan.toUpperCase()}\n\n💳 Plan yükseltmesi için ödeme sayfasına yönlendiriliyorsunuz...`);
+                    
+                    // Redirect to payment page
+                    window.location.href = paymentUrl;
+                    return;
+                }
+                
+                // Proceed with new user registration
+                const currentPlan = planConfig[selectedPlan] ? planConfig[selectedPlan][selectedBilling] : { quota: 1000, price: 0 };
+                
+                const registrationData = {
+                    name: formData.get('fullName'),
+                    email: formData.get('email'),
+                    contact_phone: formattedPhone,
+                    company_name: formData.get('company'),
+                    
+                    // Plan information
+                    subscription_plan: selectedPlan,
+                    billing_cycle: selectedBilling,
+                    monthly_quota: selectedBilling === 'monthly' ? currentPlan.quota : Math.floor(currentPlan.quota / 12),
+                    yearly_quota: selectedBilling === 'annual' ? currentPlan.quota : currentPlan.quota * 12,
+                    plan_price: currentPlan.price,
+                    
+                    // Trial settings
+                    subscription_status: 'trial',
+                    trial_start_date: new Date().toISOString(),
+                    trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+                    
+                    // Default settings
+                    used_quota: 0,
+                    registration_source: 'web',
+                    trial_used: false,
+                    payment_status: 'pending',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+                
+                console.log('📦 Registration data with plan:', registrationData);
+                
+                // Create new user
+                const response = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('❌ API Error:', errorData);
+                    throw new Error(`Registration failed: ${errorData.message || response.statusText}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Registration successful:', result);
+                
+                // Clear form and storage
+                event.target.reset();
+                sessionStorage.removeItem('selectedPlan');
+                sessionStorage.removeItem('selectedBilling');
+                
+                // Success message with plan info
+                const successMessage = `🎉 Kaydınız başarıyla tamamlandı!\n\n📦 Seçilen Plan: ${selectedPlan.toUpperCase()}\n💰 Fiyat: ${currentPlan.price}/${selectedBilling === 'monthly' ? 'ay' : 'yıl'}\n📊 Mesaj Kotası: ${currentPlan.quota.toLocaleString()}\n\n📱 WhatsApp asistanınız hazırlanıyor...`;
+                
+                alert(successMessage);
+                
+                // Redirect to success page with plan info
+                const successUrl = `success.html?phone=${encodeURIComponent(formattedPhone)}&plan=${selectedPlan}&billing=${selectedBilling}`;
+                window.location.href = successUrl;
+                
+            } catch (error) {
+                console.error('❌ Registration error:', error);
+                alert(`❌ Kayıt başarısız: ${error.message}\n\nLütfen tekrar deneyin veya destek ile iletişime geçin.\n\n📧 info@satinalmacopilot.com`);
+                
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                defaultText.style.display = 'inline';
+                loadingText.style.display = 'none';
+            }
+        }
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            // Check for plan suggestion from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const suggestedPlan = urlParams.get('plan');
+            const suggestedBilling = urlParams.get('billing');
+            
+            if (suggestedPlan && planConfig[suggestedPlan]) {
+                selectPlan(suggestedPlan);
+            }
+            
+            if (suggestedBilling && (suggestedBilling === 'monthly' || suggestedBilling === 'annual')) {
+                const billingToggle = document.querySelector(`[data-billing="${suggestedBilling}"]`);
+                if (billingToggle) {
+                    billingToggle.click();
+                }
+            }
+        });
     </script>
 </body>
 </html>
-
-        <section class="features">
-            <div class="container">
-                <h2 class="section-title">Neden Satınalma CoPilot?</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">🤖</div>
-                        <h3>AI Destekli Analiz</h3>
-                        <p>Gelişmiş yapay zeka ile tedarikçi araştırması, risk analizi ve pazar intelligence otomatik olarak gerçekleştirilir.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📱</div>
-                        <h3>WhatsApp Entegrasyonu</h3>
-                        <p>Tanıdık WhatsApp arayüzü üzerinden tüm satınalma süreçlerinizi yönetin. Ekstra uygulama öğrenmeye gerek yok.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>7/24 Hızlı Yanıt</h3>
-                        <p>Gece yarısı bile tedarikçi araştırması yapın. Asistanınız her zaman hazır ve 2 saniyede yanıt verir.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🛡️</div>
-                        <h3>Güvenli & Gizli</h3>
-                        <p>Tüm verileriniz şifrelenmiş olarak korunur. KVKK uyumlu altyapı ile güvenlik bizim önceliğimiz.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📊</div>
-                        <h3>Detaylı Raporlama</h3>
-                        <p>Tedarikçi performansı, maliyet analizi ve trend raporları ile stratejik kararlar alın.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🔗</div>
-                        <h3>ERP Entegrasyonu</h3>
-                        <p>Mevcut ERP sisteminize entegre olarak çalışır. Veri transferi tamamen otomatik.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
