@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ödeme Başarısız - Satınalma CoPilot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#ef4444,#f97316);min-height:100vh;padding:20px}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:#fff;border-radius:20px;padding:60px 40px;max-width:720px;width:100%;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.12);position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#ef4444,#f59e0b,#f97316)}
+    .icon{font-size:4rem;margin-bottom:22px;animation:shake .7s ease both}
+    @keyframes shake {10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-4px)}40%,60%{transform:translateX(4px)}}
+    .title{font-size:2.2rem;font-weight:800;color:#1f2937;margin-bottom:12px}
+    .subtitle{font-size:1.05rem;color:#6b7280;margin-bottom:24px;line-height:1.6}
+    .reason{background:#fff7ed;border:1px solid #f59e0b;color:#92400e;border-radius:12px;padding:16px;margin:18px 0;text-align:left}
+    .tips{background:#f3f4f6;border-radius:12px;padding:18px;margin:18px 0;text-align:left}
+    .tips h4{margin-bottom:8px;color:#1f2937}
+    .tips ul{margin-left:16px;color:#374151}
+    .btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:14px}
+    .btn{display:inline-block;padding:12px 20px;border-radius:10px;font-weight:700;text-decoration:none;transition:.2s}
+    .btn.primary{background:#1d4ed8;color:#fff}
+    .btn.primary:hover{background:#1e40af;transform:translateY(-2px)}
+    .btn.ghost{background:#fff;border:1px solid #d1d5db;color:#374151}
+    .btn.ghost:hover{background:#f9fafb}
+    .footer{margin-top:28px;padding-top:18px;border-top:1px solid #e5e7eb}
+    .footer a{color:#2563eb;text-decoration:none;margin:0 10px;font-weight:600}
+    .footer a:hover{text-decoration:underline}
+    @media(max-width:768px){.card{padding:40px 24px;margin:0 12px}.title{font-size:1.8rem}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="icon">⚠️</div>
+      <div class="title">Ödeme Tamamlanamadı</div>
+      <div class="subtitle">İşleminiz başarısız oldu veya iptal edildi. Aşağıdaki adımları izleyerek tekrar deneyebilirsiniz.</div>
+
+      <div class="reason" id="reasonBox" style="display:none">
+        <strong>Hata detayı:</strong>
+        <div id="reasonText">-</div>
+      </div>
+
+      <div class="tips">
+        <h4>📌 Öneriler</h4>
+        <ul>
+          <li>Kart limitinizi ve 3D Secure doğrulamasını kontrol edin.</li>
+          <li>Tarayıcıyı kapatmadan işlemi tamamlayın.</li>
+          <li>Gerekirse farklı bir kart deneyin.</li>
+        </ul>
+      </div>
+
+      <div class="btns">
+        <a class="btn primary" id="retryBtn" href="payment.html">Tekrar Dene</a>
+        <a class="btn ghost" href="index.html">Ana Sayfa</a>
+      </div>
+
+      <div class="footer">
+        <a href="mailto:info@satinalmacopilot.com">📧 Destek</a>
+        <a href="tel:+905520710977">📞 Yardım</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL parametreleri: ?order=...&phone=...&reason=...
+    const p = new URLSearchParams(location.search);
+    const phone  = p.get('phone');
+    const reason = p.get('reason');
+
+    // Hata nedeni varsa göster
+    if (reason) {
+      const box = document.getElementById('reasonBox');
+      const txt = document.getElementById('reasonText');
+      txt.textContent = decodeURIComponent(reason);
+      box.style.display = 'block';
+    }
+
+    // Retry linkini kişiselleştir
+    if (phone) {
+      document.getElementById('retryBtn').href = `payment.html?phone=${encodeURIComponent(phone)}`;
+    }
+  </script>
+</body>
+</html>
