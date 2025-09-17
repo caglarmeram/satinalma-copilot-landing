@@ -1,515 +1,173 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Başarılı - Satınalma CoPilot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #10b981, #059669);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .success-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .success-card {
-            background: white;
-            border-radius: 20px;
-            padding: 60px 40px;
-            max-width: 700px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .success-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #10b981, #2563eb, #7c3aed);
-        }
-        
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 24px;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-        
-        .success-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 16px;
-        }
-        
-        .success-subtitle {
-            font-size: 1.2rem;
-            color: #64748b;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .plan-summary {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: 16px;
-            padding: 24px;
-            margin: 30px 0;
-            text-align: left;
-            border-left: 4px solid #2563eb;
-        }
-
-        .plan-summary h3 {
-            color: #1e293b;
-            font-weight: 600;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .plan-detail {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .plan-detail:last-child {
-            border-bottom: none;
-        }
-
-        .plan-detail .label {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .plan-detail .value {
-            color: #1e293b;
-            font-weight: 600;
-        }
-        
-        .steps-container {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 30px;
-            margin: 40px 0;
-            text-align: left;
-        }
-        
-        .steps-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: white;
-            border-radius: 12px;
-            border-left: 4px solid #10b981;
-        }
-        
-        .step-number {
-            background: #10b981;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        
-        .step-content h4 {
-            color: #1e293b;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .step-content p {
-            color: #64748b;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .whatsapp-info {
-            background: #dcfce7;
-            border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-        }
-        
-        .whatsapp-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-            margin: 8px 0;
-        }
-        
-        .whatsapp-button {
-            background: #25d366;
-            color: white;
-            text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .whatsapp-button:hover {
-            background: #20c757;
-            transform: translateY(-2px);
-        }
-        
-        .trial-info, .payment-info {
-            background: #fef3c7;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-        }
-        
-        .payment-info {
-            background: #dcfce7;
-            border: 1px solid #10b981;
-        }
-        
-        .trial-countdown, .payment-success {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #92400e;
-        }
-
-        .payment-success {
-            color: #166534;
-        }
-        
-        .footer-links {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #e2e8f0;
-        }
-        
-        .footer-links a {
-            color: #2563eb;
-            text-decoration: none;
-            margin: 0 16px;
-            font-weight: 500;
-        }
-        
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        .example-commands {
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .example-commands h4 {
-            color: #1e293b;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .example-commands ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .example-commands li {
-            background: white;
-            margin: 8px 0;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 3px solid #2563eb;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: #1e293b;
-        }
-
-        @media (max-width: 768px) {
-            .success-card {
-                padding: 40px 24px;
-                margin: 0 16px;
-            }
-            
-            .success-title {
-                font-size: 2rem;
-            }
-            
-            .steps-container {
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ödeme Başarılı - Satınalma CoPilot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#10b981,#059669);min-height:100vh;padding:20px}
+    .success-container{min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .success-card{background:#fff;border-radius:20px;padding:60px 40px;max-width:720px;width:100%;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.1);position:relative;overflow:hidden}
+    .success-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#2563eb,#7c3aed)}
+    .success-icon{font-size:4rem;margin-bottom:24px;animation:bounce 2s infinite}
+    @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
+    .success-title{font-size:2.4rem;font-weight:700;color:#1e293b;margin-bottom:12px}
+    .success-subtitle{font-size:1.05rem;color:#64748b;margin-bottom:28px;line-height:1.6}
+    .plan-summary{background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);border-radius:16px;padding:24px;margin:26px 0;text-align:left;border-left:4px solid #2563eb}
+    .plan-summary h3{color:#1e293b;font-weight:600;margin-bottom:14px;text-align:center}
+    .plan-detail{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #e2e8f0}
+    .plan-detail:last-child{border-bottom:none}
+    .label{color:#64748b;font-weight:500}
+    .value{color:#1e293b;font-weight:600}
+    .steps-container{background:#f8fafc;border-radius:16px;padding:26px;margin:30px 0;text-align:left}
+    .steps-title{font-size:1.1rem;font-weight:600;color:#1e293b;margin-bottom:14px;text-align:center}
+    .step{display:flex;align-items:flex-start;gap:16px;margin-bottom:14px;padding:14px;background:#fff;border-radius:12px;border-left:4px solid #10b981}
+    .step-number{background:#10b981;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+    .whatsapp-info{background:#dcfce7;border:2px solid #10b981;border-radius:12px;padding:20px;margin:24px 0}
+    .whatsapp-number{font-size:1.4rem;font-weight:800;color:#059669;margin:6px 0}
+    .whatsapp-button{background:#25d366;color:#fff;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px;margin:16px 0;transition:.3s}
+    .whatsapp-button:hover{background:#20c757;transform:translateY(-2px)}
+    .payment-info{background:#dcfce7;border:1px solid #10b981;border-radius:12px;padding:18px;margin:20px 0;color:#166534}
+    .footer-links{margin-top:30px;padding-top:20px;border-top:1px solid #e2e8f0}
+    .footer-links a{color:#2563eb;text-decoration:none;margin:0 12px;font-weight:600}
+    .footer-links a:hover{text-decoration:underline}
+    .example-commands{background:#f1f5f9;border-radius:12px;padding:18px;margin:22px 0;text-align:left}
+    .example-commands h4{color:#1e293b;margin-bottom:10px;text-align:center}
+    .example-commands li{background:#fff;margin:8px 0;padding:10px;border-radius:8px;border-left:3px solid #2563eb;font-family:'Courier New',monospace;font-size:.9rem;color:#1e293b;list-style:none}
+    @media (max-width:768px){.success-card{padding:40px 24px;margin:0 12px}.success-title{font-size:2rem}}
+  </style>
 </head>
 <body>
-    <div class="success-container">
-        <div class="success-card">
-            <div class="success-icon">🎉</div>
-            <h1 class="success-title" id="mainTitle">Kayıt Başarılı!</h1>
-            <p class="success-subtitle" id="mainSubtitle">
-                Hoş geldiniz! 14 günlük ücretsiz deneme süreniz başladı. 
-                Şimdi WhatsApp asistanınızla tanışma zamanı.
-            </p>
+  <div class="success-container">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <h1 class="success-title" id="mainTitle">Ödeme Başarılı!</h1>
+      <p class="success-subtitle" id="mainSubtitle">
+        Planınız aktifleştirildi. WhatsApp asistanınız şimdi tam kapasiteyle çalışıyor!
+      </p>
 
-            <!-- Plan Summary (shown for paid plans) -->
-            <div class="plan-summary" id="planSummary" style="display: none;">
-                <h3>📋 Plan Detayları</h3>
-                <div class="plan-detail">
-                    <span class="label">Seçilen Plan:</span>
-                    <span class="value" id="planName">-</span>
-                </div>
-                <div class="plan-detail">
-                    <span class="label">Mesaj Kotası:</span>
-                    <span class="value" id="planQuota">-</span>
-                </div>
-                <div class="plan-detail">
-                    <span class="label">Faturalama:</span>
-                    <span class="value" id="planBilling">-</span>
-                </div>
-                <div class="plan-detail">
-                    <span class="label">Toplam Ödeme:</span>
-                    <span class="value" id="planPrice">-</span>
-                </div>
-            </div>
-            
-            <div class="whatsapp-info">
-                <p><strong>WhatsApp Asistan Numarası:</strong></p>
-                <div class="whatsapp-number">+1 (415) 523-8886</div>
-                <p>Bu numarayı WhatsApp'ta kaydedin ve ilk mesajınızı atın!</p>
-                <a href="https://wa.me/14155238886?text=Merhaba" class="whatsapp-button" target="_blank">
-                    📱 WhatsApp'ta Mesaj Gönder
-                </a>
-            </div>
-            
-            <div class="steps-container">
-                <h3 class="steps-title">🚀 Başlamak için 3 basit adım:</h3>
-                
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>WhatsApp'ta Numarayı Kaydedin</h4>
-                        <p>+1 (415) 523-8886 numarasını "Satınalma CoPilot" adıyla WhatsApp'ta kaydedin</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>İlk Mesajınızı Atın</h4>
-                        <p>"Merhaba" yazarak asistanınızı aktifleştirin</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>Satınalma İhtiyaçlarınızı Paylaşın</h4>
-                        <p>"500 kg demir profil lazım" gibi ihtiyaçlarınızı doğal dille yazın</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Trial Info (shown for trial users) -->
-            <div class="trial-info" id="trialInfo">
-                <p><strong>🎁 Ücretsiz Deneme Süreniz:</strong></p>
-                <div class="trial-countdown" id="trialCountdown">14 gün kaldı</div>
-                <p style="margin-top: 8px; font-size: 0.9rem; color: #92400e;">
-                    Günlük 1000 sorgu hakkınız var. Sınırsız kullanım için Pro plana geçebilirsiniz.
-                </p>
-            </div>
+      <!-- Ödeme bilgileri -->
+      <div class="plan-summary" id="planSummary" style="display:none">
+        <h3>📋 Plan Detayları</h3>
+        <div class="plan-detail"><span class="label">Seçilen Plan:</span><span class="value" id="planName">-</span></div>
+        <div class="plan-detail"><span class="label">Mesaj Kotası:</span><span class="value" id="planQuota">-</span></div>
+        <div class="plan-detail"><span class="label">Faturalama:</span><span class="value" id="planBilling">-</span></div>
+        <div class="plan-detail"><span class="label">Toplam Ödeme:</span><span class="value" id="planPrice">-</span></div>
+      </div>
 
-            <!-- Payment Info (shown for paid users) -->
-            <div class="payment-info" id="paymentInfo" style="display: none;">
-                <p><strong>✅ Ödeme Başarılı!</strong></p>
-                <div class="payment-success" id="paymentStatus">Planınız aktifleştirildi</div>
-                <p style="margin-top: 8px; font-size: 0.9rem; color: #166534;">
-                    WhatsApp asistanınız şimdi tam kapasiteyle çalışıyor!
-                </p>
-            </div>
+      <div class="payment-info" id="paymentInfo" style="display:none">
+        <strong>✅ Ödeme Onaylandı</strong> — Plan haklarınız yüklendi.
+      </div>
 
-            <div class="example-commands">
-                <h4>💡 İlk Deneme Önerileri:</h4>
-                <ul>
-                    <li>"Hangi firmalar alüminyum profil üretiyor?"</li>
-                    <li>"Bosch Türkiye hakkında risk analizi"</li>
-                    <li>"Plastik ambalaj pazarı nasıl?"</li>
-                    <li>"RFQ başlat: 1000 adet vida"</li>
-                    <li>"ArÇelik A.Ş. güvenilir mi?"</li>
-                    <li>"Çelik pazarında fiyat trendleri"</li>
-                </ul>
-            </div>
-            
-            <div class="footer-links">
-                <a href="mailto:info@satinalmacopilot.com">📧 Destek</a>
-                <a href="tel:+905520710977">📞 Yardım</a>
-                <a href="index.html">🏠 Ana Sayfa</a>
-            </div>
-        </div>
+      <div class="whatsapp-info">
+        <p><strong>WhatsApp Asistan Numarası:</strong></p>
+        <div class="whatsapp-number">+1 (415) 523-8886</div>
+        <p>Bu numarayı WhatsApp'ta kaydedin ve ilk mesajınızı atın!</p>
+        <a class="whatsapp-button" id="waBtn" target="_blank" href="https://wa.me/14155238886?text=Merhaba">
+          📱 WhatsApp'ta Mesaj Gönder
+        </a>
+      </div>
+
+      <div class="steps-container">
+        <h3 class="steps-title">🚀 Başlamak için 3 adım</h3>
+        <div class="step"><div class="step-number">1</div><div><strong>Numarayı Kaydedin</strong><br/>+1 (415) 523-8886 → “Satınalma CoPilot”</div></div>
+        <div class="step"><div class="step-number">2</div><div><strong>İlk Mesaj</strong><br/>“Merhaba” yazarak asistanı aktifleştirin</div></div>
+        <div class="step"><div class="step-number">3</div><div><strong>İhtiyacınızı Yazın</strong><br/>“RFQ başlat: 1000 adet vida” gibi</div></div>
+      </div>
+
+      <div class="example-commands">
+        <h4>💡 İlk Deneme Önerileri</h4>
+        <ul>
+          <li>"Hangi firmalar alüminyum profil üretiyor?"</li>
+          <li>"Bosch Türkiye hakkında risk analizi"</li>
+          <li>"RFQ başlat: 1000 adet vida"</li>
+          <li>"Çelik pazarında fiyat trendleri"</li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <a href="mailto:info@satinalmacopilot.com">📧 Destek</a>
+        <a href="tel:+905520710977">📞 Yardım</a>
+        <a href="index.html">🏠 Ana Sayfa</a>
+      </div>
     </div>
-    
-    <script>
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const userPhone = urlParams.get('phone');
-        const selectedPlan = urlParams.get('plan');
-        const isPayment = urlParams.get('payment') === 'success';
-        
-        // Plan configurations
-        const planConfig = {
-            basic: {
-                name: 'Basic',
-                monthly: { price: 7.95, quota: 500 },
-                yearly: { price: 47.4, quota: 6000 }
-            },
-            pro: {
-                name: 'Pro',
-                monthly: { price: 17.95, quota: 1500 },
-                yearly: { price: 107.4, quota: 18000 }
-            },
-            max: {
-                name: 'Max',
-                monthly: { price: 39.95, quota: 5000 },
-                yearly: { price: 239.4, quota: 60000 }
-            }
-        };
+  </div>
 
-        function updateTrialCountdown() {
-            const now = new Date();
-            const trialEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-            const timeLeft = trialEnd - now;
-            const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
-            
-            document.getElementById('trialCountdown').textContent = `${daysLeft} gün kaldı`;
+  <script>
+    // Backend URL (opsiyonel durum sorgusu için)
+    const API_BASE_URL = "https://api.satinalmacopilot.com";
+
+    // Plan konfigürasyonları
+    const planConfig = {
+      basic:{ name:'Basic',  monthly:{price:7.95, quota:500},  yearly:{price:47.40, quota:6000}},
+      pro:  { name:'Pro',    monthly:{price:17.95,quota:1500}, yearly:{price:107.40,quota:18000}},
+      max:  { name:'Max',    monthly:{price:39.95,quota:5000}, yearly:{price:239.40,quota:60000}}
+    };
+
+    // URL parametrelerini al
+    const params   = new URLSearchParams(location.search);
+    const orderId  = params.get('order');
+    const phone    = params.get('phone');
+    const planKey  = params.get('plan')    || 'pro';
+    const billing  = params.get('billing') || 'monthly';
+    const isPayment= params.get('payment') === 'success' || !!orderId;
+
+    // WhatsApp linkini kişiselleştir
+    if (phone) {
+      const msg = isPayment ? 'Merhaba, planımı yeni aktifleştirdim!' : 'Merhaba, yeni kaydoldum!';
+      document.getElementById('waBtn').href = `https://wa.me/14155238886?text=${encodeURIComponent(msg)}`;
+    }
+
+    function fillPaidUI() {
+      const plan = planConfig[planKey];
+      if (plan) {
+        const data = plan[billing] || plan.monthly;
+        document.getElementById('planSummary').style.display = 'block';
+        document.getElementById('paymentInfo').style.display = 'block';
+        document.getElementById('planName').textContent   = plan.name;
+        document.getElementById('planQuota').textContent  = data.quota.toLocaleString() + ' mesaj/' + (billing==='monthly'?'ay':'yıl');
+        document.getElementById('planBilling').textContent= (billing==='monthly'?'Aylık':'Yıllık');
+        document.getElementById('planPrice').textContent  = '$' + data.price.toFixed(2); // ← düzeltildi
+      }
+    }
+
+    async function maybeCheckOrder() {
+      if (!orderId) { if (isPayment) fillPaidUI(); return; }
+      try {
+        const r = await fetch(`${API_BASE_URL}/api/payment/status/${orderId}`);
+        if (r.ok) {
+          const j = await r.json();
+          if (j.status === 'completed') fillPaidUI();
         }
+      } catch(e) {/* sessiz geç */}
+    }
 
-        function displayPlanInfo() {
-            if (isPayment && selectedPlan && planConfig[selectedPlan]) {
-                // Show payment success state
-                document.getElementById('mainTitle').textContent = 'Ödeme Başarılı!';
-                document.getElementById('mainSubtitle').textContent = 'Planınız aktifleştirildi. WhatsApp asistanınız şimdi tam kapasiteyle çalışıyor!';
-                
-                // Show plan summary
-                document.getElementById('planSummary').style.display = 'block';
-                document.getElementById('paymentInfo').style.display = 'block';
-                document.getElementById('trialInfo').style.display = 'none';
-                
-                const plan = planConfig[selectedPlan];
-                const billing = urlParams.get('billing') || 'monthly';
-                const planData = plan[billing];
-                
-                document.getElementById('planName').textContent = plan.name;
-                document.getElementById('planQuota').textContent = planData.quota.toLocaleString() + ' mesaj/' + (billing === 'monthly' ? 'ay' : 'yıl');
-                document.getElementById('planBilling').textContent = billing === 'monthly' ? 'Aylık' : 'Yıllık';
-                document.getElementById('planPrice').textContent = ' + planData.price;
-                
-                // Update trial info to show quota
-                document.querySelector('#paymentInfo p:last-child').textContent = 
-                    `${planData.quota.toLocaleString()} mesaj kotanız yüklendi!`;
-            } else {
-                // Show trial state (default)
-                updateTrialCountdown();
-                setInterval(updateTrialCountdown, 60 * 60 * 1000); // Update every hour
-            }
-        }
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // kutlama efekti
+      createConfetti();
+      maybeCheckOrder();
+      // 5 sn sonra WhatsApp açma promptu
+      setTimeout(()=>{
+        const go = confirm("WhatsApp'ı şimdi açmak ister misiniz?");
+        if (go) window.open(document.getElementById('waBtn').href,'_blank');
+      },5000);
+    });
 
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            displayPlanInfo();
-            
-            // Track successful registration/payment
-            console.log('Registration/Payment completed:', {
-                phone: userPhone,
-                plan: selectedPlan,
-                isPayment: isPayment
-            });
-            
-            // Auto-open WhatsApp after 5 seconds (optional)
-            setTimeout(() => {
-                if (confirm('WhatsApp\'ı şimdi açmak ister misiniz?')) {
-                    const message = isPayment ? 
-                        'Merhaba, planımı yeni aktifleştirdim!' : 
-                        'Merhaba, yeni kaydoldum!';
-                    window.open(`https://wa.me/14155238886?text=${encodeURIComponent(message)}`, '_blank');
-                }
-            }, 5000);
-
-            // Add some celebration confetti effect for payment success
-            if (isPayment) {
-                createConfetti();
-            }
-        });
-
-        function createConfetti() {
-            // Simple confetti effect
-            const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
-                    confetti.style.zIndex = '9999';
-                    confetti.style.pointerEvents = 'none';
-                    confetti.style.borderRadius = '50%';
-                    
-                    document.body.appendChild(confetti);
-                    
-                    // Animate falling
-                    confetti.animate([
-                        { transform: 'translateY(0px) rotate(0deg)', opacity: 1 },
-                        { transform: 'translateY(100vh) rotate(360deg)', opacity: 0 }
-                    ], {
-                        duration: 3000,
-                        easing: 'linear'
-                    }).onfinish = () => confetti.remove();
-                }, i * 100);
-            }
-        }
-    </script>
+    function createConfetti(){
+      const colors=['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6'];
+      for(let i=0;i<50;i++){
+        setTimeout(()=>{
+          const c=document.createElement('div');
+          c.style.cssText='position:fixed;width:10px;height:10px;border-radius:50%;pointer-events:none;z-index:9999';
+          c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+          c.style.left=Math.random()*100+'vw'; c.style.top='-10px';
+          document.body.appendChild(c);
+          c.animate([{transform:'translateY(0) rotate(0)',opacity:1},{transform:'translateY(100vh) rotate(360deg)',opacity:0}],{duration:3000,easing:'linear'}).onfinish=()=>c.remove();
+        },i*80);
+      }
+    }
+  </script>
 </body>
 </html>
