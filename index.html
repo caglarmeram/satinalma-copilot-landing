@@ -1,619 +1,1413 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Satınalma CoPilot - AI Destekli Satınalma Asistanı</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    /* Reset and Base Styles */
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.6;color:#333;background:#fff}
-    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satınalma CoPilot - AI Destekli Satınalma Asistanı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Navigation */
-    .navbar{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 0;transition:all .3s ease}
-    .nav-brand{display:flex;align-items:center;gap:12px}
-    .logo{font-size:2rem}
-    .brand-text{font-size:1.5rem;font-weight:700;color:#2563eb}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
 
-    /* Hero */
-    .hero{padding:120px 0 80px;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);margin-top:80px}
-    .hero-content{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-    .hero-title{font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:24px;color:#1e293b}
-    .highlight{color:#2563eb;background:linear-gradient(120deg,#dbeafe,#bfdbfe);padding:0 8px;border-radius:6px}
-    .hero-subtitle{font-size:1.25rem;color:#64748b;margin-bottom:32px;line-height:1.6}
-    .hero-features{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px}
-    .feature-pill{background:#dbeafe;color:#1e40af;padding:8px 16px;border-radius:25px;font-size:.9rem;font-weight:500}
-    .cta-section{text-align:left}
-    .cta-button{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:18px 36px;font-size:1.1rem;font-weight:600;border-radius:12px;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 14px rgba(37,99,235,.3);margin-bottom:16px;display:block}
-    .cta-button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,99,235,.4)}
-    .cta-note{color:#64748b;font-size:.9rem}
-    .hero-visual{display:flex;justify-content:center}
-    .phone-mockup{width:280px;height:560px;background:#1f2937;border-radius:30px;padding:20px 15px;box-shadow:0 20px 40px rgba(0,0,0,.2);position:relative}
-    .phone-mockup::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:60px;height:4px;background:#6b7280;border-radius:2px}
-    .phone-screen{background:#fff;height:100%;border-radius:20px;padding:20px 15px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
-    .chat-message{padding:12px 16px;border-radius:18px;max-width:85%;font-size:.85rem;line-height:1.4}
-    .chat-message.user{background:#2563eb;color:#fff;align-self:flex-end;margin-left:auto}
-    .chat-message.bot{background:#f1f5f9;color:#334155;align-self:flex-start}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    /* Features */
-    .features{padding:80px 0;background:#fff}
-    .section-title{text-align:center;font-size:2.5rem;font-weight:700;color:#1e293b;margin-bottom:60px}
-    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
-    .feature-card{background:#fff;padding:30px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);text-align:center;transition:transform .3s ease}
-    .feature-card:hover{transform:translateY(-5px)}
-    .feature-icon{font-size:3rem;margin-bottom:20px}
-    .feature-card h3{font-size:1.25rem;font-weight:600;color:#1e293b;margin-bottom:12px}
-    .feature-card p{color:#64748b;line-height:1.6}
+        /* Navigation */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
 
-    /* Social Proof */
-    .social-proof{padding:80px 0;background:#f8fafc}
-    .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:40px;margin-top:40px}
-    .testimonial{background:#fff;padding:30px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-    .testimonial-content{font-style:italic;color:#475569;margin-bottom:20px;font-size:1.1rem;line-height:1.6}
-    .testimonial-author{color:#1e293b;font-weight:500}
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    /* Pricing */
-    .pricing{padding:80px 0;background:#fff}
-    .section-subtitle{text-align:center;font-size:1.2rem;color:#64748b;margin-bottom:60px}
-    .billing-toggle{display:flex;justify-content:center;margin-bottom:60px}
-    .toggle-container{background:#fff;border-radius:12px;padding:8px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;gap:8px}
-    .toggle-option{padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s ease;position:relative}
-    .toggle-option.active{background:#2563eb;color:#fff}
-    .toggle-option:not(.active){color:#64748b}
-    .toggle-option:not(.active):hover{background:#f1f5f9}
-    .savings-badge{background:#10b981;color:#fff;font-size:.75rem;padding:4px 8px;border-radius:6px;position:absolute;top:-8px;right:-8px;white-space:nowrap}
-    .trial-banner{background:linear-gradient(90deg,#10b981,#059669);color:#fff;text-align:center;padding:20px;border-radius:12px;margin:40px auto;max-width:600px}
-    .trial-banner h3{font-size:1.5rem;margin-bottom:8px}
-    .trial-banner p{opacity:.9;margin:0}
-    .pricing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;max-width:1200px;margin:0 auto}
-    .pricing-card{background:#fff;border-radius:20px;padding:40px 30px;box-shadow:0 10px 30px rgba(0,0,0,.1);position:relative;transition:all .3s ease;border:2px solid #e2e8f0;cursor:pointer}
-    .pricing-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,.15);border-color:#2563eb!important}
-    .pricing-card.featured{border-color:#2563eb;transform:scale(1.02);box-shadow:0 20px 40px rgba(37,99,235,.15)}
-    .pricing-card.featured:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 25px 50px rgba(37,99,235,.2);border-color:#1d4ed8!important}
-    .pricing-card.selected{border-color:#10b981!important;background:#f0fdf4;transform:translateY(-8px) scale(1.02);box-shadow:0 20px 40px rgba(16,185,129,.2)}
-    .plan-selection-indicator{position:absolute;top:-10px;right:-10px;background:#10b981;color:#fff;padding:5px 12px;border-radius:15px;font-size:.8rem;font-weight:600;z-index:10}
-    .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:8px 20px;border-radius:20px;font-size:.8rem;font-weight:600;box-shadow:0 4px 12px rgba(37,99,235,.3)}
-    .plan-header{text-align:center;margin-bottom:30px}
-    .plan-name{font-size:1.5rem;font-weight:700;color:#1e293b;margin-bottom:8px}
-    .plan-description{color:#64748b;font-size:.9rem;margin-bottom:24px}
-    .price-section{text-align:center;margin-bottom:30px}
-    .price-main{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:12px}
-    .currency{font-size:1.8rem;font-weight:700;color:#1e293b}
-    .price-amount{font-size:3.2rem;font-weight:800;color:#2563eb;line-height:1}
-    .price-period{font-size:1.1rem;color:#64748b;font-weight:500}
-    .price-info{min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-    .original-price{color:#ef4444;text-decoration:line-through;font-size:1.1rem;font-weight:600}
-    .discount-badge2{background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:.9rem;padding:6px 14px;border-radius:12px;font-weight:700}
-    .monthly-equivalent{font-size:.85rem;color:#64748b;margin-top:4px;font-weight:500}
-    .quota-section{background:#f8fafc;border-radius:12px;padding:20px;margin:20px 0 30px;text-align:center;border:1px solid #e2e8f0}
-    .quota-number{font-size:1.8rem;font-weight:700;color:#1e293b;margin-bottom:4px}
-    .quota-label{color:#64748b;font-size:.9rem;font-weight:500}
-    .features-list{list-style:none;margin:0 0 30px;padding:0}
-    .features-list li{display:flex;align-items:center;gap:12px;padding:10px 0;color:#475569;font-size:.95rem}
-    .feature-check{color:#10b981;font-weight:700;font-size:1.1rem}
-    .feature-cross{color:#ef4444;font-weight:700;font-size:1.1rem}
-    .cta-button-pricing{width:100%;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:16px 24px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .3s ease;margin-bottom:16px}
-    .cta-button-pricing:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,99,235,.3)}
-    .login-link{text-align:center;color:#64748b;font-size:.9rem}
-    .login-link a{color:#2563eb;text-decoration:none;font-weight:500;cursor:pointer}
-    .login-link a:hover{text-decoration:underline}
+        .logo {
+            font-size: 2rem;
+        }
 
-    /* Registration */
-    .registration{padding:80px 0;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);color:#1e293b}
-    .form-wrapper{max-width:600px;margin:0 auto;background:#fff;padding:40px;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);border:1px solid #e2e8f0;transition:all .3s ease}
-    .form-header{text-align:center;margin-bottom:40px}
-    .form-header h2{font-size:2rem;margin-bottom:12px;color:#1e293b}
-    .form-header p{color:#64748b;font-size:1.1rem}
-    .selected-plan-info{background:#f0fdf4;border:2px solid #10b981;border-radius:12px;padding:20px;margin-bottom:30px;text-align:center;display:none}
-    .selected-plan-info h3{color:#059669;margin-bottom:8px}
-    .registration-form{display:flex;flex-direction:column;gap:20px}
-    .form-group{display:flex;flex-direction:column;gap:8px}
-    .form-group label{font-weight:500;color:#374151}
-    .form-group input{padding:14px 16px;border:2px solid #e5e7eb;border-radius:8px;background:#fff;color:#1f2937;font-size:1rem;transition:border-color .3s ease}
-    .form-group input::placeholder{color:#9ca3af}
-    .form-group input:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-    .form-group input.error{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
-    .error-message{color:#ef4444;font-size:.8rem;margin-top:4px}
-    .submit-button{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:16px 24px;font-size:1.1rem;font-weight:600;border-radius:8px;cursor:pointer;transition:all .3s ease;margin-top:10px;box-shadow:0 4px 14px rgba(37,99,235,.3)}
-    .submit-button:hover{background:linear-gradient(135deg,#1d4ed8,#1e40af);transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,99,235,.4)}
-    .submit-button:disabled{opacity:.7;cursor:not-allowed;transform:none;box-shadow:0 4px 14px rgba(37,99,235,.3)}
-    .loading-text{display:none}
-    .form-note{text-align:center;color:#64748b;font-size:.9rem;line-height:1.5;margin-top:20px}
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
 
-    /* Footer */
-    .footer{background:#1e293b;color:#fff;padding:40px 0;text-align:center}
-    .footer-content{display:flex;flex-direction:column;align-items:center;gap:16px}
-    .footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-    .footer-links{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
-    .footer-links a{color:#94a3b8;text-decoration:none;transition:color .3s ease}
-    .footer-links a:hover{color:#e2e8f0}
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            margin-top: 80px;
+        }
 
-    /* Animations */
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
 
-    /* Billing Display Control */
-    .monthly-prices{display:none}
-    .annual-prices{display:block}
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: #1e293b;
+        }
 
-    /* Responsive */
-    @media (max-width:768px){
-      .hero-content{grid-template-columns:1fr;gap:40px;text-align:center}
-      .hero-title{font-size:2.5rem}
-      .phone-mockup{width:240px;height:480px}
-      .testimonials{grid-template-columns:1fr}
-      .pricing-cards{grid-template-columns:1fr;gap:20px}
-      .features-grid{grid-template-columns:1fr}
-      .toggle-container{flex-direction:column;width:100%;max-width:300px}
-      .toggle-option{text-align:center}
-    }
-    @media (max-width:480px){
-      .container{padding:0 16px}
-      .hero{padding:100px 0 60px}
-      .hero-title{font-size:2rem}
-      .section-title{font-size:2rem}
-      .form-wrapper{padding:30px 20px}
-    }
-  </style>
+        .highlight {
+            color: #2563eb;
+            background: linear-gradient(120deg, #dbeafe, #bfdbfe);
+            padding: 0 8px;
+            border-radius: 6px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .feature-pill {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .cta-section {
+            text-align: left;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .cta-note {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Phone Mockup */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-mockup {
+            width: 280px;
+            height: 560px;
+            background: #1f2937;
+            border-radius: 30px;
+            padding: 20px 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #6b7280;
+            border-radius: 2px;
+        }
+
+        .phone-screen {
+            background: #fff;
+            height: 100%;
+            border-radius: 20px;
+            padding: 20px 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 85%;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .chat-message.user {
+            background: #2563eb;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .chat-message.bot {
+            background: #f1f5f9;
+            color: #334155;
+            align-self: flex-start;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .testimonial {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 60px;
+        }
+
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .toggle-container {
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 8px;
+        }
+
+        .toggle-option {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .toggle-option.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .toggle-option:not(.active) {
+            color: #64748b;
+        }
+
+        .toggle-option:not(.active):hover {
+            background: #f1f5f9;
+        }
+
+        .savings-badge {
+            background: #10b981;
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            white-space: nowrap;
+        }
+
+        .trial-banner {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 600px;
+        }
+
+        .trial-banner h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .trial-banner p {
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #2563eb !important;
+        }
+
+        .pricing-card.featured {
+            border-color: #2563eb;
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+            border-color: #1d4ed8 !important;
+        }
+
+        .pricing-card.selected {
+            border-color: #10b981 !important;
+            background: #f0fdf4;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .plan-selection-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #10b981;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .plan-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .price-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .currency {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .price-amount {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #2563eb;
+            line-height: 1;
+        }
+
+        .price-period {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .price-info {
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .original-price {
+            color: #ef4444;
+            text-decoration: line-through;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .discount-badge2 {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .monthly-equivalent {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .quota-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0 30px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quota-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .quota-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .feature-check {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feature-cross {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .cta-button-pricing {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .cta-button-pricing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Registration Form */
+        .registration {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+        }
+
+        .form-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .form-header p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .selected-plan-info {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .selected-plan-info h3 {
+            color: #059669;
+            margin-bottom: 8px;
+        }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input {
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            color: #1f2937;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .loading-text {
+            display: none;
+        }
+
+        .form-note {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #e2e8f0;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Billing Display Control */
+        .monthly-prices {
+            display: none;
+        }
+
+        .annual-prices {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .phone-mockup {
+                width: 240px;
+                height: 480px;
+            }
+            
+            .testimonials {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .toggle-container {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .toggle-option {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .hero {
+                padding: 100px 0 60px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .form-wrapper {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <div class="nav-brand">
-        <div class="logo">🤖</div>
-        <div class="brand-text">Satınalma CoPilot</div>
-      </div>
-    </div>
-  </nav>
-
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="hero-title">
-              <span class="highlight">AI Destekli</span><br>Satınalma<br>Asistanınız
-            </h1>
-            <p class="hero-subtitle">
-              WhatsApp üzerinden çalışan akıllı asistanınızla tedarikçi araştırması, 
-              RFQ yönetimi ve risk analizlerinizi otomatikleştirin.
-            </p>
-            <div class="hero-features">
-              <span class="feature-pill">⚡ 7/24 Aktif</span>
-              <span class="feature-pill">🔍 Akıllı Analiz</span>
-              <span class="feature-pill">📱 WhatsApp</span>
-              <span class="feature-pill">🛡️ Güvenli</span>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <div class="logo">🤖</div>
+                <div class="brand-text">Satınalma CoPilot</div>
             </div>
-            <div class="cta-section">
-              <button class="cta-button" onclick="scrollToRegistration()">Ücretsiz Denemeye Başla</button>
-              <p class="cta-note">💳 Kredi kartı gerekmez • 📞 Kurulum desteği</p>
-            </div>
-          </div>
-          <div class="hero-visual">
-            <div class="phone-mockup">
-              <div class="phone-screen">
-                <div class="chat-message user">500 kg demir profil lazım</div>
-                <div class="chat-message bot">🔍 Tedarikçi araştırması başlatıyorum...</div>
-                <div class="chat-message bot">✅ 5 güvenilir tedarikçi bulundu<br>📊 Fiyat analizi hazır<br>📋 RFQ oluşturulsun mu?</div>
-                <div class="chat-message user">Evet, RFQ oluştur</div>
-                <div class="chat-message bot">✨ RFQ-2025-001 oluşturuldu<br>📤 Tedarikçilere gönderildi<br>⏰ 48 saat içinde yanıt bekleniyor</div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+    </nav>
 
-    <!-- FEATURES -->
-    <section class="features">
-      <div class="container">
-        <h2 class="section-title">Neden Satınalma CoPilot?</h2>
-        <div class="features-grid">
-          <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Destekli Analiz</h3><p>Gelişmiş yapay zeka ile tedarikçi araştırması, risk analizi ve pazar intelligence otomatik olarak gerçekleştirilir.</p></div>
-          <div class="feature-card"><div class="feature-icon">📱</div><h3>WhatsApp Entegrasyonu</h3><p>Tanıdık WhatsApp arayüzü üzerinden tüm satınalma süreçlerinizi yönetin. Ekstra uygulama öğrenmeye gerek yok.</p></div>
-          <div class="feature-card"><div class="feature-icon">⚡</div><h3>7/24 Hızlı Yanıt</h3><p>Gece yarısı bile tedarikçi araştırması yapın. Asistanınız her zaman hazır ve 2 saniyede yanıt verir.</p></div>
-          <div class="feature-card"><div class="feature-icon">🛡️</div><h3>Güvenli & Gizli</h3><p>Tüm verileriniz şifrelenmiş olarak korunur. KVKK uyumlu altyapı ile güvenlik bizim önceliğimiz.</p></div>
-          <div class="feature-card"><div class="feature-icon">📊</div><h3>Detaylı Raporlama</h3><p>Tedarikçi performansı, maliyet analizi ve trend raporları ile stratejik kararlar alın.</p></div>
-          <div class="feature-card"><div class="feature-icon">🔗</div><h3>ERP Entegrasyonu</h3><p>Mevcut ERP sisteminize entegre olarak çalışır. Veri transferi tamamen otomatik.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SOCIAL PROOF -->
-    <section class="social-proof">
-      <div class="container">
-        <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
-        <div class="testimonials">
-          <div class="testimonial">
-            <div class="testimonial-content">"Satınalma süreçlerimiz %70 hızlandı. AI asistan sayesinde en iyi tedarikçileri bulup, riskleri önceden görüyoruz. WhatsApp'tan kullanmak çok pratik!"</div>
-            <div class="testimonial-author">— Ahmet Yılmaz, Satınalma Müdürü, TechCorp A.Ş.</div>
-          </div>
-          <div class="testimonial">
-            <div class="testimonial-content">"RFQ süreçleri artık otomatik. Hem zaman tasarrufu hem de daha kaliteli tedarikçilerle çalışmaya başladık. Gerçekten devrimci bir çözüm."</div>
-            <div class="testimonial-author">— Zeynep Kaya, Operasyon Direktörü, İnşaat Plus Ltd.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="pricing" id="pricing">
-      <div class="container">
-        <h2 class="section-title">Fiyatlandırma</h2>
-        <p class="section-subtitle">İhtiyacınıza uygun planı seçin ve hemen başlayın</p>
-        
-        <div class="billing-toggle">
-          <div class="toggle-container">
-            <div class="toggle-option active" data-billing="annual">Yıllık Faturalama <span class="savings-badge">%50 İndirim</span></div>
-            <div class="toggle-option" data-billing="monthly">Aylık Faturalama</div>
-          </div>
-        </div>
-
-        <div class="trial-banner">
-          <h3>14 Gün Ücretsiz Denemeye Başla</h3>
-          <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
-        </div>
-
-        <div class="pricing-cards">
-          <!-- BASIC -->
-          <div class="pricing-card" data-plan="basic">
-            <div class="plan-header"><h3 class="plan-name">Basic</h3><p class="plan-description">Satınalma profesyonelleri için</p></div>
-            <div class="price-section">
-              <div class="annual-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">3.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"><div class="original-price">$7.95</div><div class="discount-badge2">%50 İndirim</div><div class="monthly-equivalent">Yıllık ödemede $47.4</div></div>
-              </div>
-              <div class="monthly-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">7.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"></div>
-              </div>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="highlight">AI Destekli</span><br>
+                            Satınalma<br>
+                            Asistanınız
+                        </h1>
+                        <p class="hero-subtitle">
+                            WhatsApp üzerinden çalışan akıllı asistanınızla tedarikçi araştırması, 
+                            RFQ yönetimi ve risk analizlerinizi otomatikleştirin.
+                        </p>
+                        <div class="hero-features">
+                            <span class="feature-pill">⚡ 7/24 Aktif</span>
+                            <span class="feature-pill">🔍 Akıllı Analiz</span>
+                            <span class="feature-pill">📱 WhatsApp</span>
+                            <span class="feature-pill">🛡️ Güvenli</span>
+                        </div>
+                        <div class="cta-section">
+                            <button class="cta-button" onclick="scrollToRegistration()">
+                                Ücretsiz Denemeye Başla
+                            </button>
+                            <p class="cta-note">
+                                💳 Kredi kartı gerekmez • 📞 Kurulum desteği
+                            </p>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="phone-mockup">
+                            <div class="phone-screen">
+                                <div class="chat-message user">500 kg demir profil lazım</div>
+                                <div class="chat-message bot">🔍 Tedarikçi araştırması başlatıyorum...</div>
+                                <div class="chat-message bot">✅ 5 güvenilir tedarikçi bulundu<br>📊 Fiyat analizi hazır<br>📋 RFQ oluşturulsun mu?</div>
+                                <div class="chat-message user">Evet, RFQ oluştur</div>
+                                <div class="chat-message bot">✨ RFQ-2025-001 oluşturuldu<br>📤 Tedarikçilere gönderildi<br>⏰ 48 saat içinde yanıt bekleniyor</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="quota-section"><div class="quota-number">500</div><div class="quota-label">mesaj/ay</div></div>
-            <ul class="features-list">
-              <li><span class="feature-check">✓</span> Tedarikçi Bulma ve Analiz</li>
-              <li><span class="feature-check">✓</span> Basit RFQ Oluşturma</li>
-              <li><span class="feature-check">✓</span> Temel Risk Analizi</li>
-              <li><span class="feature-cross">✗</span> Gelişmiş Raporlama</li>
-              <li><span class="feature-cross">✗</span> ERP Entegrasyonu</li>
-              <li><span class="feature-cross">✗</span> Öncelikli Destek</li>
-            </ul>
-            <button class="cta-button-pricing" onclick="selectPlan('basic'); goToPayment('basic')">Hemen Başla</button>
-            <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
-          </div>
+        </section>
 
-          <!-- PRO -->
-          <div class="pricing-card featured" data-plan="pro">
-            <div class="popular-badge">🔥 ÖNERİLEN</div>
-            <div class="plan-header"><h3 class="plan-name">Pro</h3><p class="plan-description">Deneyimli satınalma uzmanları için</p></div>
-            <div class="price-section">
-              <div class="annual-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">8.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"><div class="original-price">$17.95</div><div class="discount-badge2">%50 İndirim</div><div class="monthly-equivalent">Yıllık ödemede $107.4</div></div>
-              </div>
-              <div class="monthly-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">17.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"></div>
-              </div>
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Neden Satınalma CoPilot?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Destekli Analiz</h3>
+                        <p>Gelişmiş yapay zeka ile tedarikçi araştırması, risk analizi ve pazar intelligence otomatik olarak gerçekleştirilir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>WhatsApp Entegrasyonu</h3>
+                        <p>Tanıdık WhatsApp arayüzü üzerinden tüm satınalma süreçlerinizi yönetin. Ekstra uygulama öğrenmeye gerek yok.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>7/24 Hızlı Yanıt</h3>
+                        <p>Gece yarısı bile tedarikçi araştırması yapın. Asistanınız her zaman hazır ve 2 saniyede yanıt verir.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Güvenli & Gizli</h3>
+                        <p>Tüm verileriniz şifrelenmiş olarak korunur. KVKK uyumlu altyapı ile güvenlik bizim önceliğimiz.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Detaylı Raporlama</h3>
+                        <p>Tedarikçi performansı, maliyet analizi ve trend raporları ile stratejik kararlar alın.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>ERP Entegrasyonu</h3>
+                        <p>Mevcut ERP sisteminize entegre olarak çalışır. Veri transferi tamamen otomatik.</p>
+                    </div>
+                </div>
             </div>
-            <div class="quota-section"><div class="quota-number">1,500</div><div class="quota-label">mesaj/ay</div></div>
-            <ul class="features-list">
-              <li><span class="feature-check">✓</span> Tüm Basic Özellikler</li>
-              <li><span class="feature-check">✓</span> Gelişmiş Tedarikçi Scouting</li>
-              <li><span class="feature-check">✓</span> Kapsamlı RFQ Yönetimi</li>
-              <li><span class="feature-check">✓</span> Detaylı Risk & Pazar Analizi</li>
-              <li><span class="feature-check">✓</span> Performans Raporlama</li>
-              <li><span class="feature-cross">✗</span> ERP Entegrasyonu</li>
-            </ul>
-            <button class="cta-button-pricing" onclick="selectPlan('pro'); goToPayment('pro')">Hemen Başla</button>
-            <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
-          </div>
+        </section>
 
-          <!-- MAX -->
-          <div class="pricing-card" data-plan="max">
-            <div class="plan-header"><h3 class="plan-name">Max</h3><p class="plan-description">İleri seviye satınalma profesyonelleri için</p></div>
-            <div class="price-section">
-              <div class="annual-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">19.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"><div class="original-price">$39.95</div><div class="discount-badge2">%50 İndirim</div><div class="monthly-equivalent">Yıllık ödemede $239.4</div></div>
-              </div>
-              <div class="monthly-prices">
-                <div class="price-main"><span class="currency">$</span><span class="price-amount">39.95</span><span class="price-period">/ay</span></div>
-                <div class="price-info"></div>
-              </div>
+        <section class="social-proof">
+            <div class="container">
+                <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
+                <div class="testimonials">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            "Satınalma süreçlerimiz %70 hızlandı. AI asistan sayesinde en iyi tedarikçileri bulup, riskleri önceden görüyoruz. WhatsApp'tan kullanmak çok pratik!"
+                        </div>
+                        <div class="testimonial-author">— Ahmet Yılmaz, Satınalma Müdürü, TechCorp A.Ş.</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            "RFQ süreçleri artık otomatik. Hem zaman tasarrufu hem de daha kaliteli tedarikçilerle çalışmaya başladık. Gerçekten devrimci bir çözüm."
+                        </div>
+                        <div class="testimonial-author">— Zeynep Kaya, Operasyon Direktörü, İnşaat Plus Ltd.</div>
+                    </div>
+                </div>
             </div>
-            <div class="quota-section"><div class="quota-number">5,000</div><div class="quota-label">mesaj/ay</div></div>
-            <ul class="features-list">
-              <li><span class="feature-check">✓</span> Tüm Pro Özellikleri</li>
-              <li><span class="feature-check">✓</span> Sipariş & Teslimat Takibi</li>
-              <li><span class="feature-check">✓</span> ERP & API Entegrasyonu</li>
-              <li><span class="feature-check">✓</span> Özel Raporlama Dashboard</li>
-              <li><span class="feature-check">✓</span> Öncelikli Destek (24/7)</li>
-              <li><span class="feature-check">✓</span> Kişisel Hesap Yöneticisi</li>
-            </ul>
-            <button class="cta-button-pricing" onclick="selectPlan('max'); goToPayment('max')">Hemen Başla</button>
-            <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
-          </div>
+        </section>
+
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <h2 class="section-title">Fiyatlandırma</h2>
+                <p class="section-subtitle">İhtiyacınıza uygun planı seçin ve hemen başlayın</p>
+                
+                <div class="billing-toggle">
+                    <div class="toggle-container">
+                        <div class="toggle-option active" data-billing="annual">
+                            Yıllık Faturalama
+                            <span class="savings-badge">%50 İndirim</span>
+                        </div>
+                        <div class="toggle-option" data-billing="monthly">Aylık Faturalama</div>
+                    </div>
+                </div>
+
+                <div class="trial-banner">
+                    <h3>14 Gün Ücretsiz Denemeye Başla</h3>
+                    <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
+                </div>
+
+                <div class="pricing-cards">
+                    <div class="pricing-card" data-plan="basic">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Basic</h3>
+                            <p class="plan-description">Satınalma profesyonelleri için</p>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="annual-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">3.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info">
+                                    <div class="original-price">$7.95</div>
+                                    <div class="discount-badge2">%50 İndirim</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $47.4</div>
+                                </div>
+                            </div>
+                            <div class="monthly-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">7.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info"></div>
+                            </div>
+                        </div>
+
+                        <div class="quota-section">
+                            <div class="quota-number">500</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
+
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> Tedarikçi Bulma ve Analiz</li>
+                            <li><span class="feature-check">✓</span> Basit RFQ Oluşturma</li>
+                            <li><span class="feature-check">✓</span> Temel Risk Analizi</li>
+                            <li><span class="feature-cross">✗</span> Gelişmiş Raporlama</li>
+                            <li><span class="feature-cross">✗</span> ERP Entegrasyonu</li>
+                            <li><span class="feature-cross">✗</span> Öncelikli Destek</li>
+                        </ul>
+
+                        <button class="cta-button-pricing" onclick="selectPlan('basic')">Hemen Başla</button>
+                        <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
+                    </div>
+
+                    <div class="pricing-card featured" data-plan="pro">
+                        <div class="popular-badge">🔥 ÖNERİLEN</div>
+                        <div class="plan-header">
+                            <h3 class="plan-name">Pro</h3>
+                            <p class="plan-description">Deneyimli satınalma uzmanları için</p>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="annual-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">8.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info">
+                                    <div class="original-price">$17.95</div>
+                                    <div class="discount-badge2">%50 İndirim</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $107.4</div>
+                                </div>
+                            </div>
+                            <div class="monthly-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">17.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info"></div>
+                            </div>
+                        </div>
+
+                        <div class="quota-section">
+                            <div class="quota-number">1,500</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
+
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> Tüm Basic Özellikler</li>
+                            <li><span class="feature-check">✓</span> Gelişmiş Tedarikçi Scouting</li>
+                            <li><span class="feature-check">✓</span> Kapsamlı RFQ Yönetimi</li>
+                            <li><span class="feature-check">✓</span> Detaylı Risk & Pazar Analizi</li>
+                            <li><span class="feature-check">✓</span> Performans Raporlama</li>
+                            <li><span class="feature-cross">✗</span> ERP Entegrasyonu</li>
+                        </ul>
+
+                        <button class="cta-button-pricing" onclick="selectPlan('pro')">Hemen Başla</button>
+                        <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
+                    </div>
+
+                    <div class="pricing-card" data-plan="max">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Max</h3>
+                            <p class="plan-description">İleri seviye satınalma profesyonelleri için</p>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="annual-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">19.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info">
+                                    <div class="original-price">$39.95</div>
+                                    <div class="discount-badge2">%50 İndirim</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $239.4</div>
+                                </div>
+                            </div>
+                            <div class="monthly-prices">
+                                <div class="price-main">
+                                    <span class="currency">$</span>
+                                    <span class="price-amount">39.95</span>
+                                    <span class="price-period">/ay</span>
+                                </div>
+                                <div class="price-info"></div>
+                            </div>
+                        </div>
+
+                        <div class="quota-section">
+                            <div class="quota-number">5,000</div>
+                            <div class="quota-label">mesaj/ay</div>
+                        </div>
+
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> Tüm Pro Özellikleri</li>
+                            <li><span class="feature-check">✓</span> Sipariş & Teslimat Takibi</li>
+                            <li><span class="feature-check">✓</span> ERP & API Entegrasyonu</li>
+                            <li><span class="feature-check">✓</span> Özel Raporlama Dashboard</li>
+                            <li><span class="feature-check">✓</span> Öncelikli Destek (24/7)</li>
+                            <li><span class="feature-check">✓</span> Kişisel Hesap Yöneticisi</li>
+                        </ul>
+
+                        <button class="cta-button-pricing" onclick="selectPlan('max')">Hemen Başla</button>
+                        <div class="login-link">Hesabınız var mı? <a onclick="showLoginMessage()">Giriş yapın</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="registration" id="registration">
+            <div class="container">
+                <div class="form-wrapper">
+                    <div class="form-header">
+                        <h2>14 Gün Ücretsiz Denemeye Başla</h2>
+                        <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
+                    </div>
+                    
+                    <div class="selected-plan-info" id="selectedPlanInfo">
+                        <h3>✅ Seçilen Plan: <span id="selectedPlanName"></span></h3>
+                        <p>Kayıt sonrası planınız aktif olacak</p>
+                    </div>
+                    
+                    <form class="registration-form" onsubmit="handleRegistration(event)">
+                        <div class="form-group">
+                            <label for="fullName">Ad Soyad *</label>
+                            <input type="text" id="fullName" name="fullName" required placeholder="Örn: Ahmet Yılmaz">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-posta *</label>
+                            <input type="email" id="email" name="email" required placeholder="Örn: ahmet@sirket.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp Numarası *</label>
+                            <input type="tel" id="whatsapp" name="whatsapp" required placeholder="Örn: +90 555 123 45 67">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Şirket Adı *</label>
+                            <input type="text" id="company" name="company" required placeholder="Örn: ABC Teknoloji A.Ş.">
+                        </div>
+                        <button type="submit" class="submit-button" id="submitBtn">
+                            <span class="default-text">Ücretsiz Denemeye Başla</span>
+                            <span class="loading-text">Kaydediliyor...</span>
+                        </button>
+                        <p class="form-note">
+                            Kaydolarak <a href="#" style="color: #2563eb;">Kullanım Koşulları</a> ve 
+                            <a href="#" style="color: #2563eb;">Gizlilik Politikası</a>'nı kabul etmiş olursunuz.<br>
+                            14 gün sonunda otomatik ücretlendirme başlamaz.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">🤖</div>
+                    <div class="brand-text">Satınalma CoPilot</div>
+                </div>
+                <div class="footer-links">
+                    <a href="#about">Hakkımızda</a>
+                    <a href="#pricing">Fiyatlandırma</a>
+                    <a href="#contact">İletişim</a>
+                    <a href="#privacy">Gizlilik</a>
+                    <a href="#terms">Kullanım Koşulları</a>
+                    <a href="#help">Yardım</a>
+                </div>
+                <p>&copy; 2024 Satınalma CoPilot. Tüm hakları saklıdır.</p>
+            </div>
         </div>
-      </div>
-    </section>
+    </footer>
 
-    <!-- REGISTRATION -->
-    <section class="registration" id="registration">
-      <div class="container">
-        <div class="form-wrapper">
-          <div class="form-header">
-            <h2>14 Gün Ücretsiz Denemeye Başla</h2>
-            <p>1000 mesaj hediye ile WhatsApp asistanınızla tanışın</p>
-          </div>
-          <div class="selected-plan-info" id="selectedPlanInfo">
-            <h3 id="selectedPlanName">Seçilen Plan</h3>
-            <p id="selectedPlanDetails">Plan detayları</p>
-          </div>
-          <form class="registration-form" onsubmit="handleRegistration(event)">
-            <div class="form-group">
-              <label for="fullName">Ad Soyad *</label>
-              <input type="text" id="fullName" name="fullName" required placeholder="Örn: Ahmet Yılmaz">
-            </div>
-            <div class="form-group">
-              <label for="email">E-posta *</label>
-              <input type="email" id="email" name="email" required placeholder="Örn: ahmet@sirket.com">
-            </div>
-            <div class="form-group">
-              <label for="whatsapp">WhatsApp Numarası *</label>
-              <input type="tel" id="whatsapp" name="whatsapp" required placeholder="Örn: +90 555 123 45 67">
-            </div>
-            <div class="form-group">
-              <label for="company">Şirket Adı *</label>
-              <input type="text" id="company" name="company" required placeholder="Örn: ABC Teknoloji A.Ş.">
-            </div>
-            <button type="submit" class="submit-button" id="submitBtn">
-              <span class="default-text">Ücretsiz Denemeye Başla</span>
-              <span class="loading-text">Kaydediliyor...</span>
-            </button>
-            <p class="form-note">
-              Kaydolarak <a href="#" style="color:#2563eb;">Kullanım Koşulları</a> ve 
-              <a href="#" style="color:#2563eb;">Gizlilik Politikası</a>'nı kabul etmiş olursunuz.<br>
-              14 gün sonunda otomatik ücretlendirme başlamaz.
-            </p>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
+    <script>
+        // Global variables
+        let selectedPlan = null;
+        let currentBilling = 'annual';
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand"><div class="logo">🤖</div><div class="brand-text">Satınalma CoPilot</div></div>
-        <div class="footer-links">
-          <a href="#about">Hakkımızda</a><a href="#pricing">Fiyatlandırma</a><a href="#contact">İletişim</a>
-          <a href="#privacy">Gizlilik</a><a href="#terms">Kullanım Koşulları</a><a href="#help">Yardım</a>
-        </div>
-        <p>&copy; 2024 Satınalma CoPilot. Tüm hakları saklıdır.</p>
-      </div>
-    </div>
-  </footer>
+        // Billing Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleContainer = document.querySelector('.toggle-container');
+            const toggleOptions = document.querySelectorAll('.toggle-option');
+            
+            toggleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    toggleOptions.forEach(opt => opt.classList.remove('active'));
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update pricing display
+                    const billingType = this.getAttribute('data-billing');
+                    currentBilling = billingType;
+                    updatePricing(billingType);
+                });
+            });
 
-  <script>
-    /* ===== Config ===== */
-    const planConfig = {
-      basic:{ monthly:{ quota:500,  price:7.95 },  annual:{ quota:6000,  price:47.4 } },
-      pro:  { monthly:{ quota:1500, price:17.95 }, annual:{ quota:18000, price:107.4 } },
-      max:  { monthly:{ quota:5000, price:39.95 }, annual:{ quota:60000, price:239.4 } }
-    };
-
-    /* ===== State ===== */
-    let selectedPlan = null;
-    let selectedBilling = 'annual';
-
-    /* ===== Init ===== */
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeBillingToggle();
-      initializeFormValidation();
-      initializePlanCards();
-      checkUrlParams();
-    });
-
-    function initializeBillingToggle(){
-      const options = document.querySelectorAll('.toggle-option');
-      options.forEach(opt=>{
-        opt.addEventListener('click', function(){
-          options.forEach(o=>o.classList.remove('active'));
-          this.classList.add('active');
-          selectedBilling = this.getAttribute('data-billing');
-          updatePricing(selectedBilling);
-          if (selectedPlan) updateSelectedPlanDisplay();
+            // Add click handlers for pricing cards
+            const pricingCards = document.querySelectorAll('.pricing-card');
+            pricingCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const plan = this.getAttribute('data-plan');
+                    selectPlan(plan);
+                });
+            });
         });
-      });
-    }
 
-    function updatePricing(type){
-      const annual = document.querySelectorAll('.annual-prices');
-      const monthly = document.querySelectorAll('.monthly-prices');
-      if(type==='monthly'){ annual.forEach(e=>e.style.display='none'); monthly.forEach(e=>e.style.display='block'); }
-      else { annual.forEach(e=>e.style.display='block'); monthly.forEach(e=>e.style.display='none'); }
-    }
-
-    function initializePlanCards(){
-      document.querySelectorAll('.pricing-card').forEach(card=>{
-        card.addEventListener('click', ()=>{
-          const p = card.getAttribute('data-plan');
-          if (p) selectPlan(p);
-        });
-      });
-    }
-
-    function selectPlan(planType){
-      selectedPlan = planType;
-      document.querySelectorAll('.pricing-card').forEach(c=>{
-        c.classList.remove('selected');
-        const ind = c.querySelector('.plan-selection-indicator'); if (ind) ind.remove();
-      });
-      const card = document.querySelector(`[data-plan="${planType}"]`);
-      if(card){
-        card.classList.add('selected');
-        const i=document.createElement('div'); i.className='plan-selection-indicator'; i.textContent='✅ SEÇİLDİ'; card.appendChild(i);
-        card.style.animation='pulse .6s ease-in-out'; setTimeout(()=>{card.style.animation='';},600);
-      }
-      updateSelectedPlanDisplay();
-      scrollToRegistration();
-      const form = document.querySelector('.form-wrapper');
-      form.style.boxShadow='0 0 20px rgba(37,99,235,.3)'; form.style.transform='scale(1.02)';
-      setTimeout(()=>{form.style.boxShadow='0 20px 40px rgba(0,0,0,.1)'; form.style.transform='scale(1)';},2000);
-    }
-
-    function updateSelectedPlanDisplay(){
-      const info=document.getElementById('selectedPlanInfo');
-      const name=document.getElementById('selectedPlanName');
-      const details=document.getElementById('selectedPlanDetails');
-      if(selectedPlan && planConfig[selectedPlan]){
-        const plan=planConfig[selectedPlan][selectedBilling];
-        info.style.display='block';
-        name.textContent=`🎯 Seçilen Plan: ${selectedPlan.toUpperCase()}`;
-        details.textContent=`$${plan.price}/${selectedBilling==='monthly'?'ay':'yıl'} • ${plan.quota.toLocaleString()} mesaj • 14 gün ücretsiz deneme`;
-        document.querySelector('.form-header h2').textContent=`${selectedPlan.toUpperCase()} Plan - 14 Gün Ücretsiz Deneme`;
-      }else{
-        info.style.display='none';
-        document.querySelector('.form-header h2').textContent='14 Gün Ücretsiz Denemeye Başla';
-      }
-    }
-
-    function scrollToRegistration(){ document.getElementById('registration').scrollIntoView({behavior:'smooth'}); }
-
-    function showLoginMessage(){
-      alert('🔒 Giriş özelliği yakında eklenecek!\n\n📱 Şimdilik WhatsApp asistanınızla doğrudan konuşabilirsiniz:\n+1 (415) 523-8886\n\nSorun yaşıyorsanız:\n📧 info@satinalmacopilot.com');
-    }
-
-    function checkUrlParams(){
-      const p=new URLSearchParams(location.search);
-      const sPlan=p.get('plan'); const sBill=p.get('billing');
-      if(sPlan && planConfig[sPlan]) setTimeout(()=>selectPlan(sPlan),500);
-      if(sBill && (sBill==='monthly' || sBill==='annual')){
-        selectedBilling=sBill; const t=document.querySelector(`[data-billing="${sBill}"]`); if(t) setTimeout(()=>t.click(),200);
-      }
-    }
-
-    /* ===== Validation ===== */
-    function initializeFormValidation(){
-      const form=document.querySelector('.registration-form'); if(!form) return;
-      const inputs=form.querySelectorAll('input[required]');
-      inputs.forEach(inp=>{
-        inp.addEventListener('input',()=>{ if(inp.classList.contains('error')) validateField(inp); });
-        inp.addEventListener('blur',()=>validateField(inp));
-      });
-    }
-
-    function validateField(field){
-      const val=field.value.trim(); let ok=true; let msg='';
-      field.classList.remove('error'); const ex=field.parentNode.querySelector('.error-message'); if(ex) ex.remove();
-      switch(field.type){
-        case 'email': if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){ ok=false; msg='Geçerli bir e-posta adresi girin'; } break;
-        case 'tel':   if(!/^[\+]?[0-9\s\-\(\)]{10,}$/.test(val)){ ok=false; msg='Geçerli bir telefon numarası girin'; } break;
-        case 'text':  if(val.length<2){ ok=false; msg='En az 2 karakter giriniz'; } break;
-      }
-      if(!ok){ field.classList.add('error'); const d=document.createElement('div'); d.className='error-message'; d.textContent=msg; field.parentNode.appendChild(d); }
-      return ok;
-    }
-
-    /* ===== Payment Redirect Helpers ===== */
-    function billingKeyForPayment(){ return (selectedBilling==='annual') ? 'yearly' : 'monthly'; }
-
-    function goToPayment(planFromButton){
-      const plan = planFromButton || selectedPlan || 'pro';
-      const phoneInput = document.querySelector('#whatsapp');
-      const raw = (phoneInput?.value || '').trim();
-      if(!raw){ alert('Lütfen WhatsApp numaranızı giriniz (örn: +905551234567)'); phoneInput?.focus(); return; }
-      const clean = raw.replace(/[^\d+]/g,'');
-      const billing = billingKeyForPayment();
-      const url = `payment.html?phone=${encodeURIComponent(clean)}&plan=${encodeURIComponent(plan)}&billing=${encodeURIComponent(billing)}`;
-      window.location.href = url;
-    }
-
-    /* ===== Registration handler ===== */
-    async function handleRegistration(e){
-      e.preventDefault();
-      const form=e.target; const inputs=form.querySelectorAll('input[required]'); let all=true;
-      inputs.forEach(i=>{ if(!validateField(i)) all=false; }); if(!all){ alert('❌ Lütfen tüm alanları doğru şekilde doldurun.'); return; }
-
-      const btn=document.getElementById('submitBtn'); const def=btn.querySelector('.default-text'); const load=btn.querySelector('.loading-text');
-      btn.disabled=true; def.style.display='none'; load.style.display='inline';
-
-      try{
-        const fd=new FormData(form);
-        const rawPhone=fd.get('whatsapp')||''; let cleanPhone=rawPhone.replace(/[^\d+]/g,'');
-        if(!cleanPhone.startsWith('+')){
-          if(cleanPhone.startsWith('0')) cleanPhone='+90'+cleanPhone.substring(1);
-          else if(cleanPhone.length===10) cleanPhone='+90'+cleanPhone;
-          else cleanPhone='+'+cleanPhone;
-        }
-        const plan = selectedPlan || 'pro';
-        const billing = selectedBilling;
-        const currentPlan = planConfig[plan][billing];
-
-        const registrationData={
-          name:fd.get('fullName'),
-          email:fd.get('email'),
-          contact_phone:cleanPhone,
-          company_name:fd.get('company'),
-          subscription_plan:plan,
-          billing_cycle:billing,
-          monthly_quota: billing==='monthly'? currentPlan.quota : Math.floor(currentPlan.quota/12),
-          yearly_quota:  billing==='annual'? currentPlan.quota : currentPlan.quota*12,
-          plan_price: currentPlan.price,
-          subscription_status:'trial',
-          trial_start_date:new Date().toISOString(),
-          trial_end_date:new Date(Date.now()+14*24*60*60*1000).toISOString(),
-          used_quota:0,
-          registration_source:'web',
-          payment_status:'trial',
-          created_at:new Date().toISOString(),
-          updated_at:new Date().toISOString()
-        };
-
-        // Kullanıcı var mı kontrol
-        const check = await fetch(`https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers?contact_phone=eq.${encodeURIComponent(cleanPhone)}&select=id,name,subscription_status`,{
-          headers:{
-            'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-            'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg'
-          }
-        });
-        if(check.ok){
-          const arr=await check.json();
-          if(arr.length>0){
-            alert(`📱 Bu WhatsApp numarası zaten kayıtlı!\n\n👤 ${arr[0].name}\n📱 WhatsApp: +1 (415) 523-8886\n\nDoğrudan WhatsApp'tan mesaj gönderebilirsiniz.`);
-            if(confirm('WhatsApp\'ı açmak ister misiniz?')) window.open('https://wa.me/14155238886?text=Merhaba, hesabım aktif','_blank');
-            btn.disabled=false; def.style.display='inline'; load.style.display='none';
-            return;
-          }
+        function updatePricing(billingType) {
+            const annualPrices = document.querySelectorAll('.annual-prices');
+            const monthlyPrices = document.querySelectorAll('.monthly-prices');
+            
+            if (billingType === 'monthly') {
+                annualPrices.forEach(price => price.style.display = 'none');
+                monthlyPrices.forEach(price => price.style.display = 'block');
+            } else {
+                annualPrices.forEach(price => price.style.display = 'block');
+                monthlyPrices.forEach(price => price.style.display = 'none');
+            }
         }
 
-        // Yeni kullanıcı oluştur
-        const resp = await fetch('https://dblepmaqqkudsbmvlqcw.supabase.co/rest/v1/customers',{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-            'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg',
-            'Prefer':'return=representation'
-          },
-          body:JSON.stringify(registrationData)
+        // Plan selection function
+        function selectPlan(planType) {
+            selectedPlan = planType;
+            
+            // Remove previous selections
+            document.querySelectorAll('.pricing-card').forEach(card => {
+                card.classList.remove('selected');
+                const indicator = card.querySelector('.plan-selection-indicator');
+                if (indicator) indicator.remove();
+            });
+            
+            // Add selection to chosen plan
+            const selectedCard = document.querySelector(`[data-plan="${planType}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+                
+                // Add selection indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'plan-selection-indicator';
+                indicator.textContent = '✓ Seçildi';
+                selectedCard.appendChild(indicator);
+            }
+            
+            // Show plan info in registration form
+            const planInfo = document.getElementById('selectedPlanInfo');
+            const planName = document.getElementById('selectedPlanName');
+            
+            const planNames = {
+                basic: 'Basic Plan',
+                pro: 'Pro Plan (Önerilen)',
+                max: 'Max Plan'
+            };
+            
+            planName.textContent = planNames[planType];
+            planInfo.style.display = 'block';
+            
+            // Scroll to registration form with animation
+            scrollToRegistration();
+            
+            // Add pulsing animation to form
+            const formWrapper = document.querySelector('.form-wrapper');
+            formWrapper.style.animation = 'pulse 1s ease-in-out';
+            setTimeout(() => {
+                formWrapper.style.animation = '';
+            }, 1000);
+        }
+
+        // Scroll to registration function
+        function scrollToRegistration() {
+            document.getElementById('registration').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        // Show login message function
+        function showLoginMessage() {
+            alert('🔐 Giriş sistemi yakında aktif olacak!\n\n📧 Mevcut hesabınız için: info@satinalmacopilot.com\n📞 Destek: +90 552 071 0977');
+        }
+
+        // Registration form handler with proper API integration
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const defaultText = submitBtn.querySelector('.default-text');
+            const loadingText = submitBtn.querySelector('.loading-text');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            defaultText.style.display = 'none';
+            loadingText.style.display = 'inline';
+            
+            try {
+                // Get form data
+                const formData = new FormData(event.target);
+                const registrationData = {
+                    name: formData.get('fullName'),
+                    email: formData.get('email'),
+                    contact_phone: formData.get('whatsapp'),
+                    company_name: formData.get('company'),
+                    selected_plan: selectedPlan || 'pro',
+                    billing_cycle: currentBilling
+                };
+                
+                console.log('Registration data:', registrationData);
+                
+                // Call secure API endpoint
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                const result = await response.json();
+                console.log('API Response:', result);
+                
+                if (response.ok && result.success) {
+                    // Reset form
+                    event.target.reset();
+                    
+                    // Handle different response types
+                    if (result.action === 'trial_started') {
+                        // New user - redirect to success page
+                        alert('🎉 Kayıt başarılı!\n\n✅ 14 günlük ücretsiz deneme başladı\n📱 WhatsApp asistanınız aktif\n📧 Kurulum talimatları e-postanıza gönderildi');
+                        window.location.href = `success.html?phone=${encodeURIComponent(registrationData.contact_phone)}`;
+                        
+                    } else if (result.action === 'payment_required') {
+                        // Existing user needs payment - redirect to payment page
+                        alert('👋 Hoş geldin!\n\n⏰ Ücretsiz denemen sona ermiş\n💳 Devam etmek için plan seçimi gerekli\n🚀 Hemen aktifleştir!');
+                        window.location.href = `payment.html?phone=${encodeURIComponent(registrationData.contact_phone)}&plan=${selectedPlan || 'pro'}&billing=${currentBilling}`;
+                        
+                    } else if (result.action === 'already_active') {
+                        // User already has active subscription
+                        alert('✅ Zaten aktif üyesiniz!\n\n🤖 WhatsApp asistanınız çalışıyor\n📱 +1 (415) 523-8886 numarasına mesaj atabilirsiniz\n🎯 Satınalma ihtiyaçlarınızı paylaşın');
+                        
+                    } else {
+                        // Unexpected response
+                        throw new Error(result.message || 'Bilinmeyen yanıt türü');
+                    }
+                    
+                } else {
+                    // API returned error
+                    throw new Error(result.message || 'Kayıt işlemi başarısız');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                
+                // Show user-friendly error message
+                let errorMessage = '❌ Kayıt işlemi başarısız oldu.\n\n';
+                
+                if (error.message.includes('already exists')) {
+                    errorMessage += '📱 Bu numara zaten kayıtlı\n💡 Giriş yapmak için destek ekibimizle iletişime geçin';
+                } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                    errorMessage += '🌐 İnternet bağlantısı sorunu\n💡 Lütfen tekrar deneyin';
+                } else {
+                    errorMessage += '🔧 Teknik bir sorun oluştu\n💡 Lütfen daha sonra tekrar deneyin';
+                }
+                
+                errorMessage += '\n\n📧 Destek: info@satinalmacopilot.com\n📞 Yardım: +90 552 071 0977';
+                
+                alert(errorMessage);
+                
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                defaultText.style.display = 'inline';
+                loadingText.style.display = 'none';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a plan suggested in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const suggestedPlan = urlParams.get('plan');
+            
+            if (suggestedPlan && ['basic', 'pro', 'max'].includes(suggestedPlan)) {
+                selectPlan(suggestedPlan);
+            }
         });
-        if(!resp.ok) throw new Error('Kayıt başarısız');
-
-        // Kayıt sonrası direkt ödeme sayfasına yönlendir
-        const billingParam = billingKeyForPayment(); // annual -> yearly
-        window.location.href = `payment.html?phone=${encodeURIComponent(cleanPhone)}&plan=${encodeURIComponent(plan)}&billing=${encodeURIComponent(billingParam)}`;
-        return;
-
-      }catch(err){
-        alert('❌ Hata: '+(err?.message||err));
-      }finally{
-        const btn=document.getElementById('submitBtn'); const def=btn.querySelector('.default-text'); const load=btn.querySelector('.loading-text');
-        btn.disabled=false; def.style.display='inline'; load.style.display='none';
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
