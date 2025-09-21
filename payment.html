@@ -153,14 +153,19 @@
       const plan    = params.get('plan')    || 'pro';
       const billing = params.get('billing') || 'monthly';
 
+      // 🔧 Normalize edici yardımcı (annual → yearly)
+      const normalizeBilling = (b) => {
+      const v = String(b || '').toLowerCase();
+      return v === 'annual' ? 'yearly' : v;  // tek fark burada
+      };
       if (!phone) {
         showError('Telefon numarası gerekli. Ana sayfaya yönlendiriliyorsunuz.');
         setTimeout(()=> location.href = 'index.html', 2500);
         return;
       }
 
-      selectedPlan = plan;
-      selectedBilling = billing;
+      selectedPlan    = String(plan || 'pro').toLowerCase();
+      selectedBilling = normalizeBilling(billing);
 
       try {
         await loadUserData(phone);
