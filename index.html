@@ -885,7 +885,7 @@
                             <span class="feature-pill">🛡️ Güvenli</span>
                         </div>
                         <div class="cta-section">
-                            <button class="cta-button" onclick="scrollToRegistration()">
+                            <button class="cta-button" onclick="startTrialProAnnual()">
                                 Ücretsiz Denemeye Başla
                             </button>
                             <p class="cta-note">
@@ -1409,5 +1409,21 @@
             }
         });
     </script>
+    <script>
+  // ... var olan scriptlerin altına ekleyin (selectPlan, updatePricing tanımlı)
+
+  function startTrialProAnnual() {
+    // 1) Billing toggle'ı "annual" yap
+    currentBilling = 'annual';
+    updatePricing('annual');
+
+    // 2) Planı Pro yap
+    selectPlan('pro');
+
+    // 3) Kayıt formuna kaydır
+    scrollToRegistration();
+  }
+</script>
+
 </body>
 </html>
