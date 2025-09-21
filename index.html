@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satınalma CoPilot - AI Destekli Satınalma Asistanı</title>
+    <title>SatÄ±nalma CoPilot - AI Destekli SatÄ±nalma AsistanÄ±</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* Reset and Base Styles */
@@ -790,6 +790,42 @@
             display: block;
         }
 
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-content {
@@ -855,6 +891,15 @@
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3 id="loadingText">İşleniyor...</h3>
+            <p>Lütfen bekleyin</p>
+        </div>
+    </div>
+
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
@@ -1202,6 +1247,10 @@
         let selectedPlan = null;
         let currentBilling = 'annual';
 
+        // Supabase API configuration
+        const SUPABASE_URL = 'https://dblepmaqqkudsbmvlqcw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg';
+
         // Billing Toggle Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const toggleContainer = document.querySelector('.toggle-container');
@@ -1229,6 +1278,13 @@
                     selectPlan(plan);
                 });
             });
+
+            // Check URL parameters for plan selection
+            const urlParams = new URLSearchParams(window.location.search);
+            const suggestedPlan = urlParams.get('plan');
+            if (suggestedPlan && ['basic', 'pro', 'max'].includes(suggestedPlan)) {
+                selectPlan(suggestedPlan);
+            }
         });
 
         function updatePricing(billingType) {
@@ -1299,12 +1355,128 @@
             });
         }
 
-        // Show login message function
-        function showLoginMessage() {
-            alert('🔐 Giriş sistemi yakında aktif olacak!\n\n📧 Mevcut hesabınız için: info@satinalmacopilot.com\n📞 Destek: +90 552 071 0977');
+        // Start trial with Pro Annual (for hero button)
+        function startTrialProAnnual() {
+            // 1) Set billing toggle to "annual"
+            currentBilling = 'annual';
+            updatePricing('annual');
+            document.querySelector('[data-billing="annual"]').classList.add('active');
+            document.querySelector('[data-billing="monthly"]').classList.remove('active');
+
+            // 2) Select Pro plan
+            selectPlan('pro');
+
+            // 3) Scroll to registration
+            scrollToRegistration();
         }
 
-        // Registration form handler with proper API integration
+        // Show login message function
+        function showLoginMessage() {
+            alert('🔍 Giriş sistemi yakında aktif olacak!\n\n📧 Mevcut hesabınız için: info@satinalmacopilot.com\n📞 Destek: +90 552 071 0977');
+        }
+
+        // Show loading overlay
+        function showLoading(message = 'İşleniyor...') {
+            document.getElementById('loadingText').textContent = message;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // Hide loading overlay
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Check if user exists by phone
+        async function checkUserExists(phone) {
+            try {
+                const cleanPhone = phone.replace(/[^\d+]/g, '');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/customers?contact_phone=eq.${encodeURIComponent(cleanPhone)}&select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API error');
+                }
+                
+                const users = await response.json();
+                return users.length > 0 ? users[0] : null;
+            } catch (error) {
+                console.error('Error checking user:', error);
+                return null;
+            }
+        }
+
+        // Calculate quota and duration based on plan and billing
+        function getPlanQuotaAndDuration(plan, billing) {
+            const quotas = {
+                monthly: {
+                    basic: 500,
+                    pro: 1500,
+                    max: 5000
+                },
+                annual: {
+                    basic: 6000,  // 500 * 12
+                    pro: 18000,   // 1500 * 12
+                    max: 60000    // 5000 * 12
+                }
+            };
+
+            const duration = billing === 'monthly' ? 30 : 365; // days
+            const quota = quotas[billing][plan];
+
+            return { quota, duration };
+        }
+
+        // Create new user
+        async function createUser(userData) {
+            try {
+                const { quota, duration } = getPlanQuotaAndDuration(userData.selectedPlan, userData.billingCycle);
+                
+                const now = new Date();
+                const trialEndDate = new Date(now.getTime() + (14 * 24 * 60 * 60 * 1000)); // 14 days
+                
+                const newUser = {
+                    name: userData.fullName,
+                    email: userData.email,
+                    contact_phone: userData.whatsapp,
+                    company_name: userData.company,
+                    subscription_plan: userData.selectedPlan,
+                    subscription_status: 'trial',
+                    billing_cycle: userData.billingCycle,
+                    monthly_quota: quota,
+                    used_quota: 0,
+                    trial_end_date: trialEndDate.toISOString(),
+                    created_at: now.toISOString(),
+                    updated_at: now.toISOString()
+                };
+
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/customers`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newUser)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'User creation failed');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error creating user:', error);
+                throw error;
+            }
+        }
+
+        // Registration form handler with proper business logic
         async function handleRegistration(event) {
             event.preventDefault();
             
@@ -1316,74 +1488,74 @@
             submitBtn.disabled = true;
             defaultText.style.display = 'none';
             loadingText.style.display = 'inline';
+            showLoading('Kayıt kontrol ediliyor...');
             
             try {
                 // Get form data
                 const formData = new FormData(event.target);
                 const registrationData = {
-                    name: formData.get('fullName'),
+                    fullName: formData.get('fullName'),
                     email: formData.get('email'),
-                    contact_phone: formData.get('whatsapp'),
-                    company_name: formData.get('company'),
-                    selected_plan: selectedPlan || 'pro',
-                    billing_cycle: currentBilling
+                    whatsapp: formData.get('whatsapp'),
+                    company: formData.get('company'),
+                    selectedPlan: selectedPlan || 'pro', // Default to Pro if no plan selected
+                    billingCycle: currentBilling
                 };
                 
                 console.log('Registration data:', registrationData);
                 
-                // Call secure API endpoint
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(registrationData)
-                });
+                // Check if user already exists
+                const existingUser = await checkUserExists(registrationData.whatsapp);
                 
-                const result = await response.json();
-                console.log('API Response:', result);
-                
-                if (response.ok && result.success) {
+                if (existingUser) {
+                    hideLoading();
+                    
+                    // Check user's current status
+                    const now = new Date();
+                    const trialEndDate = existingUser.trial_end_date ? new Date(existingUser.trial_end_date) : null;
+                    const planEndDate = existingUser.plan_end_date ? new Date(existingUser.plan_end_date) : null;
+                    
+                    if (existingUser.subscription_status === 'active' && planEndDate && planEndDate > now) {
+                        // User has active subscription - Case 4
+                        alert('✅ Zaten aktif üyesiniz!\n\n🤖 WhatsApp asistanınız çalışıyor\n📱 +1 (415) 523-8886 numarasına mesaj atabilirsiniz\n🎯 Satınalma ihtiyaçlarınızı paylaşın');
+                        return;
+                    } else {
+                        // User exists but trial/subscription expired - Case 2 & 3
+                        alert('👋 Hoş geldin!\n\n⏰ Ücretsiz denemen sona ermiş\n💳 Devam etmek için plan seçimi gerekli\n🚀 Hemen aktifleştir!');
+                        window.location.href = `payment.html?phone=${encodeURIComponent(registrationData.whatsapp)}&plan=${registrationData.selectedPlan}&billing=${registrationData.billingCycle}`;
+                        return;
+                    }
+                } else {
+                    // New user - Case 1
+                    showLoading('Yeni hesap oluşturuluyor...');
+                    
+                    const newUser = await createUser(registrationData);
+                    
+                    hideLoading();
+                    
                     // Reset form
                     event.target.reset();
                     
-                    // Handle different response types
-                    if (result.action === 'trial_started') {
-                        // New user - redirect to success page
-                        alert('🎉 Kayıt başarılı!\n\n✅ 14 günlük ücretsiz deneme başladı\n📱 WhatsApp asistanınız aktif\n📧 Kurulum talimatları e-postanıza gönderildi');
-                        window.location.href = `success.html?phone=${encodeURIComponent(registrationData.contact_phone)}`;
-                        
-                    } else if (result.action === 'payment_required') {
-                        // Existing user needs payment - redirect to payment page
-                        alert('👋 Hoş geldin!\n\n⏰ Ücretsiz denemen sona ermiş\n💳 Devam etmek için plan seçimi gerekli\n🚀 Hemen aktifleştir!');
-                        window.location.href = `payment.html?phone=${encodeURIComponent(registrationData.contact_phone)}&plan=${selectedPlan || 'pro'}&billing=${currentBilling}`;
-                        
-                    } else if (result.action === 'already_active') {
-                        // User already has active subscription
-                        alert('✅ Zaten aktif üyesiniz!\n\n🤖 WhatsApp asistanınız çalışıyor\n📱 +1 (415) 523-8886 numarasına mesaj atabilirsiniz\n🎯 Satınalma ihtiyaçlarınızı paylaşın');
-                        
-                    } else {
-                        // Unexpected response
-                        throw new Error(result.message || 'Bilinmeyen yanıt türü');
-                    }
+                    // Success message for new user
+                    alert('🎉 Kayıt başarılı!\n\n✅ 14 günlük ücretsiz deneme başladı\n📱 WhatsApp asistanınız aktif\n📧 Kurulum talimatları e-postanıza gönderildi');
                     
-                } else {
-                    // API returned error
-                    throw new Error(result.message || 'Kayıt işlemi başarısız');
+                    // Redirect to success page
+                    window.location.href = `success.html?phone=${encodeURIComponent(registrationData.whatsapp)}`;
                 }
                 
             } catch (error) {
                 console.error('Registration error:', error);
+                hideLoading();
                 
                 // Show user-friendly error message
-                let errorMessage = '❌ Kayıt işlemi başarısız oldu.\n\n';
+                let errorMessage = '⚠ Kayıt işlemi başarısız oldu.\n\n';
                 
-                if (error.message.includes('already exists')) {
+                if (error.message.includes('already exists') || error.message.includes('duplicate')) {
                     errorMessage += '📱 Bu numara zaten kayıtlı\n💡 Giriş yapmak için destek ekibimizle iletişime geçin';
                 } else if (error.message.includes('network') || error.message.includes('fetch')) {
                     errorMessage += '🌐 İnternet bağlantısı sorunu\n💡 Lütfen tekrar deneyin';
                 } else {
-                    errorMessage += '🔧 Teknik bir sorun oluştu\n💡 Lütfen daha sonra tekrar deneyin';
+                    errorMessage += '📧 Teknik bir sorun oluştu\n💡 Lütfen daha sonra tekrar deneyin';
                 }
                 
                 errorMessage += '\n\n📧 Destek: info@satinalmacopilot.com\n📞 Yardım: +90 552 071 0977';
@@ -1395,35 +1567,26 @@
                 submitBtn.disabled = false;
                 defaultText.style.display = 'inline';
                 loadingText.style.display = 'none';
+                hideLoading();
             }
         }
 
-        // Initialize page
+        // If no plan is selected when form is submitted, default to Pro Annual
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if there's a plan suggested in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const suggestedPlan = urlParams.get('plan');
-            
-            if (suggestedPlan && ['basic', 'pro', 'max'].includes(suggestedPlan)) {
-                selectPlan(suggestedPlan);
-            }
+            const form = document.querySelector('.registration-form');
+            form.addEventListener('submit', function(event) {
+                // If no plan selected, auto-select Pro Annual
+                if (!selectedPlan) {
+                    currentBilling = 'annual';
+                    selectPlan('pro');
+                    updatePricing('annual');
+                    
+                    // Update toggle to show annual
+                    document.querySelector('[data-billing="annual"]').classList.add('active');
+                    document.querySelector('[data-billing="monthly"]').classList.remove('active');
+                }
+            }, true); // Use capture phase to run before the main submit handler
         });
     </script>
-    <script>
-  // ... var olan scriptlerin altına ekleyin (selectPlan, updatePricing tanımlı)
-
-  function startTrialProAnnual() {
-    // 1) Billing toggle'ı "annual" yap
-    currentBilling = 'annual';
-    updatePricing('annual');
-
-    // 2) Planı Pro yap
-    selectPlan('pro');
-
-    // 3) Kayıt formuna kaydır
-    scrollToRegistration();
-  }
-</script>
-
 </body>
 </html>
