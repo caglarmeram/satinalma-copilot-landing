@@ -1,4 +1,4 @@
-name: Deploy to Droplet
+name: Deploy Backend
 
 on:
   push:
@@ -10,26 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-          
-      - name: Test SSH connection
-        run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH connection successful'"
-          
       - name: Deploy to server
-        run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Starting deployment..."
             cd /root/satinalmacopilot-backend
-            git pull origin main
-            npm install --production
-            pm2 restart all || pm2 start ecosystem.config.js
-            echo "Deployment completed successfully"
-          EOF
+            pm2 restart satinalmacopilot-api || pm2 start ecosystem.config.js
+            echo "Backend deployment completed at $(date)"
