@@ -573,4 +573,52 @@
         console.log('Success page loaded for:', userPhone, 'Plan:', selectedPlan, 'Payment:', paymentStatus);
     </script>
 </body>
+    <script>
+const SUPABASE_URL = 'https://dblepmaqqkudsbmvlqcw.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg';
+
+function q(sel){ return document.querySelector(sel); }
+
+(async function initSuccess(){
+  const p = new URLSearchParams(location.search);
+  const phone = p.get('phone');
+  const fromUrl = {
+    name: p.get('name'),
+    company: p.get('company'),
+    plan: p.get('plan'),
+    status: p.get('status')
+  };
+
+  // 1) URL ile geldiyse yaz
+  if (fromUrl.name || fromUrl.company || fromUrl.plan || fromUrl.status) {
+    q('#fullName')  && (q('#fullName').textContent  = fromUrl.name    || 'Kullanıcı');
+    q('#company')   && (q('#company').textContent   = fromUrl.company || 'Şirket');
+    q('#plan')      && (q('#plan').textContent      = (fromUrl.plan||'trial').toUpperCase());
+    q('#status')    && (q('#status').textContent    = (fromUrl.status||'active').toUpperCase());
+  }
+
+  // 2) Telefon varsa Supabase’ten kesin veri çek
+  if (phone) {
+    const clean = phone.replace(/[^\d+]/g, '');
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/customers?contact_phone=eq.${encodeURIComponent(clean)}&select=*`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const rows = await res.json();
+    if (rows && rows[0]) {
+      const u = rows[0];
+      q('#fullName')  && (q('#fullName').textContent  = u.name || 'Kullanıcı');
+      q('#company')   && (q('#company').textContent   = u.company_name || 'Şirket');
+      q('#plan')      && (q('#plan').textContent      = (u.subscription_plan||'trial').toUpperCase());
+      const now = new Date();
+      const trialEnd = u.trial_end_date ? new Date(u.trial_end_date) : null;
+      const planEnd  = u.plan_end_date  ? new Date(u.plan_end_date)  : null;
+      let status = 'passive';
+      if (u.subscription_status === 'trial' && trialEnd && trialEnd > now) status = 'trial';
+      else if (u.subscription_status === 'active' && planEnd && planEnd > now) status = 'active';
+      q('#status') && (q('#status').textContent = status.toUpperCase());
+    }
+  }
+})();
+</script>
+
 </html>
