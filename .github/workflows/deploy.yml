@@ -1,0 +1,29 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.DROPLET_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync to server
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          path: ./
+          remote_path: ${{ secrets.DROPLET_PATH }}
+          remote_host: ${{ secrets.DROPLET_HOST }}
+          remote_user: ${{ secrets.DROPLET_USER }}
+          remote_key:  ${{ secrets.DROPLET_SSH_KEY }}
