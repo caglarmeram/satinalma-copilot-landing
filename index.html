@@ -1517,10 +1517,10 @@
                     alert(`Hoş geldiniz!\n\nTrial aboneliğiniz devam ediyor.\nWhatsApp asistanınız zaten aktif.`);
     
                     setTimeout(() => {
-                    window.location.href = `success.html?phone=${encodeURIComponent(cleanPhone)}&customer_id=${result.customer_id}`;
+                    window.location.href = `success.html?phone=${encodeURIComponent(registrationData.whatsapp)}&customer_id=${result.customer_id}`;
                     }, 2000);
     
-                    else {
+                    } else {
                         alert(result.message || 'Kayıt başarıyla tamamlandı!');
                     }
                 } else {
