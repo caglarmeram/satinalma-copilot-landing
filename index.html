@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satınalma CoPilot - AI Destekli Satınalma Asistanı</title>
+    <title>SatınAlma CoPilot - AI Destekli Satınalma Asistanı</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
     <style>
         /* Reset and Base Styles */
         * {
@@ -1042,19 +1044,19 @@
                             <div class="annual-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">3.95</span>
+                                    <span class="price-amount">4.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info">
-                                    <div class="original-price">$7.95</div>
+                                    <div class="original-price">$9.95</div>
                                     <div class="discount-badge2">%50 İndirim</div>
-                                    <div class="monthly-equivalent">Yıllık ödemede $47.4</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $59.40</div>
                                 </div>
                             </div>
                             <div class="monthly-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">7.95</span>
+                                    <span class="price-amount">9.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info"></div>
@@ -1089,19 +1091,19 @@
                             <div class="annual-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">8.95</span>
+                                    <span class="price-amount">12.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info">
-                                    <div class="original-price">$17.95</div>
-                                    <div class="discount-badge2">%50 İndirim</div>
-                                    <div class="monthly-equivalent">Yıllık ödemede $107.4</div>
+                                    <div class="original-price">$24.95</div>
+                                    <div class="discount-badge2">%48 İndirim</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $155.40</div>
                                 </div>
                             </div>
                             <div class="monthly-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">17.95</span>
+                                    <span class="price-amount">24.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info"></div>
@@ -1135,19 +1137,19 @@
                             <div class="annual-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">19.95</span>
+                                    <span class="price-amount">29.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info">
-                                    <div class="original-price">$39.95</div>
-                                    <div class="discount-badge2">%50 İndirim</div>
-                                    <div class="monthly-equivalent">Yıllık ödemede $239.4</div>
+                                    <div class="original-price">$49.95</div>
+                                    <div class="discount-badge2">%40 İndirim</div>
+                                    <div class="monthly-equivalent">Yıllık ödemede $359.40</div>
                                 </div>
                             </div>
                             <div class="monthly-prices">
                                 <div class="price-main">
                                     <span class="currency">$</span>
-                                    <span class="price-amount">39.95</span>
+                                    <span class="price-amount">49.95</span>
                                     <span class="price-period">/ay</span>
                                 </div>
                                 <div class="price-info"></div>
@@ -1209,8 +1211,8 @@
                             <span class="loading-text">Kaydediliyor...</span>
                         </button>
                         <p class="form-note">
-                            Kaydolarak <a href="#" style="color: #2563eb;">Kullanım Koşulları</a> ve 
-                            <a href="#" style="color: #2563eb;">Gizlilik Politikası</a>'nı kabul etmiş olursunuz.<br>
+                            Kaydolarak <a href="terms.html" style="color: #2563eb;">Kullanım Koşulları</a> ve 
+                            <a href="privacy.html" style="color: #2563eb;">Gizlilik Politikası</a>'nı kabul etmiş olursunuz.<br>
                             14 gün sonunda otomatik ücretlendirme başlamaz.
                         </p>
                     </form>
@@ -1227,14 +1229,14 @@
                     <div class="brand-text">Satınalma CoPilot</div>
                 </div>
                 <div class="footer-links">
-                    <a href="#about">Hakkımızda</a>
+                    <a href="about.html">Hakkımızda</a>
                     <a href="#pricing">Fiyatlandırma</a>
-                    <a href="#contact">İletişim</a>
-                    <a href="#privacy">Gizlilik</a>
-                    <a href="#terms">Kullanım Koşulları</a>
-                    <a href="#help">Yardım</a>
+                    <a href="contact.html">İletişim</a>
+                    <a href="privacy.html">Gizlilik</a>
+                    <a href="terms.html">Kullanım Koşulları</a>
+                    <a href="help.html">Yardım</a>
                 </div>
-                <p>&copy; 2024 Satınalma CoPilot. Tüm hakları saklıdır.</p>
+                <p>&copy; 2025 Back To Stylish LLC. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -1243,13 +1245,22 @@
         // Global variables
         let selectedPlan = null;
         let currentBilling = 'annual';
+        let stripe = null;
 
-        // Supabase API configuration
+        // Stripe Configuration - USE YOUR LIVE PUBLISHABLE KEY
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Qkq8iCxIA7H9vX1DvKkU62vcpIsgJzUk2rIDAGaxUMhuWZUrJ5nHoox1WjImEhTM8fvheyOJ4wSD0YXnS8VAkEh00noftlqEM';
+        
+        // API Configuration
         const API_BASE_URL = 'https://api.satinalmacopilot.com';
         
-        // Billing Toggle Functionality
+        // Initialize Stripe on page load
         document.addEventListener('DOMContentLoaded', function() {
-            const toggleContainer = document.querySelector('.toggle-container');
+            // Initialize Stripe
+            if (window.Stripe && STRIPE_PUBLISHABLE_KEY) {
+                stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            }
+
+            // Billing Toggle Functionality
             const toggleOptions = document.querySelectorAll('.toggle-option');
             
             toggleOptions.forEach(option => {
@@ -1366,11 +1377,6 @@
             scrollToRegistration();
         }
 
-        // Show login message function
-        function showLoginMessage() {
-            alert('🔍 Giriş sistemi yakında aktif olacak!\n\n📧 Mevcut hesabınız için: info@satinalmacopilot.com\n📞 Destek: +90 552 071 0977');
-        }
-
         // Show loading overlay
         function showLoading(message = 'İşleniyor...') {
             document.getElementById('loadingText').textContent = message;
@@ -1382,321 +1388,199 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
 
-        // Check if user exists by phone
-        async function checkUserExists(phone) {
-            try {
-                const cleanPhone = phone.replace(/[^\d+]/g, '');
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/customers?contact_phone=eq.${encodeURIComponent(cleanPhone)}&select=*`, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API error');
-                }
-                
-                const users = await response.json();
-                return users.length > 0 ? users[0] : null;
-            } catch (error) {
-                console.error('Error checking user:', error);
-                return null;
+        // Phone formatting helper function
+        function formatPhoneNumber(phone) {
+            if (!phone) return '';
+            
+            // Remove all non-digit characters except +
+            let cleaned = phone.replace(/[^\d+]/g, '');
+            
+            // Turkish number handling
+            if (cleaned.startsWith('0')) {
+                cleaned = '+90' + cleaned.substring(1);
+            } else if (cleaned.startsWith('90') && !cleaned.startsWith('+90')) {
+                cleaned = '+' + cleaned;
+            } else if (cleaned.match(/^\d{10}$/)) {
+                cleaned = '+90' + cleaned;
+            } else if (!cleaned.startsWith('+') && cleaned.length > 10) {
+                cleaned = '+' + cleaned;
             }
+            
+            return cleaned;
         }
 
-        // Calculate quota and duration based on plan and billing
-        function getPlanQuotaAndDuration(plan, billing) {
-            const quotas = {
-                monthly: {
-                    basic: 500,
-                    pro: 1500,
-                    max: 5000
-                },
-                annual: {
-                    basic: 6000,  // 500 * 12
-                    pro: 18000,   // 1500 * 12
-                    max: 60000    // 5000 * 12
-                }
-            };
-
-            const duration = billing === 'monthly' ? 30 : 365; // days
-            const quota = quotas[billing][plan];
-
-            return { quota, duration };
-        }
-
-        // Create new user
-        async function createUser(userData) {
+        // NEW: Stripe-based registration handler
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const defaultText = submitBtn.querySelector('.default-text');
+            const loadingText = submitBtn.querySelector('.loading-text');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            defaultText.style.display = 'none';
+            loadingText.style.display = 'inline';
+            showLoading('Kayıt kontrol ediliyor...');
+            
             try {
-                const { quota, duration } = getPlanQuotaAndDuration(userData.selectedPlan, userData.billingCycle);
-                
-                const now = new Date();
-                const trialEndDate = new Date(now.getTime() + (14 * 24 * 60 * 60 * 1000)); // 14 days
-                
-                const newUser = {
-                    name: userData.fullName,
-                    email: userData.email,
-                    contact_phone: userData.whatsapp,
-                    company_name: userData.company,
-                    subscription_plan: userData.selectedPlan,
-                    subscription_status: 'trial',
-                    billing_cycle: userData.billingCycle,
-                    monthly_quota: quota,
-                    used_quota: 0,
-                    trial_end_date: trialEndDate.toISOString(),
-                    created_at: now.toISOString(),
-                    updated_at: now.toISOString()
+                // Get form data
+                const formData = new FormData(event.target);
+                const registrationData = {
+                    fullName: formData.get('fullName')?.trim(),
+                    email: formData.get('email')?.trim(),
+                    whatsapp: formatPhoneNumber(formData.get('whatsapp')?.trim()),
+                    company: formData.get('company')?.trim(),
+                    selectedPlan: selectedPlan || 'pro',
+                    billingCycle: currentBilling
                 };
-
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/customers`, {
+                
+                console.log('Registration data:', registrationData);
+                
+                // Basic validation
+                if (!registrationData.fullName || !registrationData.email || 
+                    !registrationData.whatsapp || !registrationData.company) {
+                    throw new Error('Lütfen tüm zorunlu alanları doldurun.');
+                }
+                
+                // Email validation
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registrationData.email)) {
+                    throw new Error('Geçersiz e-posta adresi formatı.');
+                }
+                
+                // Phone validation
+                if (!/^\+\d{10,15}$/.test(registrationData.whatsapp)) {
+                    throw new Error('Geçersiz telefon numarası formatı. Örnek: +90 555 123 45 67');
+                }
+                
+                showLoading('Kullanıcı kontrol ediliyor...');
+                
+                // Check if user exists
+                const lookupResponse = await fetch(`${API_BASE_URL}/api/customer/lookup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'Prefer': 'return=representation'
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify(newUser)
+                    body: JSON.stringify({ phone: registrationData.whatsapp })
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'User creation failed');
+                
+                if (lookupResponse.ok) {
+                    const userData = await lookupResponse.json();
+                    
+                    if (userData.exists) {
+                        hideLoading();
+                        
+                        if (userData.needs_payment || userData.effective_status === 'cancelled') {
+                            // Trial bitmiş - Stripe Checkout'a yönlendir
+                            alert(`Trial süreniz dolmuş veya kotanız bitmiş.\n\nÖdeme sayfasına yönlendiriliyorsunuz...`);
+                            await redirectToStripeCheckout(registrationData, 'existing_customer');
+                            return;
+                        } else if (userData.subscription_status === 'active') {
+                            alert('Bu telefon numarası ile aktif aboneliğiniz bulunmaktadır.\n\nWhatsApp asistanınız zaten çalışıyor.');
+                            return;
+                        } else if (userData.subscription_status === 'trial' && !userData.needs_payment) {
+                            alert('Bu telefon numarası ile trial aboneliğiniz devam ediyor.\n\nWhatsApp asistanınızı kullanmaya devam edebilirsiniz.');
+                            return;
+                        }
+                    }
                 }
-
-                return await response.json();
-            } catch (error) {
-                console.error('Error creating user:', error);
-                throw error;
-            }
-        }
-
-// 🔧 Bu fonksiyonu mevcut handleRegistration fonksiyonunun yerine koy (yaklaşık satır 1002)
-
-async function handleRegistration(event) {
-    event.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const defaultText = submitBtn.querySelector('.default-text');
-    const loadingText = submitBtn.querySelector('.loading-text');
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    defaultText.style.display = 'none';
-    loadingText.style.display = 'inline';
-    showLoading('Kayıt kontrol ediliyor...');
-    
-    try {
-        // Get form data
-        const formData = new FormData(event.target);
-        const registrationData = {
-            fullName: formData.get('fullName')?.trim(),
-            email: formData.get('email')?.trim(),
-            whatsapp: formatPhoneNumber(formData.get('whatsapp')?.trim()),
-            company: formData.get('company')?.trim(),
-            selectedPlan: selectedPlan || 'pro',
-            billingCycle: currentBilling
-        };
-        
-        console.log('Registration data:', registrationData);
-        
-        // Basic validation
-        if (!registrationData.fullName || !registrationData.email || 
-            !registrationData.whatsapp || !registrationData.company) {
-            throw new Error('Lütfen tüm zorunlu alanları doldurun.');
-        }
-        
-        // Email validation
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registrationData.email)) {
-            throw new Error('Geçersiz e-posta adresi formatı.');
-        }
-        
-        // Phone validation
-        if (!/^\+\d{10,15}$/.test(registrationData.whatsapp)) {
-            throw new Error('Geçersiz telefon numarası formatı. Örnek: +90 555 123 45 67');
-        }
-        
-        showLoading('Kullanıcı kontrol ediliyor...');
-        
-        // Önce kullanıcı var mı kontrol et
-        const lookupResponse = await fetch('https://api.satinalmacopilot.com/api/customer/lookup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ phone: registrationData.whatsapp })
-        });
-        
-        if (lookupResponse.ok) {
-            const userData = await lookupResponse.json();
-            
-            if (userData.exists) {
+                
+                showLoading('Kayıt oluşturuluyor...');
+                
+                // Create trial user via API
+                const response = await fetch(`${API_BASE_URL}/api/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                const result = await response.json();
                 hideLoading();
                 
-                if (userData.needs_payment || userData.effective_status === 'cancelled') {
-                    // Trial bitmiş - ödeme sayfasına yönlendir
-                    alert(`Trial süreniz dolmuş veya kotanız bitmiş.\n\nÖdeme sayfasına yönlendiriliyorsunuz...`);
-                    window.location.href = `payment.html?phone=${encodeURIComponent(registrationData.whatsapp)}&return_user=true&reason=${userData.trial_expired ? 'trial_expired' : 'quota_exceeded'}`;
-                    return;
-                } else if (userData.subscription_status === 'active') {
-                    alert('Bu telefon numarası ile aktif aboneliğiniz bulunmaktadır.\n\nWhatsApp asistanınız zaten çalışıyor.');
-                    return;
-                } else if (userData.subscription_status === 'trial' && !userData.needs_payment) {
-                    alert('Bu telefon numarası ile trial aboneliğiniz devam ediyor.\n\nWhatsApp asistanınızı kullanmaya devam edebilirsiniz.');
-                    return;
-                }
-            }
-        }
-        
-        showLoading('Kayıt oluşturuluyor...');
-        
-        // Normal registration request
-        const response = await fetch('https://api.satinalmacopilot.com/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'User-Agent': 'SatinalmacopilotWeb/1.0'
-            },
-            body: JSON.stringify(registrationData)
-        });
-        
-        console.log('Response status:', response.status);
-        const result = await response.json();
-        console.log('Response data:', result);
-        
-        hideLoading();
-        
-        if (response.ok && result.success) {
-            // Success handling based on backend response
-            let successMessage = '';
-            let shouldRedirect = false;
-            
-            switch(result.action) {
-                case 'trial_active':
-                    successMessage = `Hoş geldiniz!\n\nTrial süreniz devam ediyor. WhatsApp asistanınız aktif!\n\n${registrationData.whatsapp} numarasından +1 (415) 523-8886'ya "Merhaba" yazabilirsiniz.`;
-                    break;
-                    
-                case 'new_trial_started':
-                    successMessage = `Kaydınız başarıyla tamamlandı!\n\n14 günlük ücretsiz trial başladı\n1000 mesaj hediye\n5 dakika içinde WhatsApp'tan kurulum mesajı alacaksınız\n\nSuccess sayfasına yönlendiriliyorsunuz...`;
-                    shouldRedirect = true;
-                    break;
-                    
-                case 'subscription_active':
-                    successMessage = `Zaten aktif üyesiniz!\n\nWhatsApp asistanınız çalışıyor.\n\n+1 (415) 523-8886 numarasına mesaj atabilirsiniz.`;
-                    break;
-                    
-                case 'trial_expired':
-                    successMessage = `Tekrar hoş geldiniz!\n\nÜcretsiz denemeniz sona ermiş\nDevam etmek için plan seçimi gerekli\nÖdeme sayfasına yönlendiriliyorsunuz...`;
-                    shouldRedirect = true;
-                    // Redirect to payment
-                    setTimeout(() => {
-                        window.location.href = `payment.html?phone=${encodeURIComponent(registrationData.whatsapp)}&plan=${registrationData.selectedPlan}&billing=${registrationData.billingCycle}`;
-                    }, 3000);
-                    break;
-                    
-                default:
-                    successMessage = `Kaydınız tamamlandı!\n\nWhatsApp asistanınız hazırlanıyor...\nE-posta adresinize detaylar gönderildi.`;
-            }
-            
-            alert(successMessage);
-            
-            // Success redirect for new trial
-            if (result.action === 'new_trial_started') {
-                setTimeout(() => {
-                    window.location.href = `success.html?phone=${encodeURIComponent(registrationData.whatsapp)}&name=${encodeURIComponent(registrationData.fullName)}`;
-                }, 3000);
-            }
-            
-            // Reset form if not redirecting
-            if (!shouldRedirect) {
-                event.target.reset();
-                selectedPlan = null;
-                document.getElementById('selectedPlanInfo').style.display = 'none';
-                document.querySelectorAll('.pricing-card').forEach(card => {
-                    card.classList.remove('selected');
-                    const indicator = card.querySelector('.plan-selection-indicator');
-                    if (indicator) indicator.remove();
-                });
-            }
-            
-        } else {
-            // Error handling based on backend response
-            let errorMessage = 'Kayıt sırasında bilinmeyen hata oluştu.';
-            
-            switch(result.error) {
-                case 'PHONE_EXISTS':
-                    errorMessage = `Bu telefon numarası zaten kayıtlı.\n\nPlan yükseltmek için payment.html sayfasına gidin.`;
-                    break;
-                case 'EMAIL_EXISTS':
-                    errorMessage = 'Bu e-posta adresi zaten kullanımda.';
-                    break;
-                case 'INVALID_PHONE':
-                    errorMessage = 'Geçersiz telefon numarası formatı.\n\nÖrnek: +90 555 123 45 67';
-                    break;
-                case 'INVALID_EMAIL':
-                    errorMessage = 'Geçersiz e-posta adresi formatı.';
-                    break;
-                case 'MISSING_FIELDS':
-                    errorMessage = 'Lütfen tüm zorunlu alanları doldurun.';
-                    break;
-                default:
-                    if (result.message) {
-                        errorMessage = result.message;
+                if (response.ok && result.success) {
+                    if (result.action === 'new_trial_started') {
+                        alert(`Kaydınız başarıyla tamamlandı!\n\n14 günlük ücretsiz trial başladı\n1000 mesaj hediye\n5 dakika içinde WhatsApp'tan kurulum mesajı alacaksınız`);
+                        
+                        // Redirect to success page
+                        setTimeout(() => {
+                            window.location.href = `success.html?phone=${encodeURIComponent(registrationData.whatsapp)}&name=${encodeURIComponent(registrationData.fullName)}`;
+                        }, 2000);
+                    } else if (result.action === 'trial_expired') {
+                        alert(`Tekrar hoş geldiniz!\n\nÜcretsiz denemeniz sona ermiş\nDevam etmek için plan seçimi gerekli`);
+                        await redirectToStripeCheckout(registrationData, 'trial_expired');
+                    } else {
+                        alert(result.message || 'Kayıt başarıyla tamamlandı!');
                     }
+                } else {
+                    throw new Error(result.message || 'Kayıt işlemi başarısız oldu.');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                hideLoading();
+                alert(`Hata: ${error.message}\n\nDestek: info@satinalmacopilot.com`);
+                
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                defaultText.style.display = 'inline';
+                loadingText.style.display = 'none';
             }
-            
-            alert(errorMessage);
         }
-        
-    } catch (error) {
-        console.error('Registration error:', error);
-        hideLoading();
-        
-        let errorMessage = '';
-        
-        if (error.name === 'TypeError' && error.message.includes('fetch')) {
-            errorMessage += 'Sunucuya bağlanılamıyor.\n\nLütfen internet bağlantınızı kontrol edin.';
-        } else if (error.name === 'SyntaxError') {
-            errorMessage += 'Sunucu yanıt hatası.\n\nLütfen sayfayı yenileyip tekrar deneyin.';
-        } else {
-            errorMessage += error.message;
-        }
-        
-        errorMessage += '\n\nDestek: info@satinalmacopilot.com\nYardım: +90 552 071 0977';
-        
-        alert(errorMessage);
-        
-    } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        defaultText.style.display = 'inline';
-        loadingText.style.display = 'none';
-    }
-}
 
-// Phone formatting helper function
-function formatPhoneNumber(phone) {
-    if (!phone) return '';
-    
-    // Remove all non-digit characters except +
-    let cleaned = phone.replace(/[^\d+]/g, '');
-    
-    // Turkish number handling
-    if (cleaned.startsWith('0')) {
-        cleaned = '+90' + cleaned.substring(1);
-    } else if (cleaned.startsWith('90') && !cleaned.startsWith('+90')) {
-        cleaned = '+' + cleaned;
-    } else if (cleaned.match(/^\d{10}$/)) {
-        cleaned = '+90' + cleaned;
-    } else if (!cleaned.startsWith('+') && cleaned.length > 10) {
-        cleaned = '+' + cleaned;
-    }
-    
-    return cleaned;
-}
+        // NEW: Redirect to Stripe Checkout
+        async function redirectToStripeCheckout(customerData, context = 'new_customer') {
+            if (!stripe) {
+                alert('Ödeme sistemi yüklenirken hata oluştu. Sayfayı yenileyin.');
+                return;
+            }
+
+            showLoading('Ödeme sayfası hazırlanıyor...');
+
+            try {
+                // Create Stripe Checkout Session
+                const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        customer: customerData,
+                        plan: customerData.selectedPlan || 'pro',
+                        billing: customerData.billingCycle || 'annual',
+                        context: context,
+                        success_url: `${window.location.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+                        cancel_url: `${window.location.origin}/?plan=${customerData.selectedPlan}&billing=${customerData.billingCycle}`
+                    })
+                });
+
+                const session = await response.json();
+                hideLoading();
+
+                if (response.ok && session.sessionId) {
+                    // Redirect to Stripe Checkout
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: session.sessionId
+                    });
+
+                    if (error) {
+                        console.error('Stripe error:', error);
+                        alert('Ödeme sayfasına yönlendirilirken hata oluştu. Lütfen tekrar deneyin.');
+                    }
+                } else {
+                    throw new Error(session.error || 'Checkout session oluşturulamadı');
+                }
+
+            } catch (error) {
+                console.error('Checkout error:', error);
+                hideLoading();
+                alert(`Ödeme işlemi başlatılamadı: ${error.message}\n\nDestek: info@satinalmacopilot.com`);
+            }
+        }
 
         // If no plan is selected when form is submitted, default to Pro Annual
         document.addEventListener('DOMContentLoaded', function() {
