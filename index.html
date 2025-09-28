@@ -1512,7 +1512,15 @@
                     } else if (result.action === 'trial_expired') {
                         alert(`Tekrar hoş geldiniz!\n\nÜcretsiz denemeniz sona ermiş\nDevam etmek için plan seçimi gerekli`);
                         await redirectToStripeCheckout(registrationData, 'trial_expired');
-                    } else {
+                    } 
+                    else if (result.action === 'trial_active') {
+                    alert(`Hoş geldiniz!\n\nTrial aboneliğiniz devam ediyor.\nWhatsApp asistanınız zaten aktif.`);
+    
+                    setTimeout(() => {
+                    window.location.href = `success.html?phone=${encodeURIComponent(cleanPhone)}&customer_id=${result.customer_id}`;
+                    }, 2000);
+    
+                    else {
                         alert(result.message || 'Kayıt başarıyla tamamlandı!');
                     }
                 } else {
