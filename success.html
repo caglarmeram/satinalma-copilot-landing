@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Başarılı - Satınalma CoPilot</title>
+    <title>Ödeme Başarılı - Satınalma CoPilot</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -147,6 +147,40 @@
             font-weight: 500;
         }
 
+        .whatsapp-info {
+            background: #dcfce7;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .whatsapp-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin: 8px 0;
+        }
+
+        .whatsapp-button {
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-button:hover {
+            background: #20c757;
+            transform: translateY(-2px);
+        }
+
         .steps-container {
             background: #f8fafc;
             border-radius: 16px;
@@ -201,40 +235,6 @@
             color: #64748b;
             font-size: 0.95rem;
             line-height: 1.5;
-        }
-
-        .whatsapp-info {
-            background: #dcfce7;
-            border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-        }
-
-        .whatsapp-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-            margin: 8px 0;
-        }
-
-        .whatsapp-button {
-            background: #25d366;
-            color: white;
-            text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-button:hover {
-            background: #20c757;
-            transform: translateY(-2px);
         }
 
         .trial-info {
@@ -317,7 +317,7 @@
 <body>
     <div class="success-container">
         <div class="success-icon">🎉</div>
-        <h1 class="success-title" id="mainTitle">Kayıt Başarılı!</h1>
+        <h1 class="success-title" id="mainTitle">Ödeme Başarılı!</h1>
         <p class="success-subtitle" id="mainSubtitle">
             Hoş geldiniz! WhatsApp asistanınızla tanışma zamanı.
         </p>
@@ -398,10 +398,10 @@
         </div>
         
         <div class="trial-info" id="trialInfo">
-            <p><strong>🎁 Ücretsiz Deneme Süreniz:</strong></p>
-            <div class="trial-countdown" id="trialCountdown">14 gün kaldı</div>
+            <p><strong>🎁 Plan Durumunuz:</strong></p>
+            <div class="trial-countdown" id="trialCountdown">Aktif</div>
             <p style="margin-top: 8px; font-size: 0.9rem; color: #92400e;" id="trialDetails">
-                Günlük mesaj hakkınız var. Sınırsız kullanım için planınızı yükseltin.
+                Mesaj hakkınız yüklendi. WhatsApp asistanınız hazır!
             </p>
         </div>
         
@@ -413,34 +413,58 @@
     </div>
     
     <script>
-        // Supabase configuration
+        // Configuration
         const SUPABASE_URL = 'https://dblepmaqqkudsbmvlqcw.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg';
 
-        // Get URL parameters
+        // URL parameters for Stripe integration
         const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
         const userPhone = urlParams.get('phone');
         const selectedPlan = urlParams.get('plan');
-        const paymentStatus = urlParams.get('payment');
+        const paymentStatus = urlParams.get('payment_status');
 
-        // Load user data and customize page
+        // Main initialization
         document.addEventListener('DOMContentLoaded', async function() {
-            if (userPhone) {
-                try {
-                    await loadUserData(userPhone);
-                } catch (error) {
-                    console.error('Error loading user data:', error);
-                    // Show default success message if user data fails to load
-                    showDefaultSuccess();
-                }
+            console.log('Success page loaded:', { sessionId, userPhone, selectedPlan, paymentStatus });
+            
+            if (sessionId) {
+                // Stripe success flow
+                await handleStripeSuccess(sessionId);
+            } else if (userPhone) {
+                // Direct user data loading
+                await loadUserData(userPhone);
             } else {
+                // Fallback
                 showDefaultSuccess();
             }
 
-            // Update countdown and setup auto-redirect
-            updateTrialCountdown();
             setupAutoRedirect();
         });
+
+        async function handleStripeSuccess(sessionId) {
+            try {
+                // Call backend to verify Stripe session and get user data
+                const response = await fetch('/api/verify-stripe-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ session_id: sessionId })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayUserInfo(data.customer);
+                    updatePageForPaymentSuccess(data.customer);
+                } else {
+                    throw new Error('Session verification failed');
+                }
+            } catch (error) {
+                console.error('Stripe session verification error:', error);
+                showDefaultSuccess();
+            }
+        }
 
         async function loadUserData(phone) {
             try {
@@ -457,7 +481,7 @@
                 if (users.length > 0) {
                     const user = users[0];
                     displayUserInfo(user);
-                    updatePageContent(user, paymentStatus);
+                    updatePageContent(user);
                 } else {
                     showDefaultSuccess();
                 }
@@ -477,53 +501,54 @@
             const quota = user.monthly_quota || 1000;
             document.getElementById('quotaNumber').textContent = quota.toLocaleString();
             
+            const billing = user.billing_cycle || 'monthly';
             if (user.subscription_status === 'trial') {
-                document.getElementById('quotaLabel').textContent = 'mesaj (14 gün deneme)';
+                document.getElementById('quotaLabel').textContent = 'mesaj (deneme)';
             } else {
-                const billing = user.billing_cycle || 'monthly';
                 document.getElementById('quotaLabel').textContent = `mesaj (${billing === 'monthly' ? '1 ay' : '1 yıl'})`;
             }
         }
 
-        function updatePageContent(user, paymentStatus) {
+        function updatePageForPaymentSuccess(user) {
+            // Payment successful - show paid plan details
+            document.getElementById('mainTitle').textContent = 'Ödeme Başarılı!';
+            document.getElementById('mainSubtitle').textContent = 'Planınız aktifleştirildi. WhatsApp asistanınız hazır!';
+            document.getElementById('statusBadge').textContent = 'Aktif';
+            document.getElementById('statusBadge').style.background = '#dcfce7';
+            document.getElementById('statusBadge').style.color = '#166534';
+            
+            // Update trial info section for paid plans
+            const planEnd = user.plan_end_date ? new Date(user.plan_end_date) : null;
+            if (planEnd) {
+                const now = new Date();
+                const remainingDays = Math.ceil((planEnd - now) / (1000 * 60 * 60 * 24));
+                document.getElementById('trialCountdown').textContent = `${remainingDays} gün aktif`;
+                document.getElementById('trialDetails').textContent = `Planınız ${planEnd.toLocaleDateString('tr-TR')} tarihine kadar geçerli.`;
+            } else {
+                document.getElementById('trialCountdown').textContent = 'Plan Aktif';
+                document.getElementById('trialDetails').textContent = 'Mesaj hakkınız yüklendi. WhatsApp asistanınız hazır!';
+            }
+        }
+
+        function updatePageContent(user) {
             const now = new Date();
             const trialEnd = user.trial_end_date ? new Date(user.trial_end_date) : null;
             const planEnd = user.plan_end_date ? new Date(user.plan_end_date) : null;
 
-            if (paymentStatus === 'success') {
-                // Paid user success
-                document.getElementById('mainTitle').textContent = 'Ödeme Başarılı!';
-                document.getElementById('mainSubtitle').textContent = 'Planınız aktifleştirildi. WhatsApp asistanınız hazır!';
-                document.getElementById('statusBadge').textContent = 'Aktif';
-                document.getElementById('statusBadge').style.background = '#dcfce7';
-                document.getElementById('statusBadge').style.color = '#166534';
-                
-                // Hide trial info for paid users
-                document.getElementById('trialInfo').style.display = 'none';
-            } else if (user.subscription_status === 'trial' && trialEnd && trialEnd > now) {
-                // Trial user success
+            if (user.subscription_status === 'trial' && trialEnd && trialEnd > now) {
+                // Trial user
                 document.getElementById('mainTitle').textContent = 'Ücretsiz Deneme Başladı!';
                 document.getElementById('mainSubtitle').textContent = '14 günlük ücretsiz deneme süreniz başladı.';
                 document.getElementById('statusBadge').textContent = 'Trial Aktif';
                 document.getElementById('statusBadge').style.background = '#fef3c7';
                 document.getElementById('statusBadge').style.color = '#92400e';
                 
-                // Calculate remaining trial days
                 const remainingDays = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
                 document.getElementById('trialCountdown').textContent = `${remainingDays} gün kaldı`;
                 document.getElementById('trialDetails').textContent = `${user.monthly_quota || 1000} mesaj hakkınız var. Süre veya kota bittiğinde plan seçimi gerekli.`;
             } else if (user.subscription_status === 'active' && planEnd && planEnd > now) {
-                // Active user
-                document.getElementById('mainTitle').textContent = 'Hesabınız Aktif!';
-                document.getElementById('mainSubtitle').textContent = 'WhatsApp asistanınız çalışıyor.';
-                document.getElementById('statusBadge').textContent = 'Aktif';
-                document.getElementById('statusBadge').style.background = '#dcfce7';
-                document.getElementById('statusBadge').style.color = '#166534';
-                
-                // Show plan end date instead of trial info
-                const remainingDays = Math.ceil((planEnd - now) / (1000 * 60 * 60 * 24));
-                document.getElementById('trialCountdown').textContent = `${remainingDays} gün kaldı`;
-                document.getElementById('trialDetails').textContent = `Planınız ${planEnd.toLocaleDateString('tr-TR')} tarihine kadar aktif.`;
+                // Active paid user
+                updatePageForPaymentSuccess(user);
             } else {
                 // Expired user
                 document.getElementById('mainTitle').textContent = 'Hesap Bulundu!';
@@ -532,7 +557,6 @@
                 document.getElementById('statusBadge').style.background = '#fecaca';
                 document.getElementById('statusBadge').style.color = '#991b1b';
                 
-                // Show renewal message
                 document.getElementById('trialCountdown').textContent = 'Plan Yenileme Gerekli';
                 document.getElementById('trialDetails').innerHTML = 'Devam etmek için <a href="payment.html?phone=' + encodeURIComponent(user.contact_phone) + '" style="color: #2563eb;">plan yenileyin</a>.';
             }
@@ -543,82 +567,34 @@
             document.getElementById('userName').textContent = 'Kullanıcı';
             document.getElementById('companyName').textContent = 'Şirket';
             document.getElementById('phoneNumber').textContent = userPhone || 'Telefon';
-            document.getElementById('planName').textContent = 'TRIAL';
+            document.getElementById('planName').textContent = selectedPlan ? selectedPlan.toUpperCase() : 'TRIAL';
             document.getElementById('quotaNumber').textContent = '1000';
-            document.getElementById('quotaLabel').textContent = 'mesaj (14 gün deneme)';
-        }
-
-        function updateTrialCountdown() {
-            // This will be updated with actual user data when loaded
-            const now = new Date();
-            const trialEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-            const timeLeft = trialEnd - now;
-            const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+            document.getElementById('quotaLabel').textContent = 'mesaj hakkı';
             
-            if (!document.getElementById('trialCountdown').textContent.includes('kaldı')) {
-                document.getElementById('trialCountdown').textContent = `${daysLeft} gün kaldı`;
+            if (paymentStatus === 'success') {
+                updatePageForPaymentSuccess({
+                    subscription_status: 'active',
+                    subscription_plan: selectedPlan || 'pro',
+                    monthly_quota: 1000
+                });
             }
         }
 
         function setupAutoRedirect() {
-            // Auto-open WhatsApp after 5 seconds (optional)
+            // Auto-open WhatsApp after 8 seconds (optional)
             setTimeout(() => {
                 if (confirm('WhatsApp\'ı şimdi açmak ister misiniz?')) {
-                    window.open('https://wa.me/14155238886?text=Merhaba,%20yeni%20kaydoldum', '_blank');
+                    const message = sessionId ? 'Merhaba, ödeme yaptım' : 'Merhaba, yeni kaydoldum';
+                    window.open(`https://wa.me/14155238886?text=${encodeURIComponent(message)}`, '_blank');
                 }
-            }, 5000);
+            }, 8000);
         }
 
-        // Track successful registration/payment
-        console.log('Success page loaded for:', userPhone, 'Plan:', selectedPlan, 'Payment:', paymentStatus);
+        // Analytics tracking
+        if (sessionId) {
+            console.log('Stripe payment completed:', sessionId);
+            // Add analytics tracking here
+        }
     </script>
 </body>
-    <script>
-const SUPABASE_URL = 'https://dblepmaqqkudsbmvlqcw.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGVwbWFxcWt1ZHNibXZscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NTUzOTksImV4cCI6MjA3MjAzMTM5OX0.yOPbSl2o2LjHNryW0eIfKeJa5YJgBC94GWzswlclPWg';
-
-function q(sel){ return document.querySelector(sel); }
-
-(async function initSuccess(){
-  const p = new URLSearchParams(location.search);
-  const phone = p.get('phone');
-  const fromUrl = {
-    name: p.get('name'),
-    company: p.get('company'),
-    plan: p.get('plan'),
-    status: p.get('status')
-  };
-
-  // 1) URL ile geldiyse yaz
-  if (fromUrl.name || fromUrl.company || fromUrl.plan || fromUrl.status) {
-    q('#fullName')  && (q('#fullName').textContent  = fromUrl.name    || 'Kullanıcı');
-    q('#company')   && (q('#company').textContent   = fromUrl.company || 'Şirket');
-    q('#plan')      && (q('#plan').textContent      = (fromUrl.plan||'trial').toUpperCase());
-    q('#status')    && (q('#status').textContent    = (fromUrl.status||'active').toUpperCase());
-  }
-
-  // 2) Telefon varsa Supabase’ten kesin veri çek
-  if (phone) {
-    const clean = phone.replace(/[^\d+]/g, '');
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/customers?contact_phone=eq.${encodeURIComponent(clean)}&select=*`, {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    const rows = await res.json();
-    if (rows && rows[0]) {
-      const u = rows[0];
-      q('#fullName')  && (q('#fullName').textContent  = u.name || 'Kullanıcı');
-      q('#company')   && (q('#company').textContent   = u.company_name || 'Şirket');
-      q('#plan')      && (q('#plan').textContent      = (u.subscription_plan||'trial').toUpperCase());
-      const now = new Date();
-      const trialEnd = u.trial_end_date ? new Date(u.trial_end_date) : null;
-      const planEnd  = u.plan_end_date  ? new Date(u.plan_end_date)  : null;
-      let status = 'passive';
-      if (u.subscription_status === 'trial' && trialEnd && trialEnd > now) status = 'trial';
-      else if (u.subscription_status === 'active' && planEnd && planEnd > now) status = 'active';
-      q('#status') && (q('#status').textContent = status.toUpperCase());
-    }
-  }
-})();
-</script>
-
 </html>
